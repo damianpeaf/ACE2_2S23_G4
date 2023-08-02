@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 import { envConfiguration } from './config/app.config';
+import { SerialModule } from './serial/serial.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { envConfiguration } from './config/app.config';
         },
       }),
     }),
+    SerialModule,
   ],
   controllers: [],
   providers: [],
