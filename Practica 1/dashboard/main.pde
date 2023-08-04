@@ -1,30 +1,32 @@
-String[] items = {
-  "Temperatura",
-  "Luz",
-  "Aire",
-  "Humedad",
-};
+int x0, y0, squareSize, squareGap;
+
 
 void setup() {
-  size(500, 500);
-  background(220);
+  size(700, 700);
+  surface.setTitle("Análisis metereológico");
+  
+  // Calculate the position of the first square to center the 4 squares
+  squareSize = 320;
+  squareGap = 20;
 
-  setupFigures();
+  x0 = (width - (squareSize * 2 + squareGap)) / 2;
+  y0 = (height - (squareSize * 2 + squareGap)) / 2;
+  
   setupApi();
 }
 
-void drawSquare(int x, int y, int size, String label) {
-  // Fill the square with white color
+void draw() {
+  background(220);
+  setupFigures();
+
+  drawSun();
+  drawHumidity();
+  drawTemperature();
+  drawWind();
+}
+
+
+void drawSquare(int x, int y, int size) {
   fill(255);
   rect(x, y, size, size);
-
-  // Draw the figure in the center of the square
-  fill(0);
-  ellipse(x + size / 2, y + size / 2, size * 0.8, size * 0.8);
-
-  // Draw the label
-  fill(0);
-  textSize(14);
-  textAlign(LEFT, CENTER);
-  text(label + ":", x + 10, y + 10);
 }
