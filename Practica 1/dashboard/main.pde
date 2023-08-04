@@ -48,8 +48,8 @@ void setup() {
 void draw() {
   String data;
   // read from serial port
-  if (myPort.available() > 0) {
-    data = myPort.readStringUntil('\n');
+  if (arduinoPort.available() > 0) {
+    data = arduinoPort.readStringUntil('\n');
     if (data != null) {
       // Convert the received data to a usable format (e.g., int)
       // int sensorValue = Integer.parseInt(data.trim());
