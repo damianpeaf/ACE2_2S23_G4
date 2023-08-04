@@ -1,3 +1,5 @@
+import processing.serial.*;
+
 int x0, y0, squareSize, squareGap;
 
 // intialize variables
@@ -10,6 +12,8 @@ Circle circle;
 // Initialiize cloud
 Cloud cloud ;
 
+// Initialize port
+processing.serial.Serial arduinoPort;
 
 void setup() {
   size(700, 700);
@@ -33,9 +37,28 @@ void setup() {
   for (int i = 0; i < numDrops; i++) {
     drops[i] = new CircleDrop(circle);
   }
+  
+  // Change the port name to match your Arduino board's serial port
+  String portName = "COM4"; // On Windows, it will be something like "COM3" or "COM4"
+  // For Mac or Linux, it will look like "/dev/tty.usbmodemXXXX"
+  
+  arduinoPort = new processing.serial.Serial(this, portName, 9600);
 }
 
 void draw() {
+  String data;
+  // read from serial port
+  if (myPort.available() > 0) {
+    data = myPort.readStringUntil('\n');
+    if (data != null) {
+      // Convert the received data to a usable format (e.g., int)
+      // int sensorValue = Integer.parseInt(data.trim());
+      
+      // print data
+      println(data);
+    }
+  }
+  
   background(220);
   setupFigures();
 
