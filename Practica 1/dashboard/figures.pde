@@ -112,6 +112,50 @@ void drawHumidity(){
 }
 
 void drawTemperature(){
+  // Set thermometer dimensions
+  float width = 30; 
+  float height = 150;
+  
+  // Set thermometer coordinates
+  float x = x0 + squareSize + squareGap;
+  float y = y0;
+
+  float temperature = 0;
+
+  float squareMid = (squareSize / 2);
+
+  if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
+    temperature = map(mouseY, y, y + height, -10, 40);
+  }
+
+  // Draw thermometer
+  fill(255);
+  rect(x + squareMid - (width/2), y + squareMid, width, height);
+
+  float temperatureHeight = map(temperature, -10, 40, 0, height);
+  fill(255, 0, 0);
+  rect(x + squareMid - (width/2), y + squareMid + (height - temperatureHeight), width, temperatureHeight);
+
+  // Draw the tube of the thermometer
+  fill(150);
+  float tubeWidth = 10.0;
+  rect(x + squareMid - (tubeWidth/2), y + squareMid, tubeWidth, height);
+
+  // Draw the temperature scale
+  fill(0);
+  textSize(12);
+  textAlign(CENTER, BOTTOM);
+
+  for (int i = -10; i <= 40; i += 10) {
+    float tickHeight = map(i, -10, 40, 0, height);
+    line(x + squareMid - (width/2) - 10, y + squareMid + (height - tickHeight), x + squareMid - (width/2), y + squareMid + (height - tickHeight));
+    text(i, x + squareMid - (width/2) - 20, y + squareMid + (height - tickHeight));
+  }
+
+  fill(0);
+  textSize(14);
+  textAlign(LEFT, CENTER);
+  text(temperature + "°C", x + 10, y + 10);
 }
 
 void drawWind(){

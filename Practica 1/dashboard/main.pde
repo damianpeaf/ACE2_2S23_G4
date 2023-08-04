@@ -1,6 +1,5 @@
 int x0, y0, squareSize, squareGap;
 
-
 void setup() {
   size(700, 700);
   surface.setTitle("Análisis metereológico");
