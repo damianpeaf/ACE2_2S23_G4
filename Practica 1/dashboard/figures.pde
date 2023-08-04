@@ -120,20 +120,27 @@ void drawTemperature(){
   float x = x0 + squareSize + squareGap;
   float y = y0;
 
-  float temperature = 0;
+  // float temperature = 0;
 
   float squareMid = (squareSize / 2);
+
+  float temperature = 0;
 
   if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
     temperature = map(mouseY, y, y + height, -10, 40);
   }
+
+  color yellow = color(255, 255, 0);
+  color red = color(255, 0, 0);
 
   // Draw thermometer
   fill(255);
   rect(x + squareMid - (width/2), y + squareMid, width, height);
 
   float temperatureHeight = map(temperature, -10, 40, 0, height);
-  fill(255, 0, 0);
+  color temperatureColor = lerpColor(yellow, red, map(temperature, -10, 40, 0, 1));
+  fill(temperatureColor);
+
   rect(x + squareMid - (width/2), y + squareMid + (height - temperatureHeight), width, temperatureHeight);
 
   // Draw the tube of the thermometer
