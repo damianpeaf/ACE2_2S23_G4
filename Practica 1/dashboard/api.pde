@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisShardInfo;
+// import redis.clients.jedis.Jedis;
+// import redis.clients.jedis.JedisShardInfo;
 
 String url = "https://pokeapi.co/api/v2/pokemon/ditto";
 
@@ -34,10 +34,11 @@ void getDataFromAPI() {
     e.printStackTrace();
   }
 }
-void getDataFromRedis( JedisShardInfo shardInfo ) {
-  // write and get 
-  Jedis jedis = new Jedis(shardInfo);
-  jedis.set("mykey", "myvalue");
-  String value = jedis.get("mykey");
-  println(value);
-}
+
+// void getDataFromRedis( JedisShardInfo shardInfo ) {
+//   // write and get 
+//   Jedis jedis = new Jedis(shardInfo);
+//   jedis.set("mykey", "myvalue");
+//   String value = jedis.get("mykey");
+//   println(value);
+// }
