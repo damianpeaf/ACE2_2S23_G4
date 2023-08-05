@@ -39,8 +39,8 @@ void star(float x, float y, float radius1, float radius2, int npoints, float lig
 void drawCloud(Cloud cloud, float co2Value ) {
   // Simulate CO2 level (replace this with real CO2 data from a sensor)
   // float co2Level = map(map(mouseY, 0, height, 0, 1), 0, 1, 100, 1000);
-  // The range of the co2Value is 250 to 300
-  float co2Level = map(co2Value, 250, 300, 100, 1000);
+  // The range of the co2Value is 100 to 400
+  float co2Level = map(co2Value, 100, 400, 100, 1000);
 
   // Update cloud color based on CO2 level
   cloud.updateColor(co2Level);
