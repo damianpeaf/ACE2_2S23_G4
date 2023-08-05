@@ -1,6 +1,11 @@
 import processing.serial.*;
 
+// Vars to handle the position of the squares
 int x0, y0, squareSize, squareGap;
+
+String data;
+float[] floatValues = new float[4];
+String[] stringValues;
 
 // intialize variables
 int numDrops = 60; // Number of drops in the animation
@@ -25,8 +30,6 @@ void setup() {
 
   x0 = (width - (squareSize * 2 + squareGap)) / 2;
   y0 = (height - (squareSize * 2 + squareGap)) / 2;
-  
-  setupApi();
 
   // setup humidity
   circle= new Circle(185, 530, 200);
@@ -46,9 +49,7 @@ void setup() {
 }
 
 void draw() {
-  String data;
-  String[] splitValues; 
-  float[] floatValues = new float[4];
+  
   // read from serial port
   if (arduinoPort.available() > 0) {
     data = arduinoPort.readStringUntil('\n');
@@ -58,26 +59,19 @@ void draw() {
       
       // print data
       println(data); // 25.30;70.00;345;823
-      splitValues = split(data, ';');
-      // parse data
-      for (int i = 0; i < splitValues.length; i++) {
-        floatValues[i] = Float.parseFloat(splitValues[i]);
+      stringValues = split(data, ';');
+      for (int i = 0; i < stringValues.length; i++) {
+        floatValues[i] = float(stringValues[i]);
       }
+      
     }
   }
   
   background(220);
-  setupFigures();
+  drawFigures();
 
   drawTemperature( floatValues[0] );
-  drawHumidity( numDrops, drops, circle, floatValues[1]  );
+  drawHumidity( numDrops, drops, circle, floatValues[1] );
   drawCloud(cloud, floatValues[2]);
   drawSun( floatValues[3] );
-  // drawWind();
-}
-
-
-void drawSquare(int x, int y, int size) {
-  fill(255);
-  rect(x, y, size, size);
 }

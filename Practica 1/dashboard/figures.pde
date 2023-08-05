@@ -5,7 +5,7 @@ void drawSun( float lightValue ) {
 
   pushMatrix();
   translate((x + squareSize / 2), (y + squareSize / 2));
-  rotate(lightValue / 200.0);
+  rotate(frameCount / 200.0);
   star(x, y, 60, 80, 20, lightValue); 
   popMatrix();
 
@@ -95,15 +95,7 @@ void drawTemperature( float temperature ){
   float x = x0 + squareSize + squareGap;
   float y = y0;
 
-  // float temperature = 0;
-
   float squareMid = (squareSize / 2);
-
-  // float temperature = 0;
-
-  // if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
-  //   temperature = map(mouseY, y, y + height, -10, 40);
-  // }
 
   color yellow = color(255, 255, 0);
   color red = color(255, 0, 0);
@@ -140,12 +132,7 @@ void drawTemperature( float temperature ){
   text(temperature + "°C", x + 10, y + 10);
 }
 
-// void drawWind(){
-
-// }
-
-
-void setupFigures(){
+void drawFigures(){
   // Draw the 4 squares with the labels
   for (int row = 0; row < 2; row++) {
     for (int col = 0; col < 2; col++) {
@@ -154,4 +141,9 @@ void setupFigures(){
       drawSquare(x, y, squareSize);
     }
   }
+}
+
+void drawSquare(int x, int y, int size) {
+  fill(255);
+  rect(x, y, size, size);
 }
