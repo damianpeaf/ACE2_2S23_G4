@@ -1,12 +1,15 @@
-void drawSun( float lightValue ) {
-
+void drawSun(float lightValue) {
   float x = x0;
   float y = y0;
 
   pushMatrix();
   translate((x + squareSize / 2), (y + squareSize / 2));
-  rotate(lightValue / 200.0);
-  star(x, y, 60, 80, 20, lightValue); 
+  rotate(frameCount / 200.0);
+
+  float radius1 = map(lightValue, 0, 100, squareSize * 0.2, squareSize * 0.5);
+  float radius2 = 80;
+
+  star(x, y, radius1, radius2, 20, lightValue);
   popMatrix();
 
   fill(0);
@@ -17,10 +20,23 @@ void drawSun( float lightValue ) {
 
 void star(float x, float y, float radius1, float radius2, int npoints, float lightValue) {
   float angle = TWO_PI / npoints;
-  float halfAngle = angle/2.0;
+  float halfAngle = angle / 2.0;
 
-  float colorValue = map(lightValue, 0, 100, 100, 255);
-  fill(255, colorValue, 0); 
+  if(radius1 < radius2) {
+    radius1 = radius2;
+  }
+
+  if (radius1 > 100) {
+    radius1 = 100;
+  }
+
+  // Interpolate between yellow and gray
+  color yellow = color(255, 255, 0);
+  color gray = color(150);
+  float lerpValue = 1.0 - (lightValue / 100.0); // Invert the lightValue to get the interpolation value
+  color starColor = lerpColor(yellow, gray, lerpValue); 
+
+  fill(starColor); // Set the star color
   stroke(0);
 
   beginShape();
@@ -28,12 +44,13 @@ void star(float x, float y, float radius1, float radius2, int npoints, float lig
     float sx = x + cos(a) * radius2;
     float sy = y + sin(a) * radius2;
     vertex(sx, sy);
-    sx = x + cos(a+halfAngle) * radius1;
-    sy = y + sin(a+halfAngle) * radius1;
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
     vertex(sx, sy);
   }
   endShape(CLOSE);
 }
+
 
 
 void drawCloud(Cloud cloud, float co2Value ) {
@@ -51,7 +68,7 @@ void drawCloud(Cloud cloud, float co2Value ) {
   fill(0);
   textSize(14);
   textAlign(LEFT, CENTER);
-  text("CO2 Level: " + nf(co2Level, 0, 0) + " ppm", 370, 370);
+  text("CO2 Level: " + nf(co2Value, 0, 0) + " ppm", 370, 370);
   // display C20 text in the middle of the cloud
   fill(255);
   textSize(30);
@@ -95,15 +112,7 @@ void drawTemperature( float temperature ){
   float x = x0 + squareSize + squareGap;
   float y = y0;
 
-  // float temperature = 0;
-
   float squareMid = (squareSize / 2);
-
-  // float temperature = 0;
-
-  // if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
-  //   temperature = map(mouseY, y, y + height, -10, 40);
-  // }
 
   color yellow = color(255, 255, 0);
   color red = color(255, 0, 0);
@@ -140,12 +149,7 @@ void drawTemperature( float temperature ){
   text(temperature + "°C", x + 10, y + 10);
 }
 
-// void drawWind(){
-
-// }
-
-
-void setupFigures(){
+void drawFigures(){
   // Draw the 4 squares with the labels
   for (int row = 0; row < 2; row++) {
     for (int col = 0; col < 2; col++) {
@@ -154,4 +158,9 @@ void setupFigures(){
       drawSquare(x, y, squareSize);
     }
   }
+}
+
+void drawSquare(int x, int y, int size) {
+  fill(255);
+  rect(x, y, size, size);
 }
