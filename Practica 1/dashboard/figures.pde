@@ -51,7 +51,7 @@ void drawCloud(Cloud cloud, float co2Value ) {
   fill(0);
   textSize(14);
   textAlign(LEFT, CENTER);
-  text("CO2 Level: " + nf(co2Level, 0, 0) + " ppm", 370, 370);
+  text("CO2 Level: " + nf(co2Value, 0, 0) + " ppm", 370, 370);
   // display C20 text in the middle of the cloud
   fill(255);
   textSize(30);
