@@ -1,12 +1,15 @@
-void drawSun( float lightValue ) {
-
+void drawSun(float lightValue) {
   float x = x0;
   float y = y0;
 
   pushMatrix();
   translate((x + squareSize / 2), (y + squareSize / 2));
   rotate(frameCount / 200.0);
-  star(x, y, 60, 80, 20, lightValue); 
+
+  float radius1 = map(lightValue, 0, 100, squareSize * 0.2, squareSize * 0.5);
+  float radius2 = 80;
+
+  star(x, y, radius1, radius2, 20, lightValue);
   popMatrix();
 
   fill(0);
@@ -17,10 +20,23 @@ void drawSun( float lightValue ) {
 
 void star(float x, float y, float radius1, float radius2, int npoints, float lightValue) {
   float angle = TWO_PI / npoints;
-  float halfAngle = angle/2.0;
+  float halfAngle = angle / 2.0;
 
-  float colorValue = map(lightValue, 0, 100, 100, 255);
-  fill(255, colorValue, 0); 
+  if(radius1 < radius2) {
+    radius1 = radius2;
+  }
+
+  if (radius1 > 100) {
+    radius1 = 100;
+  }
+
+  // Interpolate between yellow and gray
+  color yellow = color(255, 255, 0);
+  color gray = color(150);
+  float lerpValue = 1.0 - (lightValue / 100.0); // Invert the lightValue to get the interpolation value
+  color starColor = lerpColor(yellow, gray, lerpValue); 
+
+  fill(starColor); // Set the star color
   stroke(0);
 
   beginShape();
@@ -28,12 +44,13 @@ void star(float x, float y, float radius1, float radius2, int npoints, float lig
     float sx = x + cos(a) * radius2;
     float sy = y + sin(a) * radius2;
     vertex(sx, sy);
-    sx = x + cos(a+halfAngle) * radius1;
-    sy = y + sin(a+halfAngle) * radius1;
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
     vertex(sx, sy);
   }
   endShape(CLOSE);
 }
+
 
 
 void drawCloud(Cloud cloud, float co2Value ) {
