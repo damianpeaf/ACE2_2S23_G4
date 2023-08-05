@@ -47,6 +47,8 @@ void setup() {
 
 void draw() {
   String data;
+  String[] splitValues; 
+  float[] floatValues = new float[4];
   // read from serial port
   if (arduinoPort.available() > 0) {
     data = arduinoPort.readStringUntil('\n');
@@ -55,18 +57,23 @@ void draw() {
       // int sensorValue = Integer.parseInt(data.trim());
       
       // print data
-      println(data);
+      println(data); // 25.30;70.00;345;823
+      splitValues = split(data, ';');
+      // parse data
+      for (int i = 0; i < splitValues.length; i++) {
+        floatValues[i] = Float.parseFloat(splitValues[i]);
+      }
     }
   }
   
   background(220);
   setupFigures();
 
-  drawSun();
-  drawHumidity( numDrops, drops, circle  );
-  drawTemperature();
-  drawWind();
-  drawCloud(cloud);
+  drawTemperature( floatValues[0] );
+  drawHumidity( numDrops, drops, circle, floatValues[1]  );
+  drawCloud(cloud, floatValues[2]);
+  drawSun( floatValues[3] );
+  // drawWind();
 }
 
 

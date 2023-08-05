@@ -1,25 +1,25 @@
-void drawSun() {
+void drawSun( float lightValue ) {
 
   float x = x0;
   float y = y0;
 
   pushMatrix();
   translate((x + squareSize / 2), (y + squareSize / 2));
-  rotate(frameCount / 200.0);
-  star(x, y, 60, 80, 20); 
+  rotate(lightValue / 200.0);
+  star(x, y, 60, 80, 20, lightValue); 
   popMatrix();
 
   fill(0);
   textSize(14);
   textAlign(LEFT, CENTER);
-  text("Luz:" + frameCount, x + 10, y + 10);
+  text("Luz:" + lightValue, x + 10, y + 10);
 }
 
-void star(float x, float y, float radius1, float radius2, int npoints) {
+void star(float x, float y, float radius1, float radius2, int npoints, float lightValue) {
   float angle = TWO_PI / npoints;
   float halfAngle = angle/2.0;
 
-  float colorValue = map(frameCount, 0, 100, 100, 255);
+  float colorValue = map(lightValue, 0, 100, 100, 255);
   fill(255, colorValue, 0); 
   stroke(0);
 
@@ -36,10 +36,11 @@ void star(float x, float y, float radius1, float radius2, int npoints) {
 }
 
 
-void drawCloud(Cloud cloud ) {
+void drawCloud(Cloud cloud, float co2Value ) {
   // Simulate CO2 level (replace this with real CO2 data from a sensor)
-  // Change the range of the mouse from 250 to 300
-  float co2Level = map(map(mouseY, 0, height, 0, 1), 0, 1, 100, 1000);
+  // float co2Level = map(map(mouseY, 0, height, 0, 1), 0, 1, 100, 1000);
+  // The range of the co2Value is 250 to 300
+  float co2Level = map(co2Value, 250, 300, 100, 1000);
 
   // Update cloud color based on CO2 level
   cloud.updateColor(co2Level);
@@ -58,11 +59,11 @@ void drawCloud(Cloud cloud ) {
 }
 
 
-void drawHumidity( int numDrops, CircleDrop[] drops, Circle circle ){
+void drawHumidity( int numDrops, CircleDrop[] drops, Circle circle, float humidity ){
 
 
   // Simulate humidity level
-  float humidity = map(mouseY, 0, height, 0, 100);
+  // float humidity = map(mouseY, 0, height, 0, 100);
 
   // evaluate the percentage of humidity to change the number of drops range of 5
   numDrops = (int) map(humidity, 0, 100, 0, 60);
@@ -85,7 +86,7 @@ void drawHumidity( int numDrops, CircleDrop[] drops, Circle circle ){
   text("Humedad: " + nf(humidity, 0, 1) + "%", 30, 370);
 }
 
-void drawTemperature(){
+void drawTemperature( float temperature ){
   // Set thermometer dimensions
   float width = 30; 
   float height = 150;
@@ -98,11 +99,11 @@ void drawTemperature(){
 
   float squareMid = (squareSize / 2);
 
-  float temperature = 0;
+  // float temperature = 0;
 
-  if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
-    temperature = map(mouseY, y, y + height, -10, 40);
-  }
+  // if (mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
+  //   temperature = map(mouseY, y, y + height, -10, 40);
+  // }
 
   color yellow = color(255, 255, 0);
   color red = color(255, 0, 0);
@@ -139,9 +140,9 @@ void drawTemperature(){
   text(temperature + "°C", x + 10, y + 10);
 }
 
-void drawWind(){
+// void drawWind(){
 
-}
+// }
 
 
 void setupFigures(){
