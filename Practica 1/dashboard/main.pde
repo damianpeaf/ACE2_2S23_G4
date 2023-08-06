@@ -1,4 +1,6 @@
 import processing.serial.*;
+import java.util.Calendar;
+
 
 // Vars to handle the position of the squares
 int x0, y0, squareSize, squareGap;
@@ -16,6 +18,10 @@ Circle circle;
 
 // Initialiize cloud
 Cloud cloud ;
+
+// start time
+int startTime = millis();
+
 
 // Initialize port
 processing.serial.Serial arduinoPort;
@@ -46,6 +52,8 @@ void setup() {
   // For Mac or Linux, it will look like "/dev/tty.usbmodemXXXX"
   
   arduinoPort = new processing.serial.Serial(this, portName, 9600);
+
+  getDataFromAPI();
 }
 
 void draw() {
@@ -74,4 +82,10 @@ void draw() {
   drawHumidity( numDrops, drops, circle, floatValues[1] );
   drawCloud(cloud, floatValues[2]);
   drawSun( floatValues[3] );
+
+  // interval = 10 seconds
+  if(millis() - startTime > 10000){
+    startTime = millis();
+    postDataToApi(floatValues);
+  }
 }

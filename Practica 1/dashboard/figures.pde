@@ -6,7 +6,7 @@ void drawSun(float lightValue) {
   translate((x + squareSize / 2), (y + squareSize / 2));
   rotate(frameCount / 200.0);
 
-  float radius1 = map(lightValue, 0, 100, squareSize * 0.2, squareSize * 0.5);
+  float radius1 = map(lightValue, 0, 150, squareSize * 0.2, squareSize * 0.5);
   float radius2 = 80;
 
   star(x, y, radius1, radius2, 20, lightValue);

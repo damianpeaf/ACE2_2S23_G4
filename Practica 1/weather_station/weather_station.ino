@@ -32,11 +32,18 @@ void loop() {
   float temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
 
-  int light = analogRead(LDRPIN);
+  int ldr = analogRead(LDRPIN);
+  float lumen = -0.1977*ldr+187.73;
+
+  if (lumen < 0){
+    lumen = 0;
+  }
+
+  //  Serial.println("RESISTANCE: "+ String(ldr));
 
   int airQuality = analogRead(MQ135PIN);
 
-  Serial.println(String(temperature)+";"+String(humidity)+";"+String(airQuality)+";"+String(light));
+  Serial.println(String(temperature)+";"+String(humidity)+";"+String(airQuality)+";"+String(lumen));
 
   delay(1000);
 }
