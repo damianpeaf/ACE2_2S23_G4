@@ -29,6 +29,10 @@ processing.serial.Serial arduinoPort;
 void setup() {
   size(700, 700);
   surface.setTitle("Análisis metereológico");
+
+  // Add the new window 
+  PApplet windowGraph = WindowGraph();
+  PApplet.runSketch(new String[]{"Gráficas"}, secondWindow);
   
   // Calculate the position of the first square to center the 4 squares
   squareSize = 320;

@@ -1,17 +1,8 @@
 import java.net.*;
 import java.io.*;
-// import redis.clients.jedis.Jedis;
-// import redis.clients.jedis.JedisShardInfo;
 
 String apiUrl = "http://localhost:3000/weather";
 
-void setupApi() {
-  // connect to redis
-//   JedisShardInfo shardInfo = new JedisShardInfo("redis-12048.c1.us-east1-2.gce.cloud.redislabs.com", 12048);
-//   shardInfo.setPassword("7A82y2At236JpCJoLb6nUNmeUJAp15On");
-//   getDataFromAPI();
-//   getDataFromRedis(shardInfo);
-}
 
 JSONObject getDataFromAPI() {
   try {
@@ -37,14 +28,6 @@ JSONObject getDataFromAPI() {
     return null;
   }
 }
-
-// void getDataFromRedis( JedisShardInfo shardInfo ) {
-//   // write and get 
-//   Jedis jedis = new Jedis(shardInfo);
-//   jedis.set("mykey", "myvalue");
-//   String value = jedis.get("mykey");
-//   println(value);
-// }
 
 
 void postDataToApi(float[] values){
