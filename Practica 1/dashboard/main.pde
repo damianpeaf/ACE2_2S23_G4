@@ -30,7 +30,7 @@ void setup() {
   size(700, 700);
   surface.setTitle("Análisis metereológico");
 
-  // Add the new window 
+  // Add the new window
   PApplet windowGraph = WindowGraph();
   PApplet.runSketch(new String[]{"Gráficas"}, secondWindow);
   
