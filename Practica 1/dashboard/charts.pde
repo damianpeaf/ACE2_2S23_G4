@@ -14,6 +14,8 @@ class Charts {
     this.barColor = barColor;
     this.xLabels = xLabels;
     this.maxValue = maxValue;
+    
+    fill(0);
 
     // set data
     barChart.setData(data);

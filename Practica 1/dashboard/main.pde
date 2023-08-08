@@ -57,7 +57,6 @@ void setup() {
   
   arduinoPort = new processing.serial.Serial(this, portName, 9600);
 
-  getDataFromAPI();
 }
 
 void draw() {

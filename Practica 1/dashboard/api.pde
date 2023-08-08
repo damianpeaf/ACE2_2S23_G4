@@ -4,7 +4,10 @@ import java.io.*;
 String apiUrl = "http://localhost:3000/weather";
 
 
-JSONObject getDataFromAPI() {
+
+
+
+JSONArray getDataFromAPI() {
   try {
     URL url = new URL(apiUrl);
     URLConnection conn = url.openConnection();
@@ -19,10 +22,10 @@ JSONObject getDataFromAPI() {
     in.close();
 
     // Parse response as JSON
-    JSONObject data = parseJSONObject(response.toString());
-    println(data);
-
-    return data;
+    JSONObject jsonData = parseJSONObject(response.toString());
+    // println(jsonData.getJSONArray("data"));
+    return jsonData.getJSONArray("data");
+    
   } catch (IOException e) {
     e.printStackTrace();
     return null;
@@ -70,3 +73,4 @@ void postDataToApi(float[] values){
   }  
   
 }
+
