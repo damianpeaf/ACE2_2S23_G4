@@ -1,5 +1,6 @@
 import processing.serial.*;
 import java.util.Calendar;
+import g4p_controls.*;
 
 
 // Vars to handle the position of the squares
