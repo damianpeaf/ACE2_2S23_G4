@@ -15,7 +15,7 @@ void drawSun(float lightValue) {
   fill(0);
   textSize(14);
   textAlign(LEFT, CENTER);
-  text("Luz:" + lightValue, x + 10, y + 10);
+  text("Luz:" + lightValue + " Lux", x + 10, y + 10 );
 }
 
 void star(float x, float y, float radius1, float radius2, int npoints, float lightValue) {
