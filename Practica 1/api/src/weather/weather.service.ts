@@ -26,20 +26,36 @@ export class WeatherService {
 
     console.log(result);
 
+    // last 5 elements
+    // filter by date
     return {
-      data: result.map((item, index) => {
-        const date = new Date(keys[index]);
+      data: result
+        .map((item, index) => {
+          const date = new Date(keys[index]);
 
-        // dia/mes/año hora:minutos:segundos
-        const formattedDate = `${date.getDate()}/${
-          date.getMonth() + 1
-        }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          // dia/mes/año hora:minutos:segundos, 1 will be 01
 
-        return {
-          ...JSON.parse(item),
-          date: formattedDate,
-        };
-      }),
+          const dia = date.getDate().toString().padStart(2, '0');
+          const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+          const anio = date.getFullYear();
+          const hora = date.getHours().toString().padStart(2, '0');
+          const minutos = date.getMinutes().toString().padStart(2, '0');
+          const segundos = date.getSeconds().toString().padStart(2, '0');
+
+          const formattedDate = `${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`;
+
+          return {
+            ...JSON.parse(item),
+            date: formattedDate,
+          };
+        })
+        .sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+
+          return dateA.getTime() - dateB.getTime();
+        })
+        .slice(-14),
     };
   }
 

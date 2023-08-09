@@ -44,12 +44,13 @@ public class WindowGraph extends PApplet {
     background(225);
     // draw charts
     fill(0);
-    textSize(18);
     // put the titles in 4 corners
+    textSize(14);
     text("Luz Solar", 50, 50);
     text("Temperatura", width/2 + 100, 50);
     text("Humedad", 50, height/2 + 100);
     text("Calidad del aire", width/2 + 100, height/2 + 100);
+    textSize(12);
     // draw the charts
     LightChart.barChart.draw(10, 10, width/2 -10, height/2 -10);
     TempChart.barChart.draw(width/2 - 10, 10, width/2 -10, height/2- 10);
