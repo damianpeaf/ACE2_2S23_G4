@@ -22,6 +22,13 @@ export class WeatherService {
 
   async getAlldata() {
     const keys = await this.redisService.keys('*');
+
+    if (keys.length === 0) {
+      return {
+        data: [],
+      };
+    }
+
     const result = await this.redisService.mget(keys);
 
     console.log(result);

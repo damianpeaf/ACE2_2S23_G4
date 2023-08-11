@@ -87,7 +87,7 @@ void draw() {
   drawSun( floatValues[3] );
 
   // interval = 10 seconds
-  if(millis() - startTime > 10000){
+  if(millis() - startTime > 45000){
     startTime = millis();
     postDataToApi(floatValues);
   }

@@ -33,7 +33,7 @@ void loop() {
   float humidity = dht.readHumidity();
 
   int ldr = analogRead(LDRPIN);
-  float lumen = -0.1977*ldr+187.73;
+  float lumen = -1.8742*ldr+1702.3;
 
   if (lumen < 0){
     lumen = 0;
