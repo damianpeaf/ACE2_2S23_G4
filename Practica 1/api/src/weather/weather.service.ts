@@ -9,15 +9,28 @@ export class WeatherService {
   async testRedis() {
     await this.redisService.set('test', 'test');
     const result = await this.redisService.get('test');
+
     return result;
   }
 
   async uploadData(data: any) {
     const currentDate = new Date();
     const newKey = currentDate.toISOString();
+    await this.redisService.set(newKey, JSON.stringify(data));
 
-    const result = await this.redisService.set(newKey, JSON.stringify(data));
-    return result;
+    const dia = currentDate.getDate().toString().padStart(2, '0');
+    const mes = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const anio = currentDate.getFullYear();
+    const hora = currentDate.getHours().toString().padStart(2, '0');
+    const minutos = currentDate.getMinutes().toString().padStart(2, '0');
+    const segundos = currentDate.getSeconds().toString().padStart(2, '0');
+
+    const formattedDate = `${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`;
+
+    return {
+      ...data,
+      date: formattedDate,
+    };
   }
 
   async getAlldata() {

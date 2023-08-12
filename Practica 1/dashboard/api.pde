@@ -33,7 +33,7 @@ JSONArray getDataFromAPI() {
 }
 
 
-void postDataToApi(float[] values){
+JSONObject postDataToApi(float[] values){
   // format float[4] as JSON
 
   JSONObject data = new JSONObject();
@@ -65,12 +65,17 @@ void postDataToApi(float[] values){
         while ((responseLine = br.readLine()) != null) {
             response.append(responseLine.trim());
         }
-        println("Response Code: " + connection.getResponseCode());
-        println("Response Data: " + response.toString());
+        println(response.toString());
+
+        // Parse response as JSON
+        JSONObject jsonData = parseJSONObject(response.toString());
+        return jsonData;
     }
   } catch (Exception e) {
     e.printStackTrace();
+    println("Error");
   }  
+  return null;
   
 }
 

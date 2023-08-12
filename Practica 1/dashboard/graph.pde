@@ -59,9 +59,41 @@ public class WindowGraph extends PApplet {
 
     // LightChart.barChart.draw(0,0, width/2, height/2);
 
-
     
   }
+
+  public void updateGraph(JSONObject newData){
+    data.append(newData);
+    
+    // get last 14 values
+    JSONArray last14 = new JSONArray();
+
+    for (int i = 0; i < data.size(); i++) {
+
+      if (i >= data.size() - 14) {
+        last14.append(data.getJSONObject(i));
+      }
+    }
+
+    data = last14;
+
+    // create list of dates
+    createListOfDates();
+    // create list of light values
+    createListOfLightValues();
+    // create list of temp values
+    createListOfTempValues();
+    // create list of humidity values
+    createListOfHumidityValues();
+    // create list of air quality values
+    createListOfAirQualityValues();
+
+    // create charts
+    LightChart = new Charts(this, lightValues, color(196, 203, 58), dates, 100);
+    TempChart = new Charts(this, tempValues, color(75, 220, 209), dates, 40);
+    HumidityChart = new Charts(this, humidityValues, color(75, 104, 249), dates, 100);
+    AirQualityChart = new Charts(this, air_quality, color(143, 240, 245), dates, 400);
+  } 
 
   public void createListOfDates() {
     dates = new String[data.size()];

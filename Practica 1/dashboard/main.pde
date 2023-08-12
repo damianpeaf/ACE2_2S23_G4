@@ -22,6 +22,8 @@ Cloud cloud ;
 // start time
 int startTime = millis();
 
+WindowGraph windowGraph;
+
 
 // Initialize port
 processing.serial.Serial arduinoPort;
@@ -31,7 +33,7 @@ void setup() {
   surface.setTitle("Análisis metereológico");
 
   // Add the new window
-  PApplet windowGraph = new WindowGraph();
+  windowGraph = new WindowGraph();
   PApplet.runSketch(new String[]{"Gráficas"}, windowGraph);
   
   // Calculate the position of the first square to center the 4 squares
@@ -88,7 +90,12 @@ void draw() {
 
   // interval = 10 seconds
   if(millis() - startTime > 45000){
+    println("post data");
     startTime = millis();
-    postDataToApi(floatValues);
+    JSONObject newData = postDataToApi(floatValues);
+
+    if (newData != null) {
+      windowGraph.updateGraph(newData);
+    }
   }
 }
