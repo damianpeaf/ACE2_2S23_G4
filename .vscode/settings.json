@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "Practica1"
+        "Practica1",
+        "Practica2"
     ]
 }

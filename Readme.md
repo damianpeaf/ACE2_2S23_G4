@@ -8,4 +8,3 @@
 - Aída Alejandra Mansilla Orantes  - `202100239`
 - Alvaro Norberto García Meza  - `202109567`
 - Lesther Kevin Federico López Miculax  - `202110897`
-
