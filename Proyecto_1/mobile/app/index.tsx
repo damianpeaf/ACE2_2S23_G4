@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { Redirect } from 'expo-router';
 
-export default function App() {
+
+const index = () => {
   return (
-    <View className='flex-1 items-center justify-center bg-neutral-300'>
-      <Text className='text-red-400'>Hola mundo!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Redirect href="/Monitor" />
+  )
 }
 
+export default index
