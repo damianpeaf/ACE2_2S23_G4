@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 import { envConfiguration } from './config/app.config';
+import { SocketService } from './socket/socket.service';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -20,8 +22,9 @@ import { envConfiguration } from './config/app.config';
         },
       }),
     }),
+    SocketModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SocketService],
 })
 export class AppModule {}
