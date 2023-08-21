@@ -4,9 +4,11 @@ import Light from '../../components/controllers/light'
 import Thermo from '../../components/controllers/thermo'
 import Co2 from '../../components/controllers/co2'
 import Air from '../../components/controllers/air'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const Controller = () => {
     return (
+        <ScrollView>
         <View style={styles.gridContainer}>
             <View style={[styles.gridItem, styles.bgBlue]}>
                 <Light />
@@ -21,30 +23,31 @@ const Controller = () => {
                 <Air />
             </View>
         </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({
     gridContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexDirection: 'column',
+        // flexWrap: 'wrap',
     },
     gridItem: {
-        width: '50%',
-        height: '80%',
-        justifyContent: 'center',
+        width: '100%',
+        // height: '30%',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     bgBlue: {
-        backgroundColor: '#C7CAC7',
+        backgroundColor: '#FFFFFF',
     },
     bgGreen: {
-        backgroundColor: '#C7CAC7',
+        backgroundColor: '#FFFFFF',
     },
     bgRed: {
-        backgroundColor: '#C7CAC7',
+        backgroundColor: '#FFFFFF',
     },
     bgYellow: {
-        backgroundColor: '#C7CAC7',
+        backgroundColor: '#FFFFFF',
     },
 });
 
