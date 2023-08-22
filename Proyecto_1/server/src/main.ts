@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
-  Logger.log('Server running on http://localhost:3000', 'Bootstrap');
+  await app.listen(3000, '0.0.0.0');
+  Logger.log('Server running on 0.0.0.0', 'Bootstrap');
 }
 bootstrap();

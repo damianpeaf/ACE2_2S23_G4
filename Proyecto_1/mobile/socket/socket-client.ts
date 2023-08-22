@@ -1,11 +1,11 @@
-import { Manager, Socket } from 'socket.io-client'
+import { Manager, Socket } from 'socket.io-client';
 
 let socket: Socket;
 
 export const connectToServer = () => {
-    console.log('Connecting to server noooooooooooo')
-    const manager = new Manager('http://localhost:3000/arduino')
-
-    socket?.removeAllListeners()
-    socket = manager.socket('/arduino')
+    const manager = new Manager('http://192.168.1.7:3000', {
+        transports: ['websocket'],
+    });
+    socket?.removeAllListeners();
+    socket = manager.socket('/');
 }

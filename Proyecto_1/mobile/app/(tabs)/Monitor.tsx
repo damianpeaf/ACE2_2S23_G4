@@ -1,13 +1,40 @@
-import { ScrollView, View, Text } from 'react-native'
+import { ScrollView, View, Text, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Chart from '../../components/Chart';
 import { generateLabels, generateData } from '../../utils/data';
 
+import SocketIOClient from 'socket.io-client';
+
+
 const Monitor = () => {
+
+    const [hasConnection, setConnection] = useState(false);
+    const [time, setTime] = useState<string | null>(null);
+
+    useEffect(() => {
+
+        const socket = SocketIOClient("http://192.168.1.7:3000", {
+            transports: ["websocket"],
+        });
+
+        socket.connect();
+        socket.on('connect', () => {
+            setConnection(true);
+            setTime(null);
+        });
+
+        socket.on('disconnect', () => {
+            setConnection(false);
+            setTime(new Date().toLocaleTimeString());
+        }
+        );
+    }, []);
+
+
 
     const labels = generateLabels(7)
     const data = generateData(7)
@@ -18,6 +45,11 @@ const Monitor = () => {
         <ScrollView >
             <View className='p-3 flex flex-col justify-center items-center'>
 
+                <Text className='text-center text-2xl font-bold text-gray-700 mb-5'>
+                    {
+                        `${hasConnection ? 'Conectado' : 'Desconectados'} ${time ? `hace ${time}` : ''}`
+                    }
+                </Text>
 
                 <Chart
                     data={{

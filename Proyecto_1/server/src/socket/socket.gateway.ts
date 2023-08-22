@@ -7,12 +7,12 @@ import {
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { SocketService } from './socket.service';
-import { Namespace, Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 
-@WebSocketGateway({ namespace: 'arduino' })
+@WebSocketGateway({ cors: true })
 export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() io: Namespace;
+  @WebSocketServer() io: Server;
 
   private readonly logger = new Logger(SocketGateway.name);
 
