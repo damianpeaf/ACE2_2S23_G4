@@ -6,6 +6,7 @@ export const useSocket = () => {
     let socket: Socket;
 
     const [isConnected, setIsConnected] = useState(false)
+    const [message, setMessage] = useState<string>("")
 
     const connectToServer = () => {
         const manager = new Manager('http://192.168.1.7:3000', {
@@ -21,6 +22,11 @@ export const useSocket = () => {
         socket.on('disconnect', () => {
             setIsConnected(false);
         })
+
+        socket.on('welcome', (message: string) => {
+            console.log(message);
+            setMessage(message);
+        })
     }
 
     useEffect(() => {
@@ -34,8 +40,6 @@ export const useSocket = () => {
 
     return {
         isConnected,
+        message,
     }
 }
-
-
-

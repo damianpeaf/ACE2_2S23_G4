@@ -6,17 +6,18 @@ import {
   WebSocketServer,
   OnGatewayInit,
 } from '@nestjs/websockets';
-import { SocketService } from './socket.service';
-import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 
+import { AppSocketService } from './socket.service';
+import { Server, Socket } from 'socket.io';
+
 @WebSocketGateway({ cors: true })
-export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() io: Server;
 
-  private readonly logger = new Logger(SocketGateway.name);
+  private readonly logger = new Logger(AppSocketGateway.name);
 
-  constructor(private readonly socketService: SocketService) { }
+  constructor(private readonly socketService: AppSocketService) { }
 
 
   afterInit(): void {
@@ -25,8 +26,11 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   }
 
   handleConnection(client: Socket) {
-    console.log('Arduino connected')
     this.logger.log(`Arduino client connected: ${client.id}`);
+
+    // Return the current state to sync DB and app
+    client.emit('welcome', this.socketService.getHello());
+
   }
 
   handleDisconnect(client: Socket) {
@@ -40,28 +44,3 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     this.io.emit('message', payload);
   }
 }
-
-// Socket to handle communication with the app
-// @WebSocketGateway({ cors: true, namespace: 'app' })
-// export class AppSocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
-//   @WebSocketServer() wss: Server;
-
-//   constructor(private readonly appService: AppSocketService) { }
-
-//   handleConnection(client: Socket) {
-//     // When app connects, first time send the current state to sync DB and app
-//     console.log('App connected')
-//     this.wss.emit('message', this.appService.getHello());
-//   }
-
-//   handleDisconnect(client: Socket) {
-//     console.log({
-//       client: `Cliente desconectado ${client.id}`,
-//     });
-//   }
-
-//   @SubscribeMessage('message')
-//   handleMessage(client: Socket, payload: any): void {
-//     this.wss.emit('message', payload);
-//   }
-// }

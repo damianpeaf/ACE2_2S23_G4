@@ -2,7 +2,7 @@ import { ScrollView, View, Text, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSocket } from '../../hooks';
 
 import { generateLabels, generateData } from '../../utils/data';
@@ -13,7 +13,7 @@ import Chart from '../../components/Chart';
 
 const Monitor = () => {
 
-    const { isConnected } = useSocket();
+    const { isConnected, message } = useSocket();
 
     const labels = generateLabels(7)
     const data = generateData(7)
@@ -22,6 +22,11 @@ const Monitor = () => {
 
     return (
         <ScrollView >
+            <View className='p-3 flex flex-col justify-center items-center'>
+                <Text className='text-center text-2xl font-bold text-gray-700 mb-5'>{message}</Text>
+            </View>
+
+
             {/* Display alert if is not connected */}
             {
                 !isConnected &&
