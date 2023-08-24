@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AppEventType, InitEvent, SyncEventPayload } from '../../../mobile/interface';
+import { AppEventType, InitEvent, LiveDataEvent, SyncEventPayload } from '../../../mobile/interface';
 
 @Injectable()
 export class AppSocketService {
@@ -70,6 +70,16 @@ export class AppSocketService {
         this.mobileClients.forEach(client => {
             client.emit(AppEventType.Sync, {
                 type: AppEventType.Sync,
+                payload
+            })
+        });
+    }
+
+    // emit event to all mobile clients
+    notifyLiveDataEvent(payload: LiveDataEvent) {
+        this.mobileClients.forEach(client => {
+            client.emit(AppEventType.LiveData, {
+                type: AppEventType.LiveData,
                 payload
             })
         });

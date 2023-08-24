@@ -11,6 +11,8 @@ import { Logger } from '@nestjs/common';
 import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
 import { AppEventType, InitEvent, SyncEventPayload } from '../../../mobile/interface';
+import { LiveDataEvent } from '../../../mobile/interface/events';
+import { NotificationService } from './notification/notification.service';
 
 @WebSocketGateway({ cors: true })
 export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -18,7 +20,7 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
   private readonly logger = new Logger(AppSocketGateway.name);
 
-  constructor(private readonly socketService: AppSocketService) { }
+  constructor(private readonly socketService: AppSocketService, private readonly notificationService: NotificationService) { }
 
 
   afterInit(): void {
@@ -64,13 +66,24 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     this.socketService.unregisterMobileClient(client);
   }
 
-  @SubscribeMessage(AppEventType.Sync)
-  handleSync(client: Socket, payload: SyncEventPayload): void {
+  @SubscribeMessage(AppEventType.LiveData)
+  handleSync(client: Socket, payload: LiveDataEvent): void {
     if (!this.socketService.isEsp8266Client(client)) return;
-    this.socketService.notifySyncEvent(payload);
+    this.socketService.notifyLiveDataEvent(payload);
+    this.notificationService.analyzeData(payload); // analyze data to send notifications
     this.logger.log({
-      client: `Sync event received from ${client.id}`,
+      client: `LiveData event received from ${client.id}`,
       payload
     });
   }
 }
+
+// @SubscribeMessage(AppEventType.Sync)
+// handleSync(client: Socket, payload: SyncEventPayload): void {
+  //   if (!this.socketService.isEsp8266Client(client)) return;
+  //   this.socketService.notifySyncEvent(payload);
+  //   this.logger.log({
+    //     client: `Sync event received from ${client.id}`,
+    //     payload
+    //   });
+    // }
