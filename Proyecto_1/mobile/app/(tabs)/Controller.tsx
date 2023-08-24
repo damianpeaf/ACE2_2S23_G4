@@ -7,22 +7,23 @@ import Air from '../../components/controllers/air'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const Controller = () => {
+
     return (
         <ScrollView>
-        <View style={styles.gridContainer}>
-            <View style={[styles.gridItem, styles.bgBlue]}>
-                <Light />
+            <View style={styles.gridContainer}>
+                <View style={[styles.gridItem, styles.bgBlue]}>
+                    <Light />
+                </View>
+                <View style={[styles.gridItem, styles.bgGreen]}>
+                    <Thermo />
+                </View>
+                <View style={[styles.gridItem, styles.bgRed]}>
+                    <Co2 />
+                </View>
+                <View style={[styles.gridItem, styles.bgYellow]}>
+                    <Air />
+                </View>
             </View>
-            <View style={[styles.gridItem, styles.bgGreen]}>
-                <Thermo />
-            </View>
-            <View style={[styles.gridItem, styles.bgRed]}>
-                <Co2 />
-            </View>
-            <View style={[styles.gridItem, styles.bgYellow]}>
-                <Air />
-            </View>
-        </View>
         </ScrollView>
     )
 }

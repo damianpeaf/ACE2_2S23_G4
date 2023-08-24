@@ -1,9 +1,10 @@
+import { Socket } from "socket.io-client"
 
 export type VentState = 'off' | 'vel_1' | 'vel_2'
 
 export type NotificationType = 'warning' | 'error' | 'info'
 
-interface Notification {
+export interface NotificationI {
     type: NotificationType,
     message: string,
     timestamp: string,
@@ -21,5 +22,10 @@ export interface AppState {
         is_light_on: boolean,
         vent_state: VentState,
     },
-    notifications: Notification[]
+    notifications: NotificationI[],
+    client_info: {
+        is_esp8266_connected: boolean,
+    },
+    socket: Socket | null,
+    is_connected_to_server: boolean,
 }

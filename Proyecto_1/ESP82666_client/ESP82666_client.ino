@@ -108,5 +108,7 @@ void loop()
         String output;
         serializeJson(doc, output);
         socketIO.sendEVENT(output);
+
+        lastMillis = millis();
     }
 }

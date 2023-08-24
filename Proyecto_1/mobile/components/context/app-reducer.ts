@@ -1,6 +1,8 @@
-import { AppEventType, AppState, LiveDataEvent, NotificationEvent, SyncEvent } from "../../interface";
+import { Socket } from "socket.io-client";
+import { AppEventType, AppState, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, NotificationI, SyncEvent } from "../../interface";
 
 export type AppActionType =
+    // input events
     | {
         type: AppEventType.Sync,
         event: SyncEvent,
@@ -12,6 +14,20 @@ export type AppActionType =
     | {
         type: AppEventType.Notification,
         event: NotificationEvent,
+    }
+    | {
+        type: AppEventType.Init,
+        event: InitEvent,
+    }
+    | {
+        type: AppEventType.LightChange,
+        event: LightChangeEvent,
+    } | {
+        type: 'set-socket',
+        socket: Socket | null
+    } | {
+        type: 'set-is-connected-to-server',
+        is_connected_to_server: boolean
     }
 
 const appendValue = <T>(array: T[], value: T, max_length: number = 7) => {
@@ -59,7 +75,39 @@ export const appReducer = (state: AppState, action: AppActionType): AppState => 
                 ...state,
                 notifications: state.notifications.concat(action.event.payload)
             }
+        case AppEventType.Init:
 
+            const prevNotification = action.event.payload.previous_notifications || [];
+            return {
+                ...state,
+                client_info: {
+                    is_esp8266_connected: action.event.payload.is_esp8266_connected,
+                },
+                notifications: [
+                    ...prevNotification,
+                    ...state.notifications
+                ]
+            }
+
+        case AppEventType.LightChange:
+            return {
+                ...state,
+                global_state: {
+                    ...state.global_state,
+                    is_light_on: action.event.payload.is_light_on
+                }
+            }
+        case 'set-socket':
+            return {
+                ...state,
+                socket: action.socket
+            }
+
+        case 'set-is-connected-to-server':
+            return {
+                ...state,
+                is_connected_to_server: action.is_connected_to_server
+            }
         default:
             return state;
     }

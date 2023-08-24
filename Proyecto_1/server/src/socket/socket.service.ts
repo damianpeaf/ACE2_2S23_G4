@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AppEventType, InitEvent, SyncEventPayload } from './interfaces/events';
+import { AppEventType, InitEvent, SyncEventPayload } from '../../../mobile/interface';
 
 @Injectable()
 export class AppSocketService {

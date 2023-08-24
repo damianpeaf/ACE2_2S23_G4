@@ -1,26 +1,40 @@
 import { View, Text, Button } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Foundation } from '@expo/vector-icons';
+import { useAppContext } from '../../hooks';
+import { useEffect } from 'react';
 
 
 const Light = () => {
 
+  const { enableLight, state } = useAppContext();
   // use state
   const [changeSVG, setChangeSVG] = useState("#00000");
+  const [isWaiting, setisWaiting] = useState(false)
 
 
   // onPressLearnMore
   const onPressOnOffLight = () => {
     // set changeSVG
+    setisWaiting(true)
     if (changeSVG == "#00000") {
-      setChangeSVG("#FBBA22");
+      enableLight(true)
     }
     else {
-      setChangeSVG("#00000");
+      enableLight(false)
     }
   }
 
+  useEffect(() => {
+    setisWaiting(false)
 
+    if (state.global_state.is_light_on) {
+      setChangeSVG("#FBBA22");
+    } else {
+      setChangeSVG("#00000");
+    }
+
+  }, [state.global_state.is_light_on])
 
   return (
     <View >
@@ -28,9 +42,10 @@ const Light = () => {
       <Foundation name="lightbulb" size={200} color={changeSVG} />
 
       <Button
-      onPress={onPressOnOffLight}
-      title="ON / OFF"
-      color="black"
+        onPress={onPressOnOffLight}
+        title="ON / OFF"
+        color="black"
+        disabled={isWaiting}
       />
     </View>
   )

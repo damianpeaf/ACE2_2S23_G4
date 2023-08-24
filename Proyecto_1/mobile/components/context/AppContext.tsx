@@ -17,6 +17,10 @@ const initialState: AppState = {
         vent_state: 'off',
     },
     notifications: [],
+    client_info: {
+        is_esp8266_connected: false,
+    },
+    socket: null
 }
 
 export const Context = createContext({} as { state: AppState, dispatch: React.Dispatch<AppActionType> })

@@ -1,3 +1,5 @@
+import { NotificationI } from './app-context'
+
 export type VentState = 'off' | 'vel_1' | 'vel_2';
 
 export enum AppEventType {
@@ -15,20 +17,24 @@ export type AppEvent = {
     payload: any;
 };
 
-export type InitEvent = {
-    type: AppEventType.Init;
-    payload: {
-        is_esp8266_connected: boolean;
-        previous_notifications?: Notification[];
-    }
+export type InitEventPayload = {
+    is_esp8266_connected: boolean;
+    previous_notifications?: NotificationI[];
 };
 
+export type InitEvent = {
+    type: AppEventType.Init;
+    payload: InitEventPayload
+};
+
+
+export type SyncEventPayload = {
+    is_light_on: boolean;
+    vent_state: VentState;
+}
 export type SyncEvent = {
     type: AppEventType.Sync;
-    payload: {
-        is_light_on: boolean;
-        vent_state: VentState;
-    };
+    payload: SyncEventPayload
 };
 
 export type LiveDataEvent = {
