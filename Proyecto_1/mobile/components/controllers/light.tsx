@@ -1,6 +1,8 @@
-import { View, Text, Button } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
+
+import { View, Button } from 'react-native'
 import { Foundation } from '@expo/vector-icons';
+
 import { useAppContext } from '../../hooks';
 import { useEffect } from 'react';
 

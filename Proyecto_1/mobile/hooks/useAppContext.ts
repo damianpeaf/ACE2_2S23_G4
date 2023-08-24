@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { Context } from "../components/context/AppContext";
+import { Context } from "../components/context";
 import { AppEventType, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, SyncEvent } from "../interface";
 import { Manager } from "socket.io-client";
 

@@ -1,17 +1,12 @@
-import { ScrollView, View, Text, Button } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { useState } from 'react';
-
+import { ScrollView, View, Text } from 'react-native'
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { generateLabels, generateData } from '../../utils/data';
-
-import Chart from '../../components/Chart';
+import { Chart } from '../../components/Chart';
 
 
 
 const Monitor = () => {
-
 
     const labels = generateLabels(7)
     const data = generateData(7)
@@ -20,19 +15,6 @@ const Monitor = () => {
 
     return (
         <ScrollView >
-            <View className='p-3 flex flex-col justify-center items-center'>
-                {/* <Text className='text-center text-2xl font-bold text-gray-700 mb-5'>{message}</Text> */}
-            </View>
-
-
-            {/* Display alert if is not connected */}
-            {
-                // !isConnected &&
-                // <View className='p-3 flex flex-col justify-center items-center'>
-                //     <Text className='text-center text-2xl font-bold text-gray-700 mb-5'>No hay conexión</Text>
-                //     <MaterialCommunityIcons name="cancel" size={48} color="black" />
-                // </View>
-            }
             <View className='p-3 flex flex-col justify-center items-center'>
 
                 <Chart

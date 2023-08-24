@@ -1,4 +1,3 @@
-import React from 'react'
 import { Dimensions, Text, View } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 import { LineChartData, LineChartProps } from 'react-native-chart-kit/dist/line-chart/LineChart'
@@ -91,7 +90,7 @@ type ChartProps = {
     decimalPlaces?: number
 }
 
-const Chart = ({ colorScheme = 'orange', conf = {}, data, title, decimalPlaces = 2 }: ChartProps) => {
+export const Chart = ({ colorScheme = 'orange', conf = {}, data, title, decimalPlaces = 2 }: ChartProps) => {
 
     const colorSchemeConf = defaultColorSchemes.get(colorScheme) ?? defaultColorScheme
     colorSchemeConf.chartConfig.decimalPlaces = decimalPlaces
@@ -116,5 +115,3 @@ const Chart = ({ colorScheme = 'orange', conf = {}, data, title, decimalPlaces =
 
     )
 }
-
-export default Chart
