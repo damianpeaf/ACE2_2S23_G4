@@ -10,7 +10,7 @@ import { Logger } from '@nestjs/common';
 
 import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
-import { AppEventType, InitEvent, SyncEventPayload, LiveDataEvent } from 'interfaces';
+import { AppEventType, InitEvent, SyncEventPayload, LiveDataEvent } from './interface';
 import { NotificationService } from './notification/notification.service';
 
 @WebSocketGateway({ cors: true })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AppSocketService } from '../socket.service';
-import { LiveDataEvent } from 'interfaces';
+import { LiveDataEvent } from '../interface';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 

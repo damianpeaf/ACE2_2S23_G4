@@ -30,7 +30,6 @@
     "@nestjs/platform-socket.io": "^10.2.0",
     "@nestjs/websockets": "^10.2.0",
     "@serialport/parser-readline": "^11.0.1",
-    "interfaces": "./Proyecto_1/interfaces",
     "ioredis": "^5.3.2",
     "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",

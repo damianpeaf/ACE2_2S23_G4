@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AppEventType, InitEvent, LiveDataEvent, SyncEventPayload } from 'interfaces';
+import { AppEventType, InitEvent, LiveDataEvent, SyncEventPayload } from './interface';
 
 @Injectable()
 export class AppSocketService {
