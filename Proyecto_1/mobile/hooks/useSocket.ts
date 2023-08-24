@@ -11,6 +11,9 @@ export const useSocket = () => {
     const connectToServer = () => {
         const manager = new Manager('http://192.168.1.7:3000', {
             transports: ['websocket'],
+            extraHeaders: {
+                Authorization: 'mobile'
+            }
         });
         socket?.removeAllListeners();
         socket = manager.socket('/');

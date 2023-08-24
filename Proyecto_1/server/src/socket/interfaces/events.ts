@@ -1,6 +1,7 @@
 export type VentState = 'off' | 'vel_1' | 'vel_2';
 
 export enum AppEventType {
+    Init = 'init_client',
     Sync = 'global_state_sync',
     LiveData = 'live_data',
     Notification = 'notification',
@@ -14,12 +15,22 @@ export type AppEvent = {
     payload: any;
 };
 
+
+export type InitEvent = {
+    type: AppEventType.Init;
+    payload: {
+        is_esp8266_connected: boolean;
+        previous_notifications?: Notification[];
+    }
+};
+
+export type SyncEventPayload = {
+    is_light_on: boolean;
+    vent_state: VentState;
+}
 export type SyncEvent = {
     type: AppEventType.Sync;
-    payload: {
-        is_light_on: boolean;
-        vent_state: VentState;
-    };
+    payload: SyncEventPayload;
 };
 
 export type LiveDataEvent = {
