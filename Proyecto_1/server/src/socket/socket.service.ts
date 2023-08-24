@@ -8,7 +8,10 @@ export class AppSocketService {
     private esp8266Clients: Socket[];
     private mobileClients: Socket[];
 
-    constructor() { }
+    constructor() {
+        this.esp8266Clients = [];
+        this.mobileClients = [];
+    }
 
     getHello(): string {
         return 'Hello World!';

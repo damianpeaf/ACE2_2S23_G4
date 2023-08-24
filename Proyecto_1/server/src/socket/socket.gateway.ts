@@ -31,6 +31,10 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     // get headers
     const authorization = client.handshake.headers.Authorization as string;
 
+    this.logger.log({
+      client: `Cliente conectado ${client.id} - Tipo: ${authorization}`,
+    });
+
     if (authorization === 'esp8266') {
       this.socketService.registerEsp8266Client(client);
       this.socketService.notifyEsp8266State()
