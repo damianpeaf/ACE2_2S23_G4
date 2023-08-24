@@ -32,7 +32,7 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     const authorization = client.handshake.headers.Authorization as string;
 
     this.logger.log({
-      client: `Cliente conectado ${client.id} - Tipo: ${client.handshake.headers}`,
+      client: `Cliente conectado ${client.id} - Tipo: ${JSON.stringify(client.handshake.headers)}`,
     });
 
     if (authorization === 'esp8266') {
