@@ -29,7 +29,7 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   handleConnection(client: Socket) {
 
     // get headers
-    const authorization = client.handshake.headers.Authorization as string;
+    const authorization = client.handshake.headers.authorization as string;
 
     this.logger.log({
       client: `Cliente conectado ${client.id} - Tipo: ${JSON.stringify(client.handshake.headers)}`,

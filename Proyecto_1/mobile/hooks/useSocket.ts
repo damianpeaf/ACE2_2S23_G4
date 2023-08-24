@@ -12,7 +12,7 @@ export const useSocket = () => {
         const manager = new Manager('http://192.168.1.7:3000', {
             transports: ['websocket'],
             extraHeaders: {
-                Authorization: 'mobile'
+                authorization: 'mobile'
             }
         });
         socket?.removeAllListeners();
