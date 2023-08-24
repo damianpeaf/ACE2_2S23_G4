@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client"
-import { VentState } from "."
+import { VentState } from "./"
 
 export type NotificationType = 'warning' | 'error' | 'info'
 
