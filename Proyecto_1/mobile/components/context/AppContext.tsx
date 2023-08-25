@@ -48,9 +48,14 @@ export const AppContext = ({ children }: AppContextProps) => {
     }, [state.client_info.is_esp8266_connected])
 
     return (
-        <Context.Provider value={{
-            state,
-            dispatch
-        }}>{children}</Context.Provider>
+        <>
+            <Context.Provider value={{
+                state,
+                dispatch
+            }}>{children}</Context.Provider>
+
+            <Toast position='bottom' bottomOffset={50} />
+        </>
+
     )
 }

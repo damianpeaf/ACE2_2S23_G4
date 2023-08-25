@@ -1,21 +1,30 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import {
     Light,
-    Thermo,
+    Thermometer,
     Co2,
-    Air
+    Air,
+    Empty
 } from "../../components/controllers/"
 
 
 const components = [
+    {
+        name: 'Light1',
+        component: <Empty />
+    },
+    {
+        name: 'Light2',
+        component: <Empty />
+    },
     {
         name: 'Light',
         component: <Light />
     },
     {
         name: 'Thermo',
-        component: <Thermo />
+        component: <Thermometer />
     },
     {
         name: 'Co2',
@@ -27,6 +36,39 @@ const components = [
     },
 ]
 
+const items = [
+    {
+        name: 'Light1',
+    },
+    {
+        name: 'Light2',
+    },
+    {
+        name: 'Light',
+    },
+    {
+        name: 'Thermo',
+    },
+    {
+        name: 'Co2',
+    },
+    {
+        name: 'Light1',
+    },
+    {
+        name: 'Light2',
+    },
+    {
+        name: 'Light',
+    },
+    {
+        name: 'Thermo',
+    },
+    {
+        name: 'Co2',
+    },
+]
+
 const Controller = () => {
 
     return (
@@ -34,27 +76,42 @@ const Controller = () => {
             <View style={styles.gridContainer}>
                 {
                     components.map((item, index) => (
-                        <View key={index} style={[styles.gridItem, styles.bgMain]}>
+                        <View key={index} style={[styles.gridItem]}>
                             {item.component}
                         </View>
                     ))
                 }
+
+                {/* {
+                    items.map((item, index) => (
+                        <Text key={index} style={[styles.gridItem]}>
+                            {item.name}
+                        </Text>
+                    ))
+                } */}
             </View>
         </ScrollView>
     )
 }
 const styles = StyleSheet.create({
     gridContainer: {
-        flexDirection: 'column',
-    },
-    gridItem: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         width: '100%',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        backgroundColor: '#F4F4F4',
+        justifyContent: 'center',
     },
-    bgMain: {
-        backgroundColor: '#FFFFFF',
+
+    gridItem: {
+        margin: 5,
+        padding: 5,
+        height: 150,
+        width: 180,
+        textAlign: 'center',
+        textAlignVertical: 'center',
     },
+
 });
 
 export default Controller

@@ -1,34 +1,41 @@
-import { View, StyleSheet, FlatList } from 'react-native';
-import NotificationItem from '../../components/controllers/notification';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
+import NotificationItem from '../../components/controllers/NotificationItem';
 import { NotificationI } from '../../interface';
 import { useAppContext } from '../../hooks';
 
 
-const notifications: NotificationI[] = [
-  {
-    message: 'La luz se encendio!',
-    type: 'info',
-    timestamp: 'Hace un momento',
-  },
-  {
-    message: 'La temperatura ha disminuido',
-    type: 'warning',
-    timestamp: 'Hace un momento',
-  },
-  {
-    message: 'La cantidad de C02 ha aumentado',
-    type: 'error',
-    timestamp: 'Hace un momento',
-  },
-];
+// const notifications: NotificationI[] = [
+//   {
+//     message: 'La luz se encendio!',
+//     type: 'info',
+//     timestamp: 'Hace un momento',
+//   },
+//   {
+//     message: 'La temperatura ha disminuido',
+//     type: 'warning',
+//     timestamp: 'Hace un momento',
+//   },
+//   {
+//     message: 'La cantidad de C02 ha aumentado',
+//     type: 'error',
+//     timestamp: 'Hace un momento',
+//   },
+// ];
 
 const Notifications = () => {
 
-  // const { state } = useAppContext();
-  // const { notifications} = state;
+  const { state } = useAppContext();
+  const { notifications } = state;
 
   return (
     <View style={styles.container}>
+      {
+        notifications.length == 0 &&
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 20 }}>No hay notificaciones</Text>
+        </View>
+      }
+
       <FlatList
         data={notifications}
         keyExtractor={(item) => item.message}

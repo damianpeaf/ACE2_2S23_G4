@@ -38,10 +38,8 @@ export const Light = () => {
   }, [state.global_state.is_light_on])
 
   return (
-    <View >
-      {/* Import a svg */}
-      <Foundation name="lightbulb" size={200} color={changeSVG} />
-
+    <View>
+      <Foundation name="lightbulb" size={100} color={changeSVG} />
       <Button
         onPress={onPressOnOffLight}
         title="ON / OFF"
