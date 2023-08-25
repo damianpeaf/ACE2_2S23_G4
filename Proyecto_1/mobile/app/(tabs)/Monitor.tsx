@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import { ScrollView, View, Text } from 'react-native'
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { generateLabels, generateData } from '../../utils/data';
 import { Chart } from '../../components/Chart';
+import { useAppContext } from '../../hooks';
 
 const Monitor = () => {
 
-    const labels = generateLabels(7)
-    const data = generateData(7)
-
-    const [isPerson, setIsPerson] = useState(false)
+    const { state } = useAppContext();
 
     return (
         <ScrollView >
-            <View className='p-3 flex flex-col justify-center items-center'>
+            {/* <View className='p-3 flex flex-col justify-center items-center'>
 
                 <Chart
                     data={{
@@ -68,7 +65,7 @@ const Monitor = () => {
                         ? <MaterialIcons name="emoji-people" size={48} color="black" />
                         : <MaterialCommunityIcons name="cancel" size={48} color="black" />
                 }
-            </View>
+            </View> */}
         </ScrollView>
     )
 }

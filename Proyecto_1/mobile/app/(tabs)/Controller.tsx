@@ -1,21 +1,30 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import {
     Light,
-    Thermo,
+    Thermometer,
     Co2,
-    Air
+    Air,
+    Empty
 } from "../../components/controllers/"
 
 
 const components = [
+    {
+        name: 'Light1',
+        component: <Empty />
+    },
+    {
+        name: 'Light2',
+        component: <Empty />
+    },
     {
         name: 'Light',
         component: <Light />
     },
     {
         name: 'Thermo',
-        component: <Thermo />
+        component: <Thermometer />
     },
     {
         name: 'Co2',
@@ -34,7 +43,7 @@ const Controller = () => {
             <View style={styles.gridContainer}>
                 {
                     components.map((item, index) => (
-                        <View key={index} style={[styles.gridItem, styles.bgMain]}>
+                        <View key={index} style={[styles.gridItem]}>
                             {item.component}
                         </View>
                     ))
@@ -45,16 +54,23 @@ const Controller = () => {
 }
 const styles = StyleSheet.create({
     gridContainer: {
-        flexDirection: 'column',
-    },
-    gridItem: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         width: '100%',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        backgroundColor: '#F4F4F4',
+        justifyContent: 'center',
     },
-    bgMain: {
-        backgroundColor: '#FFFFFF',
+
+    gridItem: {
+        margin: 5,
+        padding: 5,
+        height: 150,
+        width: 180,
+        textAlign: 'center',
+        textAlignVertical: 'center',
     },
+
 });
 
 export default Controller

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from 'react'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import { AppState } from '../../interface'
 import { AppActionType, appReducer } from './app-reducer'
-import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 const initialState: AppState = {
     live_data: {
@@ -48,9 +48,14 @@ export const AppContext = ({ children }: AppContextProps) => {
     }, [state.client_info.is_esp8266_connected])
 
     return (
-        <Context.Provider value={{
-            state,
-            dispatch
-        }}>{children}</Context.Provider>
+        <>
+            <Context.Provider value={{
+                state,
+                dispatch
+            }}>{children}</Context.Provider>
+
+            <Toast position='bottom' bottomOffset={50} />
+        </>
+
     )
 }

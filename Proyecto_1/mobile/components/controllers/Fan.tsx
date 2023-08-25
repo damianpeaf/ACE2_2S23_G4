@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Slider } from '@react-native-assets/slider';
 import { useAppContext } from '../../hooks';
@@ -14,10 +14,14 @@ const ItemComponents: {
 };
 
 export const Air = () => {
-  const { setVentState } = useAppContext();
+  const { setVentState, state } = useAppContext();
 
-  const [sliderValue, setSliderValue] = useState(0);
-  const [itemName, setItemName] = useState('fan-off');
+  const [sliderValue, setSliderValue] = useState(
+    state.global_state.vent_state === 'off' ? 0 : state.global_state.vent_state === 'vel_1' ? 1 : 2
+  );
+  const [itemName, setItemName] = useState(
+    state.global_state.vent_state === 'off' ? 'fan-off' : state.global_state.vent_state === 'vel_1' ? 'fan-speed-1' : 'fan-speed-2'
+  );
 
   const calculateVentState = (value: number): VentState => {
     switch (Math.floor(value)) {
@@ -49,21 +53,17 @@ export const Air = () => {
         minimumTrackTintColor="#000"
         maximumTrackTintColor="#F4F4F4"
       />
-      <Text>Valor: {sliderValue}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   viewStyles: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '50%',
+    width: '100%',
     padding: 10,
   },
   sliderStyles: {
-    width: '100%',
+    width: '80%',
     height: 50,
   },
 });
