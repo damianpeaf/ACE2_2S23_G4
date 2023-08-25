@@ -63,12 +63,15 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   // ********** ESP8266 Events ********** //
 
   @SubscribeMessage(AppEventType.LiveData)
-  handleLivedata(client: Socket, payload: LiveDataEventPayload): void {
+  handleLivedata(client: Socket, payload: Omit<LiveDataEventPayload, 'timestamp'>): void {
     if (!this.socketService.isEsp8266Client(client)) return;
 
     const event: LiveDataEvent = {
       type: AppEventType.LiveData,
-      payload
+      payload: {
+        ...payload,
+        timestamp: new Date().toISOString()
+      }
     }
 
     this.logger.log(`${AppEventType.LiveData} event received from ESP8266`);
