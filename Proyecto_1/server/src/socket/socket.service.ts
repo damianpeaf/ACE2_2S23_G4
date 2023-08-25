@@ -1,21 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AppEventType, InitEvent, LiveDataEvent, SyncEventPayload } from './interface';
+import { AppEventType, InitEvent, LiveDataEvent, NotificationEvent, NotificationI, SyncEvent } from './interface';
+import { Redis } from 'ioredis';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
 
 @Injectable()
 export class AppSocketService {
 
+    private readonly logger = new Logger(AppSocketService.name);
+
     private esp8266Clients: Socket[];
     private mobileClients: Socket[];
 
-    constructor() {
+    constructor(@InjectRedis() private readonly redisService: Redis) {
         this.esp8266Clients = [];
         this.mobileClients = [];
     }
 
-    getHello(): string {
-        return 'Hello World!';
-    }
+    // ********** Connection Events ********** //
 
     registerEsp8266Client(client: Socket) {
         this.esp8266Clients.push(client);
@@ -33,6 +35,8 @@ export class AppSocketService {
         this.mobileClients = this.mobileClients.filter(c => c.id !== client.id);
     }
 
+    // ********** Utils ********** //
+
     isEsp8266Client(client: Socket) {
         return this.esp8266Clients.includes(client);
     }
@@ -45,60 +49,50 @@ export class AppSocketService {
         return this.esp8266Clients.length > 0;
     }
 
-    getMobileClients() {
-        return this.mobileClients;
-    }
+    // ********** Mobile Event Emition ********** //
 
     sendInitMobileData(client: Socket, sendNotifications = true) {
+
+        const notifications: NotificationI[] = []
+
+        if (sendNotifications) {
+            // TODO: get previous notifications from redis service
+            // this.redisService
+        }
 
         const event: InitEvent = {
             type: AppEventType.Init,
             payload: {
                 is_esp8266_connected: this.isAnyEsp8266ClientConnected(),
-                previous_notifications: sendNotifications ? [] : undefined, // TODO: get previous notifications from redis service
+                previous_notifications: sendNotifications ? notifications : undefined,
             }
         }
 
         client.emit(AppEventType.Init, event)
+        this.logger.log(`Event ${event.type} sent to mobile client: ${client.id}`);
     }
 
     notifyEsp8266State() {
-        this.mobileClients.forEach(client => this.sendInitMobileData(client, false));
-    }
-
-    notifySyncEvent(payload: SyncEventPayload) {
-        this.mobileClients.forEach(client => {
-            client.emit(AppEventType.Sync, {
-                type: AppEventType.Sync,
-                payload
-            })
-        });
-    }
-
-    // emit event to all mobile clients
-    notifyLiveDataEvent(payload: LiveDataEvent) {
-        this.mobileClients.forEach(client => {
-            client.emit(AppEventType.LiveData, {
-                type: AppEventType.LiveData,
-                payload
-            })
-        });
-    }
-
-    getInitialData(): any {
-        return {
-            live_data: {
-                air_quality: [12],
-                labels: ["12:00"],
-                light: [12],
-                temperature: [23.0],
-                presence: false,
-            },
-            global_state: {
-                is_light_on: false,
-                vent_state: 'off',
-            },
-            notifications: [],
+        const event: InitEvent = {
+            type: AppEventType.Init,
+            payload: {
+                is_esp8266_connected: this.isAnyEsp8266ClientConnected(),
+            }
         }
+
+        this.mobileClients.forEach(client => {
+            client.emit(AppEventType.Init, event)
+        });
     }
+
+    broadcastEventToMobileClients(event: InitEvent | SyncEvent | LiveDataEvent | NotificationEvent) {
+        this.mobileClients.forEach(client => {
+            client.emit(event.type, event)
+            this.logger.log(`Event ${event.type} sent to mobile client: ${client.id}`);
+        });
+    }
+
+    // ********** ESP8266 Event Emition ********** //
+    // TODO: implement broadcastEventToEsp8266Clients
+
 }
