@@ -1,26 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import NotificationItem from '../../components/controllers/notification';
+import { NotificationI } from '../../interface';
 import { useAppContext } from '../../hooks';
 
 
-const notifications = [
+const notifications: NotificationI[] = [
   {
-    id: 1,
     message: 'La luz se encendio!',
-    type: 'notifications-circle',
+    type: 'info',
     timestamp: 'Hace un momento',
   },
   {
-    id: 2,
     message: 'La temperatura ha disminuido',
-    type: 'notifications-circle',
+    type: 'warning',
     timestamp: 'Hace un momento',
   },
   {
-    id: 3,
     message: 'La cantidad de C02 ha aumentado',
-    type: 'warning',
+    type: 'error',
     timestamp: 'Hace un momento',
   },
 ];
@@ -34,7 +31,7 @@ const Notifications = () => {
     <View style={styles.container}>
       <FlatList
         data={notifications}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.message}
         renderItem={({ item }) => <NotificationItem item={item} />}
       />
     </View>
