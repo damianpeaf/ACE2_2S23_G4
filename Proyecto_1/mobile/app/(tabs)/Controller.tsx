@@ -36,39 +36,6 @@ const components = [
     },
 ]
 
-const items = [
-    {
-        name: 'Light1',
-    },
-    {
-        name: 'Light2',
-    },
-    {
-        name: 'Light',
-    },
-    {
-        name: 'Thermo',
-    },
-    {
-        name: 'Co2',
-    },
-    {
-        name: 'Light1',
-    },
-    {
-        name: 'Light2',
-    },
-    {
-        name: 'Light',
-    },
-    {
-        name: 'Thermo',
-    },
-    {
-        name: 'Co2',
-    },
-]
-
 const Controller = () => {
 
     return (
@@ -81,14 +48,6 @@ const Controller = () => {
                         </View>
                     ))
                 }
-
-                {/* {
-                    items.map((item, index) => (
-                        <Text key={index} style={[styles.gridItem]}>
-                            {item.name}
-                        </Text>
-                    ))
-                } */}
             </View>
         </ScrollView>
     )

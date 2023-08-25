@@ -1,27 +1,36 @@
 import { Tabs } from 'expo-router'
 import { MaterialCommunityIcons, Feather, Ionicons } from '@expo/vector-icons'
 
+const tabActiveColor = "black"
+const tabInactiveColor = "rgb(192,192,192)"
+
 const _layout = () => {
     return (
         <Tabs >
             <Tabs.Screen name="Monitor" options={{
                 tabBarLabel: "Monitor de sensores",
-                tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="motion-sensor" size={24} color="black" />
+                headerTitle: "Monitor de sensores",
+                tabBarActiveTintColor: tabActiveColor,
+                tabBarInactiveTintColor: tabInactiveColor,
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="motion-sensor" size={24} color={color} />
                 ),
-                headerTitle: "Monitor de sensores"
             }} />
             <Tabs.Screen name="Controller" options={{
                 tabBarLabel: "Controlador",
-                tabBarIcon: ({ color, size }) => (
-                    <Feather name="cpu" size={24} color="black" />
+                tabBarActiveTintColor: tabActiveColor,
+                tabBarInactiveTintColor: tabInactiveColor,
+                tabBarIcon: ({ color }) => (
+                    <Feather name="cpu" size={24} color={color} />
                 ),
                 headerTitle: "Controlador"
             }} />
             <Tabs.Screen name="Notifications" options={{
                 tabBarLabel: "Notificaciones",
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="notifications" size={24} color="black" />
+                tabBarActiveTintColor: tabActiveColor,
+                tabBarInactiveTintColor: tabInactiveColor,
+                tabBarIcon: ({ color }) => (
+                    <Ionicons name="notifications" size={24} color={color} />
                 ),
                 headerTitle: "Notificaciones"
             }} />

@@ -1,26 +1,6 @@
 import { View, StyleSheet, FlatList, Text } from 'react-native';
 import NotificationItem from '../../components/controllers/NotificationItem';
-import { NotificationI } from '../../interface';
 import { useAppContext } from '../../hooks';
-
-
-// const notifications: NotificationI[] = [
-//   {
-//     message: 'La luz se encendio!',
-//     type: 'info',
-//     timestamp: 'Hace un momento',
-//   },
-//   {
-//     message: 'La temperatura ha disminuido',
-//     type: 'warning',
-//     timestamp: 'Hace un momento',
-//   },
-//   {
-//     message: 'La cantidad de C02 ha aumentado',
-//     type: 'error',
-//     timestamp: 'Hace un momento',
-//   },
-// ];
 
 const Notifications = () => {
 

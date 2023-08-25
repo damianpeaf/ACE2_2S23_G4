@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from 'react'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import { AppState } from '../../interface'
 import { AppActionType, appReducer } from './app-reducer'
-import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 const initialState: AppState = {
     live_data: {

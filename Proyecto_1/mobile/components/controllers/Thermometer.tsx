@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
+import { useAppContext } from '../../hooks';
 
 
 const listName = [
@@ -26,10 +27,14 @@ const listName = [
 
 
 export const Thermometer = () => {
+  const { state } = useAppContext();
+
   return (
     <View>
       <FontAwesome name="thermometer-4" style={styles.icon} />
-      <Text style={styles.text}>25ºC</Text>
+      <Text style={styles.text}>
+        {`${state.live_data.temperature} °C`}
+      </Text>
     </View>
   )
 }

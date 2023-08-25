@@ -14,10 +14,14 @@ const ItemComponents: {
 };
 
 export const Air = () => {
-  const { setVentState } = useAppContext();
+  const { setVentState, state } = useAppContext();
 
-  const [sliderValue, setSliderValue] = useState(0);
-  const [itemName, setItemName] = useState('fan-off');
+  const [sliderValue, setSliderValue] = useState(
+    state.global_state.vent_state === 'off' ? 0 : state.global_state.vent_state === 'vel_1' ? 1 : 2
+  );
+  const [itemName, setItemName] = useState(
+    state.global_state.vent_state === 'off' ? 'fan-off' : state.global_state.vent_state === 'vel_1' ? 'fan-speed-1' : 'fan-speed-2'
+  );
 
   const calculateVentState = (value: number): VentState => {
     switch (Math.floor(value)) {
