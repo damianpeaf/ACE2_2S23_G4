@@ -37,24 +37,22 @@ export type SyncEvent = {
     payload: SyncEventPayload
 };
 
+export type LiveDataEventPayload = {
+    temperature: number;
+    light: number;
+    air_quality: number;
+    timestamp: string;
+    presence: boolean;
+};
+
 export type LiveDataEvent = {
     type: AppEventType.LiveData;
-    payload: {
-        temperature: number;
-        light: number;
-        air_quality: number;
-        timestamp: string;
-        presence: boolean;
-    };
+    payload: LiveDataEventPayload
 };
 
 export type NotificationEvent = {
     type: AppEventType.Notification;
-    payload: {
-        type: 'warning' | 'error' | 'info';
-        message: string;
-        timestamp: string;
-    };
+    payload: NotificationI
 };
 
 export type LightChangeEvent = {

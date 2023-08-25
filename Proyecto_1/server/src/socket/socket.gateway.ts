@@ -10,7 +10,7 @@ import { Logger } from '@nestjs/common';
 
 import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
-import { AppEventType, InitEvent, SyncEventPayload, LiveDataEvent } from './interface';
+import { AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent } from './interface';
 import { NotificationService } from './notification/notification.service';
 
 @WebSocketGateway({ cors: true })
@@ -21,20 +21,16 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
   constructor(private readonly socketService: AppSocketService, private readonly notificationService: NotificationService) { }
 
-
   afterInit(): void {
-    // console.log('Arduino socket initialized')
-    this.logger.log('Arduino socket initialized');
+    this.logger.log('Socket initialized');
   }
+
+  // ********** Connection Events ********** //
 
   handleConnection(client: Socket) {
 
     // get headers
     const authorization = client.handshake.headers.authorization as string;
-
-    this.logger.log({
-      client: `Cliente conectado ${client.id} - Tipo: ${JSON.stringify(client.handshake.headers)}`,
-    });
 
     if (authorization === 'esp8266') {
       this.socketService.registerEsp8266Client(client);
@@ -52,9 +48,7 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
     const isEsp8266Client = this.socketService.isEsp8266Client(client);
 
-    this.logger.log({
-      client: `Cliente desconectado ${client.id} - Tipo: ${isEsp8266Client ? 'esp8266' : 'mobile'}`,
-    });
+    this.logger.log(`Client Type: ${isEsp8266Client ? 'esp8266' : 'mobile'} desconectado - ID: ${client.id}`);
 
     if (isEsp8266Client) {
       this.socketService.unregisterEsp8266Client(client);
@@ -65,24 +59,37 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     this.socketService.unregisterMobileClient(client);
   }
 
-  @SubscribeMessage(AppEventType.LiveData)
-  handleSync(client: Socket, payload: LiveDataEvent): void {
-    if (!this.socketService.isEsp8266Client(client)) return;
-    this.socketService.notifyLiveDataEvent(payload);
-    this.notificationService.analyzeData(payload); // analyze data to send notifications
-    this.logger.log({
-      client: `LiveData event received from ${client.id}`,
-      payload
-    });
-  }
-}
 
-// @SubscribeMessage(AppEventType.Sync)
-// handleSync(client: Socket, payload: SyncEventPayload): void {
-  //   if (!this.socketService.isEsp8266Client(client)) return;
-  //   this.socketService.notifySyncEvent(payload);
-  //   this.logger.log({
-    //     client: `Sync event received from ${client.id}`,
-    //     payload
-    //   });
-    // }
+  // ********** ESP8266 Events ********** //
+
+  @SubscribeMessage(AppEventType.LiveData)
+  handleLivedata(client: Socket, payload: LiveDataEventPayload): void {
+    if (!this.socketService.isEsp8266Client(client)) return;
+
+    const event: LiveDataEvent = {
+      type: AppEventType.LiveData,
+      payload
+    }
+
+    this.logger.log(`${AppEventType.LiveData} event received from ESP8266`);
+    this.socketService.broadcastEventToMobileClients(event);
+    this.notificationService.analyzeData(event); // analyze data to send notifications
+  }
+
+
+  @SubscribeMessage(AppEventType.Sync)
+  handleSync(client: Socket, payload: SyncEventPayload): void {
+    if (!this.socketService.isEsp8266Client(client)) return;
+
+    const event: SyncEvent = {
+      type: AppEventType.Sync,
+      payload
+    }
+
+    this.logger.log(`${AppEventType.Sync} event received from ESP8266`);
+    this.socketService.broadcastEventToMobileClients(event);
+  }
+
+  // ********** Mobile Events ********** //
+  // TODO: implement mobile events
+}
