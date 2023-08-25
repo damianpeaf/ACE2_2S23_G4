@@ -82,33 +82,27 @@ void setup()
     // event handler
     socketIO.onEvent(socketIOEvent);
     lastMillis = millis();
+    Serial.println("Master ready!");
 }
 
 void loop()
 {
-    socketIO.loop();
+    // socketIO.loop();
 
-    // send sync event every 5 seconds
-    /*
-        {
-            is_light_on: boolean,
-            vent_state: 'off' | 'vel_1' | 'vel_2'
-        }
-    */
-    if (millis() - lastMillis > 5000)
-    {
-        DynamicJsonDocument doc(1024);
-        JsonArray array = doc.to<JsonArray>();
-        array.add("global_state_sync");
+    // if (millis() - lastMillis > 5000)
+    // {
+    //     DynamicJsonDocument doc(1024);
+    //     JsonArray array = doc.to<JsonArray>();
+    //     array.add("global_state_sync");
 
-        JsonObject param1 = array.createNestedObject();
-        param1["is_light_on"] = true;
-        param1["vent_state"] = "vel_1";
+    //     JsonObject param1 = array.createNestedObject();
+    //     param1["is_light_on"] = true;
+    //     param1["vent_state"] = "vel_1";
 
-        String output;
-        serializeJson(doc, output);
-        socketIO.sendEVENT(output);
+    //     String output;
+    //     serializeJson(doc, output);
+    //     socketIO.sendEVENT(output);
 
-        lastMillis = millis();
-    }
+    //     lastMillis = millis();
+    // }
 }
