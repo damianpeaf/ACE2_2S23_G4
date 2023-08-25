@@ -8,23 +8,37 @@ import {
 } from "../../components/controllers/"
 
 
+const components = [
+    {
+        name: 'Light',
+        component: <Light />
+    },
+    {
+        name: 'Thermo',
+        component: <Thermo />
+    },
+    {
+        name: 'Co2',
+        component: <Co2 />
+    },
+    {
+        name: 'Air',
+        component: <Air />
+    },
+]
+
 const Controller = () => {
 
     return (
         <ScrollView>
             <View style={styles.gridContainer}>
-                <View style={[styles.gridItem, styles.bgBlue]}>
-                    <Light />
-                </View>
-                <View style={[styles.gridItem, styles.bgGreen]}>
-                    <Thermo />
-                </View>
-                <View style={[styles.gridItem, styles.bgRed]}>
-                    <Co2 />
-                </View>
-                <View style={[styles.gridItem, styles.bgYellow]}>
-                    <Air />
-                </View>
+                {
+                    components.map((item, index) => (
+                        <View key={index} style={[styles.gridItem, styles.bgMain]}>
+                            {item.component}
+                        </View>
+                    ))
+                }
             </View>
         </ScrollView>
     )
@@ -32,24 +46,13 @@ const Controller = () => {
 const styles = StyleSheet.create({
     gridContainer: {
         flexDirection: 'column',
-        // flexWrap: 'wrap',
     },
     gridItem: {
         width: '100%',
-        // height: '30%',
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
-    bgBlue: {
-        backgroundColor: '#FFFFFF',
-    },
-    bgGreen: {
-        backgroundColor: '#FFFFFF',
-    },
-    bgRed: {
-        backgroundColor: '#FFFFFF',
-    },
-    bgYellow: {
+    bgMain: {
         backgroundColor: '#FFFFFF',
     },
 });

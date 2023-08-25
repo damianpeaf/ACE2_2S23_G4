@@ -4,8 +4,6 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { generateLabels, generateData } from '../../utils/data';
 import { Chart } from '../../components/Chart';
 
-
-
 const Monitor = () => {
 
     const labels = generateLabels(7)
