@@ -9,10 +9,11 @@ import { time } from 'console';
 export class NotificationService {
 
   // create a static to manage when the value is saved in redis to avoid save it again
-  private static saveOnceLight = false;
-  private static saveOnceAir = false;
+  private saveOnceLight = false;
+  private saveOnceAir = false;
 
   private readonly logger = new Logger(NotificationService.name);
+  private readonly badAirQualityThreshold = 300; // in ppm
 
   constructor(private readonly socketService: AppSocketService, @InjectRedis() private readonly redisService: Redis) { }
 
@@ -25,27 +26,28 @@ export class NotificationService {
   }
 
   // analyzeData
-  analyzeData(payload: LiveDataEvent) {
+  analyzeData(event: LiveDataEvent) {
     this.logger.log('analyzeData')
 
-    const {air_quality,light,presence,temperature,timestamp} = payload.payload;
+    const { air_quality, light, presence, temperature, timestamp } = event.payload;
 
     // analyze light
     this.analyzeLight(timestamp, presence);
     // analyze air quality
     this.analyzeAirQuality(air_quality, timestamp);
-    
+
   }
 
 
   analyzeLight(timestamp: string, presence: boolean) {
-    if (!NotificationService.saveOnceLight) {
+    if (!this.saveOnceLight) {
       // save the data as lightNotification: timestamp with 60 seconds of life
-      this.redisService.set(`lightNotification`, JSON.stringify({timestamp}), 'EX', 61)
-      NotificationService.saveOnceLight = true;
+      this.redisService.set(`lightNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+      this.saveOnceLight = true;
     }
-    
+
     // if presence is false -> evaluate if theye have passed 30 seconds
+    // ! TODO: read from redis if the light is on or off
     if (!presence) {
       // get the last lightNotification from redis and compare the timestamp
       this.redisService.get('lightNotification', (err, result) => {
@@ -55,9 +57,9 @@ export class NotificationService {
         }
         // if the timestamp is equal 30 seconds -> do nothing
         if (result) {
-          const {timestamp} = JSON.parse(result);
+          const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
-          const newTimeStamp = new  Date(timestamp);
+          const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
           if (diff == 30000 || diff == 31000) {
             // TODO: send first notification and save it
@@ -72,20 +74,20 @@ export class NotificationService {
     } else {
       // Delete the lightNotification from redis
       this.redisService.del('lightNotification')
-      NotificationService.saveOnceLight = false;
+      this.saveOnceLight = false;
     }
   }
 
 
   analyzeAirQuality(air_quality: number, timestamp: string) {
-    if (!NotificationService.saveOnceAir) {
+    if (!this.saveOnceAir) {
       // save the data as airNotification: timestamp with 60 seconds of life
-      this.redisService.set(`airNotification`, JSON.stringify({timestamp}), 'EX', 61)
-      NotificationService.saveOnceAir = true;
+      this.redisService.set(`airNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+      this.saveOnceAir = true;
     }
-    
-    // if air_quality > 20 -> evaluate if theye have passed 30 seconds
-    if (air_quality > 20) {
+
+    // if air_quality > Threshold -> evaluate if theye have passed 30 seconds
+    if (air_quality > this.badAirQualityThreshold) {
       // get the last airNotification from redis and compare the timestamp
       this.redisService.get('airNotification', (err, result) => {
         if (err) {
@@ -94,9 +96,9 @@ export class NotificationService {
         }
         // if the timestamp is equal 30 seconds -> do nothing
         if (result) {
-          const {timestamp} = JSON.parse(result);
+          const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
-          const newTimeStamp = new  Date(timestamp);
+          const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
           if (diff == 30000 || diff == 31000) {
             // TODO: send first notification and save it
@@ -111,10 +113,10 @@ export class NotificationService {
     } else {
       // Delete the airNotification from redis
       this.redisService.del('airNotification')
-      NotificationService.saveOnceAir = false;
+      this.saveOnceAir = false;
     }
   }
 
-  
+
 
 }
