@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import Light from '../../components/controllers/light'
-import Thermo from '../../components/controllers/thermo'
-import Co2 from '../../components/controllers/co2'
-import Air from '../../components/controllers/air'
+import { View, StyleSheet } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import {
+    Light,
+    Thermo,
+    Co2,
+    Air
+} from "../../components/controllers/"
+
 
 const Controller = () => {
 

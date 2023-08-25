@@ -1,11 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { NotificationI } from '../../interface';
 
-// https://www.svgrepo.com/svg/499912/light-bulb
-const NotificationItem = ({ item } ) => (
+interface Props {
+  item: NotificationI
+}
+
+const itemIcon = {
+  "info": <Ionicons name="notifications-circle-outline" size={24} color="black" />,
+  "warning": <Ionicons name="alert" size={24} color="black" />,
+  "error": <Ionicons name="warning" size={24} color="black" />,
+}
+
+const NotificationItem = ({ item }: Props) => (
   <View style={styles.notificationContainer}>
-    <Ionicons name={item.type} size={24} color="black" />
+    {
+      itemIcon[item.type]
+    }
     <Text style={styles.notificationMessage}>{item.message}</Text>
     <Text style={styles.notificationTimestamp}>{item.timestamp}</Text>
   </View>

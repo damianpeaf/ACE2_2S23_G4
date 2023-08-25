@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Context } from "../components/context";
-import { AppEventType, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, SyncEvent } from "../interface";
+import { AppEventType, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, SyncEvent, VentChangeEvent, VentState } from "../interface";
 import { Manager } from "socket.io-client";
 
 
@@ -86,6 +86,19 @@ export const useAppContext = () => {
         socket.emit(AppEventType.LightChange, event)
     }
 
+    const setVentState = (ventState: VentState) => {
+        if (!socket) return;
+
+        const event: VentChangeEvent = {
+            payload: {
+                vent_state: ventState
+            },
+            type: AppEventType.VentChange
+        }
+
+        socket.emit(AppEventType.VentChange, event)
+    }
+
     useEffect(() => {
         if (!socket) {
             initSocket();
@@ -98,7 +111,8 @@ export const useAppContext = () => {
         addLiveData,
         addNotification,
         initStateEvent,
-        enableLight
+        enableLight,
+        setVentState
     }
 
 }

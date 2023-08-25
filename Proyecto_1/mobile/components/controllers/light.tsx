@@ -1,13 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { View, Button } from 'react-native'
 import { Foundation } from '@expo/vector-icons';
 
 import { useAppContext } from '../../hooks';
-import { useEffect } from 'react';
 
 
-const Light = () => {
+export const Light = () => {
 
   const { enableLight, state } = useAppContext();
   // use state
@@ -52,5 +51,3 @@ const Light = () => {
     </View>
   )
 }
-
-export default Light
