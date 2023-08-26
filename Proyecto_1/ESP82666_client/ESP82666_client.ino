@@ -27,6 +27,9 @@ String serialStream = "";
 bool isLightOn = false;
 int ventState = 0; // 0: off, 1: low, 2: high
 
+// Led pin on D4
+const int ledPin = 2;
+
 void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
 {
     switch (type)
@@ -77,6 +80,7 @@ void processEvent(uint8_t *payload)
         if (isOn != isLightOn)
         {
             isLightOn = isOn;
+            digitalWrite(ledPin, isLightOn ? HIGH : LOW);
             USE_SERIAL.printf("[IOc] Light change: %s\n", isLightOn ? "on" : "off");
             mySUART.println(isLightOn ? "1" : "0");
         }
@@ -187,6 +191,10 @@ void setup()
     // state reset
     isLightOn = false;
     ventState = 0;
+
+    // led
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
 
     Serial.println("Setup ready!");
 }
