@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useAppContext } from '../../hooks';
 
@@ -33,7 +32,7 @@ export const Thermometer = () => {
     <View>
       <FontAwesome name="thermometer-4" style={styles.icon} />
       <Text style={styles.text}>
-        {`${state.live_data.temperature} °C`}
+        {`${state.live_data.temperature[0]} °C`}
       </Text>
     </View>
   )

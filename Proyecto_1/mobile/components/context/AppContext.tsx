@@ -5,10 +5,10 @@ import { AppActionType, appReducer } from './app-reducer'
 
 const initialState: AppState = {
     live_data: {
-        air_quality: [],
-        labels: [],
-        light: [],
-        temperature: [],
+        air_quality: [12, 22, 45],
+        labels: ["Uno, dos, tres"],
+        light: [100, 200, 300],
+        temperature: [20, 21, 22],
         presence: false,
     },
     global_state: {

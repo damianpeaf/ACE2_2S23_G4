@@ -15,7 +15,7 @@ export const Co2 = () => {
       <MaterialCommunityIcons name="molecule-co2" size={100} color="black" />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={{ fontSize: 35, fontWeight: 'bold' }}>
-          {`${state.live_data.air_quality} ppm`}
+          {`${state.live_data.air_quality[0]} ppm`}
         </Text>
       </View>
     </View>
