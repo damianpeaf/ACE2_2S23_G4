@@ -14,9 +14,7 @@ interface GlobalStateI {
 
 interface NotificationStateI {
   firstLightNotification: boolean;
-  secondLightNotification: boolean;
   firstAirNotification: boolean;
-  secondAirNotification: boolean;
 }
 
 @Injectable()
@@ -29,9 +27,7 @@ export class NotificationService {
   private globalState: GlobalStateI = { is_light_on: false, vent_state: 'off' };
   private notificationState: NotificationStateI = {
     firstLightNotification: false,
-    secondLightNotification: false,
     firstAirNotification: false,
-    secondAirNotification: false
   };
   private readonly badAirQualityThreshold = 300; // in ppm
 
@@ -40,7 +36,7 @@ export class NotificationService {
   resetGlobalState() {
     // reset the global state
     this.globalState = { is_light_on: false, vent_state: 'off' };
-    this.notificationState = { firstLightNotification: false, secondLightNotification: false, firstAirNotification: false, secondAirNotification: false };
+    this.notificationState = { firstLightNotification: false, firstAirNotification: false };
     this.redisService.del('lightNotification')
     this.redisService.del('airNotification')
   }
@@ -145,7 +141,9 @@ export class NotificationService {
             this.emitNotification(notification);
             this.saveNotification(notification);
 
-          } else if (diff >= 60000 && !this.notificationState.secondLightNotification) {
+            this.notificationState.firstLightNotification = true;
+
+          } else if (diff >= 60000) {
 
             const notification: NotificationI = {
               message: 'La luz se ha quedado encendida sin presencia humana por más de 60 segundos, se apagará automáticamente',
@@ -157,8 +155,9 @@ export class NotificationService {
             this.saveNotification(notification);
 
             // Notification cycle finished
+            this.saveOnceLight = false;
+            this.redisService.del('lightNotification')
             this.notificationState.firstLightNotification = false;
-            this.notificationState.secondLightNotification = false;
 
             // TODO: emit to esp8266 to turn off the light
             // this.socketService.broadcastEventToEsp8266Client
@@ -167,10 +166,9 @@ export class NotificationService {
       })
     } else {
       // Delete the lightNotification from redis
-      this.redisService.del('lightNotification')
       this.saveOnceLight = false;
+      this.redisService.del('lightNotification')
       this.notificationState.firstLightNotification = false;
-      this.notificationState.secondLightNotification = false;
     }
   }
 
@@ -206,8 +204,9 @@ export class NotificationService {
 
             this.emitNotification(notification);
             this.saveNotification(notification);
+            this.notificationState.firstAirNotification = true;
 
-          } else if (diff >= 60000 && !this.notificationState.secondAirNotification) {
+          } else if (diff >= 60000) {
 
             const notification: NotificationI = {
               message: 'La calidad del aire es mala, de manera sostendida por más de 60 segundos, se prenderá el ventilador automáticamente',
@@ -219,8 +218,9 @@ export class NotificationService {
             this.saveNotification(notification);
 
             // Notification cycle finished
+            this.saveOnceAir = false;
+            this.redisService.del('airNotification')
             this.notificationState.firstAirNotification = false;
-            this.notificationState.secondAirNotification = false;
 
             // TODO: emit to esp8266 to turn on the fan
 
@@ -229,10 +229,9 @@ export class NotificationService {
       })
     } else {
       // Delete the airNotification from redis
-      this.redisService.del('airNotification')
       this.saveOnceAir = false;
+      this.redisService.del('airNotification')
       this.notificationState.firstAirNotification = false;
-      this.notificationState.secondAirNotification = false;
     }
   }
 
