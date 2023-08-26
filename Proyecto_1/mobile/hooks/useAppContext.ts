@@ -44,6 +44,14 @@ export const useAppContext = () => {
             })
         })
 
+        newSocket.on(AppEventType.Sync, (payload: SyncEvent) => {
+            syncState(payload);
+        })
+
+        newSocket.on(AppEventType.Notification, (payload: NotificationEvent) => {
+            addNotification(payload);
+        })
+
         dispatch({
             type: 'set-socket',
             socket: newSocket

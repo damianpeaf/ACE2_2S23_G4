@@ -18,7 +18,7 @@ const Notifications = () => {
 
       <FlatList
         data={notifications}
-        keyExtractor={(item) => item.message}
+        keyExtractor={(item, i) => i.toString() + item.timestamp}
         renderItem={({ item }) => <NotificationItem item={item} />}
       />
     </View>

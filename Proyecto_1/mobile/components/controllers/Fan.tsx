@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Slider } from '@react-native-assets/slider';
@@ -8,50 +8,73 @@ import { VentState } from '../../interface';
 const ItemComponents: {
   [key: string]: JSX.Element;
 } = {
-  "fan-off": <MaterialCommunityIcons size={100} color="black" name="fan-off" />,
-  "fan-speed-1": <MaterialCommunityIcons size={100} color="black" name="fan-speed-1" />,
-  "fan-speed-2": <MaterialCommunityIcons size={100} color="black" name="fan-speed-2" />,
+  'off': <MaterialCommunityIcons size={100} color="black" name="fan-off" />,
+  'vel_1': <MaterialCommunityIcons size={100} color="black" name="fan-speed-1" />,
+  'vel_2': <MaterialCommunityIcons size={100} color="black" name="fan-speed-2" />,
 };
+
+const valueMap: {
+  [key: number]: VentState;
+} = {
+  0: 'off',
+  1: 'vel_1',
+  2: 'vel_2',
+}
 
 export const Air = () => {
   const { setVentState, state } = useAppContext();
 
+  const [isEmmiting, setIsEmmiting] = useState(false)
   const [sliderValue, setSliderValue] = useState(
     state.global_state.vent_state === 'off' ? 0 : state.global_state.vent_state === 'vel_1' ? 1 : 2
   );
-  const [itemName, setItemName] = useState(
-    state.global_state.vent_state === 'off' ? 'fan-off' : state.global_state.vent_state === 'vel_1' ? 'fan-speed-1' : 'fan-speed-2'
-  );
 
-  const calculateVentState = (value: number): VentState => {
-    switch (Math.floor(value)) {
-      case 0:
-        setItemName('fan-off');
-        return 'off';
-      case 1:
-        setItemName('fan-speed-1');
-        return 'vel_1';
-      default:
-        setItemName('fan-speed-2');
-        return 'vel_2';
-    }
+  const handleSliderValueChange = (value: number) => {
+    setSliderValue(Math.floor(value));
   };
+
+  useEffect(() => {
+    handleEmit();
+  }, [sliderValue]);
+
+
+  const handleEmit = () => {
+
+    setIsEmmiting(true);
+
+    switch (sliderValue) {
+      case 0:
+        setVentState('off');
+        break;
+      case 1:
+        setVentState('vel_1');
+        break;
+      default:
+        setVentState('vel_2');
+        break;
+    }
+
+  }
+
+  useEffect(() => {
+    setIsEmmiting(false);
+  }, [state.global_state.vent_state]);
 
   return (
     <View style={styles.viewStyles}>
-      {ItemComponents[itemName]}
+      {ItemComponents[state.global_state.vent_state]}
       <Slider
         style={styles.sliderStyles}
         value={sliderValue}
         onValueChange={(newValue) => {
-          setSliderValue(newValue);
-          setVentState(calculateVentState(newValue));
+          handleSliderValueChange(newValue);
         }}
         step={1}
         minimumValue={0}
         maximumValue={2}
         minimumTrackTintColor="#000"
         maximumTrackTintColor="#F4F4F4"
+        enabled={!isEmmiting}
       />
     </View>
   );

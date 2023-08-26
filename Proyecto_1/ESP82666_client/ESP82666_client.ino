@@ -42,6 +42,7 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
         break;
     case sIOtype_EVENT:
         USE_SERIAL.printf("[IOc] get event: %s\n", payload);
+        processEvent(payload);
         break;
     case sIOtype_ACK:
         USE_SERIAL.printf("[IOc] get ack: %u\n", length);
@@ -61,6 +62,93 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
         break;
     }
 }
+
+void processEvent(uint8_t *payload)
+{
+    DynamicJsonDocument doc(1024);
+    deserializeJson(doc, payload);
+
+    String r_event = doc[0];
+    if (r_event == "light_change")
+    {
+        // light change event
+        // [IOc] get event: ["light_change",true]
+        bool isOn = doc[1];
+        if (isOn != isLightOn)
+        {
+            isLightOn = isOn;
+            USE_SERIAL.printf("[IOc] Light change: %s\n", isLightOn ? "on" : "off");
+            mySUART.println(isLightOn ? "1" : "0");
+        }
+        sendGlobalState();
+    }
+    else if (r_event == "vent_change")
+    {
+        // vent change event
+        // [IOc] get event: ["vent_change","off"]
+        // [IOc] get event: ["vent_change","vel_1"]
+        // [IOc] get event: ["vent_change","vel_2"]
+
+        String v_state = doc[1];
+
+        if (v_state == "off")
+        {
+            if (ventState != 0)
+            {
+                ventState = 0;
+                USE_SERIAL.printf("[IOc] Vent change: %s\n", "off");
+                mySUART.println("2");
+            }
+        }
+        else if (v_state == "vel_1")
+        {
+            if (ventState != 1)
+            {
+                ventState = 1;
+                USE_SERIAL.printf("[IOc] Vent change: %s\n", "vel_1");
+                mySUART.println("3");
+            }
+        }
+        else if (v_state == "vel_2")
+        {
+            if (ventState != 2)
+            {
+                ventState = 2;
+                USE_SERIAL.printf("[IOc] Vent change: %s\n", "vel_2");
+                mySUART.println("4");
+            }
+        }
+        sendGlobalState();
+    }
+}
+
+void sendGlobalState()
+{
+    DynamicJsonDocument doc(1024);
+    JsonArray array = doc.to<JsonArray>();
+    array.add("global_state_sync");
+
+    JsonObject param1 = array.createNestedObject();
+    param1["is_light_on"] = isLightOn;
+
+    if (ventState == 0)
+    {
+        param1["vent_state"] = "off";
+    }
+    else if (ventState == 1)
+    {
+        param1["vent_state"] = "vel_1";
+    }
+    else if (ventState == 2)
+    {
+        param1["vent_state"] = "vel_2";
+    }
+
+    String output;
+    serializeJson(doc, output);
+    socketIO.sendEVENT(output);
+}
+
 void setup()
 {
     Serial.begin(115200); // Start the Serial communication to send messages to the computer
@@ -154,8 +242,8 @@ void loop()
             serializeJson(doc, output);
             socketIO.sendEVENT(output); // send message to server
 
-            Serial.println("Sending live data event to server:");
-            Serial.println(output);
+            // Serial.println("Sending live data event to server:");
+            // Serial.println(output);
 
             serialStream = "";
         }

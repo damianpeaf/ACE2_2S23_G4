@@ -56,8 +56,18 @@ export class AppSocketService {
         const notifications: NotificationI[] = []
 
         if (sendNotifications) {
-            // TODO: get previous notifications from redis service
-            // this.redisService
+            this.redisService.lrange('notifications', 0, -1, (err, result) => {
+                if (err) {
+                    this.logger.error(err);
+                    return;
+                }
+
+                result.forEach((notification) => {
+                    notifications.push(JSON.parse(notification));
+                })
+
+                this.logger.log(`Notifications sent to mobile client: ${client.id}`);
+            })
         }
 
         const event: InitEvent = {
