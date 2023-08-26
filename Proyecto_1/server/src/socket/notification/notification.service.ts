@@ -129,7 +129,7 @@ export class NotificationService {
           const lastTimestamp = new Date(timestamp);
           const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
-          if ((diff >= 30000 || diff < 60000) && !this.notificationState.firstLightNotification) {
+          if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
 
             const notification: NotificationI = {
               message: 'La luz se ha quedado encendida sin presencia humana por más de 30 segundos',
@@ -199,7 +199,7 @@ export class NotificationService {
           const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
-          if ((diff >= 30000 || diff < 60000) && !this.notificationState.firstAirNotification) {
+          if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstAirNotification) {
 
             const notification: NotificationI = {
               message: 'La calidad del aire es mala, de manera sostendida por más de 30 segundos',
