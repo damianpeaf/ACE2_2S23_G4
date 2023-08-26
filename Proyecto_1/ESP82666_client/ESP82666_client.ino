@@ -3,15 +3,25 @@
 #include <ESP8266WiFiMulti.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
-const char *ssid = "CLARO1_8E2AAB";  // The SSID (name) of the Wi-Fi network you want to connect 2.4ghz!
-const char *password = "841qlCREpc"; // The password of the Wi-Fi network
-
 #include <WebSocketsClient.h>
 #include <SocketIOclient.h>
 #include <Hash.h>
+#include <SoftwareSerial.h>
+
+// Internet connection
+const char *ssid = "CLARO1_8E2AAB";  // The SSID (name) of the Wi-Fi network you want to connect 2.4ghz!
+const char *password = "841qlCREpc"; // The password of the Wi-Fi network
+
+// WebSocket client
 SocketIOclient socketIO;
+
+// Serial communication
 #define USE_SERIAL Serial
+SoftwareSerial mySUART(4, 5); // D2, D1
+
+// utils
 unsigned long lastMillis = 0;
+String serialStream = "";
 
 void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
 {
@@ -50,6 +60,8 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
 void setup()
 {
     Serial.begin(115200); // Start the Serial communication to send messages to the computer
+    mySUART.begin(115200);
+
     delay(10);
     Serial.println('\n');
 
@@ -73,36 +85,74 @@ void setup()
 
     socketIO.setExtraHeaders("Authorization: esp8266");
 
-    // put your server ip address
     //  socketIO.begin("192.168.1.2", 8880, "/socket.io/?EIO=4");
-    //  socketIO.begin("echo.websocket.org", 80, "/");
-    //  https://ace22s23g4-production.up.railway.app/ using beginSSL
     socketIO.beginSSL("ace22s23g4-production.up.railway.app", 443, "/socket.io/?EIO=4");
 
     // event handler
     socketIO.onEvent(socketIOEvent);
     lastMillis = millis();
-    Serial.println("Master ready!");
+    Serial.println("Setup ready!");
 }
 
 void loop()
 {
-    // socketIO.loop();
+    socketIO.loop();
 
-    // if (millis() - lastMillis > 5000)
-    // {
-    //     DynamicJsonDocument doc(1024);
-    //     JsonArray array = doc.to<JsonArray>();
-    //     array.add("global_state_sync");
+    if (mySUART.available() > 0)
+    {
+        char c = mySUART.read();
 
-    //     JsonObject param1 = array.createNestedObject();
-    //     param1["is_light_on"] = true;
-    //     param1["vent_state"] = "vel_1";
+        if (c == '\n')
+        {
 
-    //     String output;
-    //     serializeJson(doc, output);
-    //     socketIO.sendEVENT(output);
+            DynamicJsonDocument doc(1024);
+            JsonArray array = doc.to<JsonArray>();
+            array.add("live_data"); // event name
 
-    //     lastMillis = millis();
-    // }
+            JsonObject payload = array.createNestedObject();
+
+            // Extract values from serial stream
+            int index = 0;
+            int lastIndex = 0;
+            int count = 0;
+            while (index != -1)
+            {
+                index = serialStream.indexOf(';', lastIndex);
+                String value = serialStream.substring(lastIndex, index);
+                switch (count)
+                {
+                case 0:
+                    payload["temperature"] = value.toFloat();
+                    break;
+                case 1:
+                    payload["humidity"] = value.toFloat();
+                    break;
+                case 2:
+                    payload["air_quality"] = value.toInt();
+                    break;
+                case 3:
+                    payload["light"] = value.toFloat();
+                    break;
+                case 4:
+                    payload["presence"] = value == "true";
+                    break;
+                }
+                lastIndex = index + 1;
+                count++;
+            }
+
+            String output;
+            serializeJson(doc, output);
+            socketIO.sendEVENT(output); // send message to server
+
+            Serial.println("Sending live data event to server:");
+            Serial.println(output);
+
+            serialStream = "";
+        }
+        else
+        {
+            serialStream += c;
+        }
+    }
 }

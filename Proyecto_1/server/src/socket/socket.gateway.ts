@@ -35,12 +35,15 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     if (authorization === 'esp8266') {
       this.socketService.registerEsp8266Client(client);
       this.socketService.notifyEsp8266State()
+      this.notificationService.resetGlobalState();
+      this.notificationService.emitGlobalState();
       this.logger.log(`ESP client connected: ${client.id}`);
       return
     }
 
     this.socketService.registerMobileClient(client);
     this.socketService.sendInitMobileData(client);
+    this.notificationService.emitGlobalState(client);
     this.logger.log(`Mobile client connected: ${client.id}`);
   }
 
@@ -53,6 +56,8 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     if (isEsp8266Client) {
       this.socketService.unregisterEsp8266Client(client);
       this.socketService.notifyEsp8266State()
+      this.notificationService.resetGlobalState();
+      this.notificationService.emitGlobalState();
       return
     }
 
@@ -84,13 +89,10 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   handleSync(client: Socket, payload: SyncEventPayload): void {
     if (!this.socketService.isEsp8266Client(client)) return;
 
-    const event: SyncEvent = {
-      type: AppEventType.Sync,
-      payload
-    }
+    this.notificationService.setGlobalState(payload);
+    this.notificationService.emitGlobalState();
 
     this.logger.log(`${AppEventType.Sync} event received from ESP8266`);
-    this.socketService.broadcastEventToMobileClients(event);
   }
 
   // ********** Mobile Events ********** //
