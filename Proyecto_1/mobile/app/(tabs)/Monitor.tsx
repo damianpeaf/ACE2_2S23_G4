@@ -61,58 +61,9 @@ const Monitor = () => {
                     }}
                     decimalPlaces={0}
                 />
-
-
-                {/* <Chart
-                    data={{
-                        datasets: [
-                            {
-                                data,
-                            },
-                        ],
-                        labels
-                    }}
-                    title='Temperatura'
-                    conf={{
-                        yAxisSuffix: '°C',
-                    }}
-                    decimalPlaces={1}
-                />
-                <Chart
-                    data={{
-                        datasets: [
-                            {
-                                data,
-                            },
-                        ],
-                        labels
-                    }}
-                    colorScheme='blue'
-                    title='Luz'
-                    conf={{
-                        yAxisSuffix: 'lx',
-                    }}
-                    decimalPlaces={0}
-                />
-                <Chart
-                    data={{
-                        datasets: [
-                            {
-                                data,
-                            },
-                        ],
-                        labels
-                    }}
-                    colorScheme='red'
-                    title='Calidad del aire'
-                    conf={{
-                        yAxisSuffix: 'ppm',
-                    }}
-                    decimalPlaces={0}
-                /> */}
                 <Text className='text-center text-2xl font-bold text-gray-700 mb-5'>Presencia</Text>
                 {
-                    state.live_data.presence
+                    presence
                         ? <MaterialIcons name="emoji-people" size={48} color="black" />
                         : <MaterialCommunityIcons name="cancel" size={48} color="black" />
                 }
