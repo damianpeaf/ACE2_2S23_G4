@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { AppEventType, InitEvent, LiveDataEvent, NotificationEvent, NotificationI, SyncEvent } from './interface';
+import { AppEvent, AppEventType, InitEvent, LiveDataEvent, NotificationEvent, NotificationI, SyncEvent } from './interface';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 
@@ -93,6 +93,13 @@ export class AppSocketService {
     }
 
     // ********** ESP8266 Event Emition ********** //
-    // TODO: implement broadcastEventToEsp8266Clients
+
+    broadcastEventToEsp8266Clients(event: AppEvent) {
+        this.esp8266Clients.forEach(client => {
+            client.emit(event.type, event.payload)
+            this.logger.log(`Event ${event.type} sent to esp8266 client: ${client.id}`);
+        });
+    }
+
 
 }

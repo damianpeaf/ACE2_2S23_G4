@@ -32,7 +32,7 @@ export const Thermometer = () => {
     <View>
       <FontAwesome name="thermometer-4" style={styles.icon} />
       <Text style={styles.text}>
-        {`${state.live_data.temperature[0]} °C`}
+        {`${state.live_data.temperature[0].toFixed(1)} °C`}
       </Text>
     </View>
   )

@@ -18,7 +18,9 @@ const NotificationItem = ({ item }: Props) => (
       itemIcon[item.type]
     }
     <Text style={styles.notificationMessage}>{item.message}</Text>
-    <Text style={styles.notificationTimestamp}>{item.timestamp}</Text>
+    <Text style={styles.notificationTimestamp}>
+      {new Date(item.timestamp).toLocaleString()}
+    </Text>
   </View>
 );
 

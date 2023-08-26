@@ -106,7 +106,14 @@ export const Chart = ({ colorScheme = 'orange', conf = {}, data, title, decimalP
             '>{title} </Text>
             <LineChart
                 {...colorSchemeConf}
-                data={data}
+                data={{
+                    datasets: [
+                        {
+                            data: [0].concat(data.datasets[0].data),
+                        }
+                    ],
+                    labels: [''].concat(data.labels)
+                }}
                 width={Dimensions.get("window").width * 0.9}
                 height={220}
                 {...conf}

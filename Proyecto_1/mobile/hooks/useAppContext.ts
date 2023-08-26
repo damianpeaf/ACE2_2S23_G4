@@ -37,6 +37,13 @@ export const useAppContext = () => {
             initStateEvent(payload);
         })
 
+        newSocket.on(AppEventType.LiveData, (payload: LiveDataEvent) => {
+            dispatch({
+                type: AppEventType.LiveData,
+                event: payload
+            })
+        })
+
         dispatch({
             type: 'set-socket',
             socket: newSocket

@@ -23,6 +23,10 @@ SoftwareSerial mySUART(4, 5); // D2, D1
 unsigned long lastMillis = 0;
 String serialStream = "";
 
+// State
+bool isLightOn = false;
+int ventState = 0; // 0: off, 1: low, 2: high
+
 void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
 {
     switch (type)
@@ -91,6 +95,11 @@ void setup()
     // event handler
     socketIO.onEvent(socketIOEvent);
     lastMillis = millis();
+
+    // state reset
+    isLightOn = false;
+    ventState = 0;
+
     Serial.println("Setup ready!");
 }
 

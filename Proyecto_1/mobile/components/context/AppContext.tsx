@@ -1,14 +1,14 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
-import { AppState } from '../../interface'
+import { AppEventType, AppState, NotificationEvent } from '../../interface'
 import { AppActionType, appReducer } from './app-reducer'
 
 const initialState: AppState = {
     live_data: {
-        air_quality: [12, 22, 45],
-        labels: ["Uno, dos, tres"],
-        light: [100, 200, 300],
-        temperature: [20, 21, 22],
+        air_quality: [0],
+        labels: [''],
+        light: [0],
+        temperature: [0],
         presence: false,
     },
     global_state: {
@@ -37,6 +37,19 @@ export const AppContext = ({ children }: AppContextProps) => {
             type: 'info',
             text1: state.is_connected_to_server ? 'Conectado al servidor' : 'Desconectado del servidor',
         })
+
+        dispatch({
+            type: AppEventType.Notification,
+            event: {
+                type: AppEventType.Notification,
+                payload: {
+                    message: state.is_connected_to_server ? 'Conectado al servidor' : 'Desconectado del servidor',
+                    type: 'info',
+                    timestamp: new Date().toISOString()
+                },
+            }
+        })
+
     }, [state.is_connected_to_server])
 
 
@@ -44,6 +57,18 @@ export const AppContext = ({ children }: AppContextProps) => {
         Toast.show({
             type: 'info',
             text1: state.client_info.is_esp8266_connected ? 'Conectado al ESP8266' : 'Desconectado del ESP8266',
+        })
+
+        dispatch({
+            type: AppEventType.Notification,
+            event: {
+                type: AppEventType.Notification,
+                payload: {
+                    message: state.client_info.is_esp8266_connected ? 'Conectado al ESP8266' : 'Desconectado del ESP8266',
+                    type: 'info',
+                    timestamp: new Date().toISOString()
+                },
+            }
         })
     }, [state.client_info.is_esp8266_connected])
 

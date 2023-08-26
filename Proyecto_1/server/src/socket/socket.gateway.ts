@@ -10,7 +10,7 @@ import { Logger } from '@nestjs/common';
 
 import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
-import { AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent } from './interface';
+import { AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent, LightChangeEvent, VentChangeEvent } from './interface';
 import { NotificationService } from './notification/notification.service';
 
 @WebSocketGateway({ cors: true })
@@ -96,5 +96,27 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   }
 
   // ********** Mobile Events ********** //
-  // TODO: implement mobile events
+
+  @SubscribeMessage(AppEventType.LightChange)
+  handleLightChange(client: Socket, event: LightChangeEvent): void {
+    if (!this.socketService.isMobileClient(client)) return;
+    this.logger.log(`${AppEventType.LightChange} event received from Mobile`);
+
+    this.socketService.broadcastEventToEsp8266Clients({
+      type: AppEventType.LightChange,
+      payload: event.payload.is_light_on // just send the boolean value
+    })
+  }
+
+  @SubscribeMessage(AppEventType.VentChange)
+  handleVentChange(client: Socket, event: VentChangeEvent): void {
+    if (!this.socketService.isMobileClient(client)) return;
+    this.logger.log(`${AppEventType.VentChange} event received from Mobile`);
+
+    this.socketService.broadcastEventToEsp8266Clients({
+      type: AppEventType.VentChange,
+      payload: event.payload.vent_state
+    })
+  }
+
 }

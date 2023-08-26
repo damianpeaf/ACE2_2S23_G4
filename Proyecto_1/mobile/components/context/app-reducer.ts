@@ -1,5 +1,6 @@
 import { Socket } from "socket.io-client";
 import { AppEventType, AppState, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, NotificationI, SyncEvent } from "../../interface";
+import { formatDate } from "../../utils/data";
 
 export type AppActionType =
     // input events
@@ -20,9 +21,6 @@ export type AppActionType =
         event: InitEvent,
     }
     | {
-        type: AppEventType.LightChange,
-        event: LightChangeEvent,
-    } | {
         type: 'set-socket',
         socket: Socket | null
     } | {
@@ -60,20 +58,22 @@ export const appReducer = (state: AppState, action: AppActionType): AppState => 
             const { air_quality, light, temperature, labels } = state.live_data;
             const { air_quality: aq_value, light: lg_value, temperature: tp_value, timestamp: l_value, presence } = action.event.payload;
 
+            const formated_label = formatDate(new Date(l_value));
+
             return {
                 ...state,
                 live_data: {
                     air_quality: appendValue(air_quality, aq_value),
                     light: appendValue(light, lg_value),
                     temperature: appendValue(temperature, tp_value),
-                    labels: appendValue(labels, l_value),
+                    labels: appendValue(labels, formated_label),
                     presence
                 }
             }
         case AppEventType.Notification:
             return {
                 ...state,
-                notifications: state.notifications.concat(action.event.payload)
+                notifications: [action.event.payload].concat(state.notifications)
             }
         case AppEventType.Init:
 
@@ -89,14 +89,6 @@ export const appReducer = (state: AppState, action: AppActionType): AppState => 
                 ]
             }
 
-        case AppEventType.LightChange:
-            return {
-                ...state,
-                global_state: {
-                    ...state.global_state,
-                    is_light_on: action.event.payload.is_light_on
-                }
-            }
         case 'set-socket':
             return {
                 ...state,

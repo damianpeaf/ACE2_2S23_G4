@@ -1,7 +1,7 @@
 export * from './NotificationItem'
-export * from './CO2'
+export * from './co2'
 export * from './Fan'
-export * from './Light'
+export * from './light'
 export * from './Thermometer'
 export * from './Empty'
 
