@@ -95,7 +95,6 @@ export class NotificationService {
 
   // analyzeData
   analyzeData(event: LiveDataEvent) {
-    this.logger.log('analyzeData')
 
     const { air_quality, light, presence, temperature, timestamp } = event.payload;
 
@@ -143,6 +142,8 @@ export class NotificationService {
 
             this.notificationState.firstLightNotification = true;
 
+            this.logger.warn('1st Light notification sent')
+
           } else if (diff >= 60000) {
 
             const notification: NotificationI = {
@@ -159,8 +160,12 @@ export class NotificationService {
             this.redisService.del('lightNotification')
             this.notificationState.firstLightNotification = false;
 
-            // TODO: emit to esp8266 to turn off the light
-            // this.socketService.broadcastEventToEsp8266Client
+            this.socketService.broadcastEventToEsp8266Clients({
+              type: AppEventType.LightChange,
+              payload: false // turn off the light
+            })
+
+            this.logger.warn('2nd Light notification sent')
           }
         }
       })
@@ -206,6 +211,7 @@ export class NotificationService {
             this.saveNotification(notification);
             this.notificationState.firstAirNotification = true;
 
+            this.logger.warn('1st Air notification sent')
           } else if (diff >= 60000) {
 
             const notification: NotificationI = {
@@ -222,8 +228,12 @@ export class NotificationService {
             this.redisService.del('airNotification')
             this.notificationState.firstAirNotification = false;
 
-            // TODO: emit to esp8266 to turn on the fan
+            this.socketService.broadcastEventToEsp8266Clients({
+              type: AppEventType.VentChange,
+              payload: 'vel_2' // turn on the vent
+            })
 
+            this.logger.warn('2nd Air notification sent')
           }
         }
       })
