@@ -110,6 +110,14 @@ export class NotificationService {
     // if presence is false -> evaluate if theye have passed 30 seconds
     const { is_light_on } = this.globalState;
 
+    console.log({
+      is_light_on,
+      presence,
+      saveOnceLight: this.saveOnceLight,
+      firstLightNotification: this.notificationState.firstLightNotification,
+      redisVal: await this.redisService.get('lightNotification'),
+    })
+
     // if there is no presence and the light is on -> evaluate if they have passed 30 seconds
     if (!presence && is_light_on) {
 
