@@ -136,10 +136,16 @@ export class NotificationService {
         }
         // if the timestamp is equal 30 seconds -> do nothing
         if (result) {
+
+          console.log({ result })
+
           const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
           const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
+
+          console.log({ diff })
+
           if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
 
             const notification: NotificationI = {
