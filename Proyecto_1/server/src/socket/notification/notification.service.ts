@@ -129,7 +129,7 @@ export class NotificationService {
       }
 
       // get the last lightNotification from redis and compare the timestamp
-      this.redisService.get('lightNotification', (err, result) => {
+      await this.redisService.get('lightNotification', (err, result) => {
         if (err) {
           this.logger.error(err)
           return
@@ -144,7 +144,7 @@ export class NotificationService {
           const newTimeStamp = new Date(timestamp);
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
-          console.log({ diff })
+          console.log({ timestamp, lastTimestamp, newTimeStamp, diff })
 
           if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
 
@@ -185,6 +185,7 @@ export class NotificationService {
             this.logger.warn('2nd Light notification sent')
           }
         }
+        return result
       })
     } else {
       // Delete the lightNotification from redis
