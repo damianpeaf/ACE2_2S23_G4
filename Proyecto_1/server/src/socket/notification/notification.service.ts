@@ -113,7 +113,7 @@ export class NotificationService {
 
       if (!this.saveOnceLight) {
         // save the data as lightNotification: timestamp with 60 seconds of life
-        this.redisService.set(`lightNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+        this.redisService.set(`lightNotification`, JSON.stringify({ timestamp }), 'EX', 75)
         this.saveOnceLight = true;
         return
       }
@@ -188,7 +188,7 @@ export class NotificationService {
 
       if (!this.saveOnceAir) {
         // save the data as airNotification: timestamp with 60 seconds of life
-        this.redisService.set(`airNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+        this.redisService.set(`airNotification`, JSON.stringify({ timestamp }), 'EX', 75)
         this.saveOnceAir = true;
         return
       }

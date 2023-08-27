@@ -51,19 +51,20 @@ export class AppSocketService {
 
     // ********** Mobile Event Emition ********** //
 
-    sendInitMobileData(client: Socket, sendNotifications = true) {
+    async sendInitMobileData(client: Socket, sendNotifications = true) {
 
         const notifications: NotificationI[] = []
 
         if (sendNotifications) {
-            this.redisService.lrange('notifications', 0, -1, (err, result) => {
+            await this.redisService.lrange('notifications', 0, -1, (err, result) => {
                 if (err) {
                     this.logger.error(err);
                     return;
                 }
 
                 result.forEach((notification) => {
-                    notifications.push(JSON.parse(notification));
+                    const notification_obj = JSON.parse(notification) as NotificationI;
+                    notifications.push(notification_obj);
                 })
 
                 this.logger.log(`Notifications sent to mobile client: ${client.id}`);
