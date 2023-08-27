@@ -3,8 +3,6 @@ import { AppSocketService } from '../socket.service';
 import { AppEventType, LiveDataEvent, NotificationI, SyncEvent, VentState } from '../interface';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import { time } from 'console';
-import { async } from 'rxjs';
 import { Socket } from 'socket.io';
 
 interface GlobalStateI {
@@ -96,7 +94,7 @@ export class NotificationService {
   // analyzeData
   analyzeData(event: LiveDataEvent) {
 
-    const { air_quality, light, presence, temperature, timestamp } = event.payload;
+    const { air_quality, presence, timestamp } = event.payload;
 
     // analyze light
     this.analyzeLight(timestamp, presence);
@@ -110,14 +108,6 @@ export class NotificationService {
     // if presence is false -> evaluate if theye have passed 30 seconds
     const { is_light_on } = this.globalState;
 
-    console.log({
-      is_light_on,
-      presence,
-      saveOnceLight: this.saveOnceLight,
-      firstLightNotification: this.notificationState.firstLightNotification,
-      redisVal: await this.redisService.get('lightNotification'),
-    })
-
     // if there is no presence and the light is on -> evaluate if they have passed 30 seconds
     if (!presence && is_light_on) {
 
@@ -129,7 +119,7 @@ export class NotificationService {
       }
 
       // get the last lightNotification from redis and compare the timestamp
-      await this.redisService.get('lightNotification', (err, result) => {
+      this.redisService.get('lightNotification', (err, result) => {
         if (err) {
           this.logger.error(err)
           return
@@ -137,13 +127,10 @@ export class NotificationService {
         // if the timestamp is equal 30 seconds -> do nothing
         if (result) {
 
-          console.log({ result })
-
           const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
           const newTimeStamp = new Date();
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
-
 
           if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
 
@@ -189,7 +176,7 @@ export class NotificationService {
     } else {
       // Delete the lightNotification from redis
       this.saveOnceLight = false;
-      await this.redisService.del('lightNotification')
+      this.redisService.del('lightNotification')
       this.notificationState.firstLightNotification = false;
     }
   }
@@ -260,7 +247,7 @@ export class NotificationService {
     } else {
       // Delete the airNotification from redis
       this.saveOnceAir = false;
-      await this.redisService.del('airNotification')
+      this.redisService.del('airNotification')
       this.notificationState.firstAirNotification = false;
     }
   }
