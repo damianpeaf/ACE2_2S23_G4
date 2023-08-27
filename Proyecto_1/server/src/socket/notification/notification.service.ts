@@ -106,17 +106,20 @@ export class NotificationService {
   }
 
   async analyzeLight(timestamp: string, presence: boolean) {
-    if (!this.saveOnceLight) {
-      // save the data as lightNotification: timestamp with 60 seconds of life
-      this.redisService.set(`lightNotification`, JSON.stringify({ timestamp }), 'EX', 61)
-      this.saveOnceLight = true;
-    }
 
     // if presence is false -> evaluate if theye have passed 30 seconds
     const { is_light_on } = this.globalState;
 
     // if there is no presence and the light is on -> evaluate if they have passed 30 seconds
     if (!presence && is_light_on) {
+
+      if (!this.saveOnceLight) {
+        // save the data as lightNotification: timestamp with 60 seconds of life
+        this.redisService.set(`lightNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+        this.saveOnceLight = true;
+        return
+      }
+
       // get the last lightNotification from redis and compare the timestamp
       this.redisService.get('lightNotification', (err, result) => {
         if (err) {
@@ -172,20 +175,23 @@ export class NotificationService {
     } else {
       // Delete the lightNotification from redis
       this.saveOnceLight = false;
-      this.redisService.del('lightNotification')
+      await this.redisService.del('lightNotification')
       this.notificationState.firstLightNotification = false;
     }
   }
 
-  analyzeAirQuality(air_quality: number, timestamp: string) {
-    if (!this.saveOnceAir) {
-      // save the data as airNotification: timestamp with 60 seconds of life
-      this.redisService.set(`airNotification`, JSON.stringify({ timestamp }), 'EX', 61)
-      this.saveOnceAir = true;
-    }
+  async analyzeAirQuality(air_quality: number, timestamp: string) {
 
     // if air_quality > Threshold -> evaluate if theye have passed 30 seconds
     if (air_quality > this.badAirQualityThreshold) {
+
+      if (!this.saveOnceAir) {
+        // save the data as airNotification: timestamp with 60 seconds of life
+        this.redisService.set(`airNotification`, JSON.stringify({ timestamp }), 'EX', 61)
+        this.saveOnceAir = true;
+        return
+      }
+
       // get the last airNotification from redis and compare the timestamp
       this.redisService.get('airNotification', (err, result) => {
         if (err) {
@@ -240,7 +246,7 @@ export class NotificationService {
     } else {
       // Delete the airNotification from redis
       this.saveOnceAir = false;
-      this.redisService.del('airNotification')
+      await this.redisService.del('airNotification')
       this.notificationState.firstAirNotification = false;
     }
   }
