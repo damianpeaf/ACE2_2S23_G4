@@ -141,10 +141,9 @@ export class NotificationService {
 
           const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
-          const newTimeStamp = new Date(timestamp);
+          const newTimeStamp = new Date();
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
-          console.log({ timestamp, lastTimestamp, newTimeStamp, diff })
 
           if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
 
@@ -217,7 +216,7 @@ export class NotificationService {
         if (result) {
           const { timestamp } = JSON.parse(result);
           const lastTimestamp = new Date(timestamp);
-          const newTimeStamp = new Date(timestamp);
+          const newTimeStamp = new Date();
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
           if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstAirNotification) {
