@@ -10,9 +10,8 @@ import { Logger } from '@nestjs/common';
 
 import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
-import { AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent, LightChangeEvent, VentChangeEvent } from './interface';
+import { NotificationI, AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent, LightChangeEvent, VentChangeEvent } from './interface';
 import { NotificationService } from './notification/notification.service';
-import { NotificationI } from '../../../mobile/interface/app-context';
 
 @WebSocketGateway({ cors: true })
 export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
