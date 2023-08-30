@@ -13,7 +13,7 @@ SoftwareSerial mySUART(2, 3); // SRX = Din-2, STX = Dpin-3
 DHT dht(DHTPIN, DHTTYPE);
 
 // ----------------- LDR -----------------
-#define LDRPIN A0
+#define LDRPIN A2
 
 // ----------------- MQ135 -----------------
 #define MQ135PIN A1
@@ -45,7 +45,9 @@ void loop()
   float humidity = dht.readHumidity();
 
   int ldr = analogRead(LDRPIN);
-  float lumen = -1.8742 * ldr + 1702.3;
+  float lumen = 0.6633 * ldr +0.0052;
+
+  // Serial.println("ANALOG LIGHT: " + String(lumen));
 
   if (lumen < 0)
   {

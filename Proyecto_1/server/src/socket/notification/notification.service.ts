@@ -94,16 +94,16 @@ export class NotificationService {
   // analyzeData
   analyzeData(event: LiveDataEvent) {
 
-    const { air_quality, presence, timestamp } = event.payload;
+    const { air_quality, presence, timestamp, light, temperature } = event.payload;
 
     // analyze light
-    this.analyzeLight(timestamp, presence);
+    this.analyzeLight(timestamp, air_quality, presence, light, temperature);
     // analyze air quality
-    this.analyzeAirQuality(air_quality, timestamp);
+    this.analyzeAirQuality(timestamp, air_quality, presence, light, temperature);
 
   }
 
-  async analyzeLight(timestamp: string, presence: boolean) {
+  async analyzeLight(timestamp: string, air_quality: number, presence: boolean, light: number, temperature: number) {
 
     // if presence is false -> evaluate if theye have passed 30 seconds
     const { is_light_on } = this.globalState;
@@ -132,10 +132,10 @@ export class NotificationService {
           const newTimeStamp = new Date();
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
-          if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstLightNotification) {
+          if ((diff >= 25_000 && diff < 50_000) && !this.notificationState.firstLightNotification) {
 
             const notification: NotificationI = {
-              message: 'La luz se ha quedado encendida sin presencia humana por más de 30 segundos',
+              message: `La luz se ha quedado encendida sin presencia humana por más de 25 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'}`,
               timestamp: new Date().toISOString(),
               type: 'warning'
             }
@@ -147,10 +147,10 @@ export class NotificationService {
 
             this.logger.warn('1st Light notification sent')
 
-          } else if (diff >= 60000) {
+          } else if (diff >= 50_000) {
 
             const notification: NotificationI = {
-              message: 'La luz se ha quedado encendida sin presencia humana por más de 60 segundos, se apagará automáticamente',
+              message: `La luz se ha quedado encendida sin presencia humana por más de 50 segundos, se apagará automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'}`,
               timestamp: new Date().toISOString(),
               type: 'error'
             }
@@ -181,7 +181,7 @@ export class NotificationService {
     }
   }
 
-  async analyzeAirQuality(air_quality: number, timestamp: string) {
+  async analyzeAirQuality(timestamp: string, air_quality: number, presence: boolean, light: number, temperature: number) {
 
     // if air_quality > Threshold -> evaluate if theye have passed 30 seconds
     if (air_quality > this.badAirQualityThreshold) {
@@ -206,10 +206,10 @@ export class NotificationService {
           const newTimeStamp = new Date();
           const diff = newTimeStamp.getTime() - lastTimestamp.getTime();
 
-          if ((diff >= 30000 && diff < 60000) && !this.notificationState.firstAirNotification) {
+          if ((diff >= 10_000 && diff < 20_000) && !this.notificationState.firstAirNotification) {
 
             const notification: NotificationI = {
-              message: 'La calidad del aire es mala, de manera sostendida por más de 30 segundos',
+              message: `La calidad del aire es mala de manera sostendida por más de 10 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'}`,
               timestamp: new Date().toISOString(),
               type: 'warning'
             }
@@ -219,10 +219,10 @@ export class NotificationService {
             this.notificationState.firstAirNotification = true;
 
             this.logger.warn('1st Air notification sent')
-          } else if (diff >= 60000) {
+          } else if (diff >= 20_000) {
 
             const notification: NotificationI = {
-              message: 'La calidad del aire es mala, de manera sostendida por más de 60 segundos, se prenderá el ventilador automáticamente',
+              message: `La calidad del aire es mala, de manera sostendida por más de 20 segundos, se prenderá el ventilador automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'}`,
               timestamp: new Date().toISOString(),
               type: 'error'
             }

@@ -30,6 +30,9 @@ int ventState = 0; // 0: off, 1: low, 2: high
 // Led pin on D4
 const int ledPin = 2;
 
+// fan pwm pin on D5
+const int fanPin = 14;
+
 void socketIOEvent(socketIOmessageType_t type, uint8_t *payload, size_t length)
 {
     switch (type)
@@ -155,6 +158,14 @@ void sendGlobalState()
 
 void setup()
 {
+    // led
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
+
+    // fan
+    pinMode(fanPin, OUTPUT);
+    analogWrite(fanPin, 0);
+
     Serial.begin(115200); // Start the Serial communication to send messages to the computer
     mySUART.begin(115200);
 
@@ -192,15 +203,25 @@ void setup()
     isLightOn = false;
     ventState = 0;
 
-    // led
-    pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, LOW);
-
     Serial.println("Setup ready!");
 }
 
 void loop()
 {
+    // fan speed
+    if (ventState == 0)
+    {
+        analogWrite(fanPin, 0);
+    }
+    else if (ventState == 1)
+    {
+        analogWrite(fanPin, 512);
+    }
+    else if (ventState == 2)
+    {
+        analogWrite(fanPin, 1023);
+    }
+
     socketIO.loop();
 
     if (mySUART.available() > 0)
