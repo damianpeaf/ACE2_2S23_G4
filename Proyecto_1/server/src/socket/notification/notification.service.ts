@@ -7,12 +7,14 @@ import { Socket } from 'socket.io';
 
 interface GlobalStateI {
   is_light_on: boolean,
-  vent_state: VentState
+  vent_state: VentState,
+  presence: boolean
 }
 
 interface NotificationStateI {
   firstLightNotification: boolean;
   firstAirNotification: boolean;
+  secondAirNotification: boolean;
 }
 
 @Injectable()
@@ -22,10 +24,11 @@ export class NotificationService {
 
   private saveOnceLight = false;
   private saveOnceAir = false;
-  private globalState: GlobalStateI = { is_light_on: false, vent_state: 'off' };
+  public globalState: GlobalStateI = { is_light_on: false, vent_state: 'off', presence: false };
   private notificationState: NotificationStateI = {
     firstLightNotification: false,
     firstAirNotification: false,
+    secondAirNotification: false
   };
   private readonly badAirQualityThreshold = 300; // in ppm
 
@@ -33,8 +36,8 @@ export class NotificationService {
 
   resetGlobalState() {
     // reset the global state
-    this.globalState = { is_light_on: false, vent_state: 'off' };
-    this.notificationState = { firstLightNotification: false, firstAirNotification: false };
+    this.globalState = { is_light_on: false, vent_state: 'off', presence: false };
+    this.notificationState = { firstLightNotification: false, firstAirNotification: false, secondAirNotification: false };
     this.redisService.del('lightNotification')
     this.redisService.del('airNotification')
   }
@@ -47,6 +50,10 @@ export class NotificationService {
 
     if (incomingState.vent_state !== undefined && incomingState.vent_state !== this.globalState.vent_state) {
       this.globalState.vent_state = incomingState.vent_state;
+    }
+
+    if (incomingState.presence !== undefined && incomingState.presence !== this.globalState.presence) {
+      this.globalState.presence = incomingState.presence;
     }
 
     this.logger.log('Global state updated')
@@ -183,6 +190,27 @@ export class NotificationService {
 
   async analyzeAirQuality(timestamp: string, air_quality: number, presence: boolean, light: number, temperature: number) {
 
+    if (this.notificationState.secondAirNotification) {
+
+      if (air_quality > this.badAirQualityThreshold) return
+
+      const notification: NotificationI = {
+        message: `La calidad del aire se ha restablecido. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'}`,
+        timestamp: new Date().toISOString(),
+        type: 'info'
+      }
+
+      this.socketService.broadcastEventToEsp8266Clients({
+        type: AppEventType.VentChange,
+        payload: 'off' // turn off the vent
+      })
+
+      this.emitNotification(notification);
+      this.saveNotification(notification);
+
+      this.notificationState.secondAirNotification = false;
+    }
+
     // if air_quality > Threshold -> evaluate if theye have passed 30 seconds
     if (air_quality > this.badAirQualityThreshold) {
 
@@ -241,6 +269,8 @@ export class NotificationService {
             })
 
             this.logger.warn('2nd Air notification sent')
+
+            this.notificationState.secondAirNotification = true;
           }
         }
       })

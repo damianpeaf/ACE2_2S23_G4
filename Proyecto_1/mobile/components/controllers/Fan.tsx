@@ -24,7 +24,6 @@ const valueMap: {
 export const Air = () => {
   const { setVentState, state } = useAppContext();
 
-  const [isEmmiting, setIsEmmiting] = useState(false)
   const [sliderValue, setSliderValue] = useState(
     state.global_state.vent_state === 'off' ? 0 : state.global_state.vent_state === 'vel_1' ? 1 : 2
   );
@@ -40,8 +39,6 @@ export const Air = () => {
 
   const handleEmit = () => {
 
-    setIsEmmiting(true);
-
     switch (sliderValue) {
       case 0:
         setVentState('off');
@@ -55,10 +52,6 @@ export const Air = () => {
     }
 
   }
-
-  useEffect(() => {
-    setIsEmmiting(false);
-  }, [state.global_state.vent_state]);
 
   return (
     <View style={styles.viewStyles}>
@@ -74,7 +67,6 @@ export const Air = () => {
         maximumValue={2}
         minimumTrackTintColor="#000"
         maximumTrackTintColor="#F4F4F4"
-        enabled={!isEmmiting}
       />
     </View>
   );

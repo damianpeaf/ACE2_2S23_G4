@@ -12,6 +12,7 @@ import { AppSocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
 import { AppEventType, SyncEventPayload, LiveDataEvent, LiveDataEventPayload, SyncEvent, LightChangeEvent, VentChangeEvent } from './interface';
 import { NotificationService } from './notification/notification.service';
+import { NotificationI } from '../../../mobile/interface/app-context';
 
 @WebSocketGateway({ cors: true })
 export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -101,6 +102,17 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   handleLightChange(client: Socket, event: LightChangeEvent): void {
     if (!this.socketService.isMobileClient(client)) return;
     this.logger.log(`${AppEventType.LightChange} event received from Mobile`);
+
+    if (!this.notificationService.globalState.presence) {
+      const notification: NotificationI = {
+        message: 'No se puede cambiar el estado de la luz si no hay presencia, si estuviera encendida, esta automaticamente se apagará',
+        type: 'error',
+        timestamp: new Date().toISOString()
+      }
+      this.notificationService.emitNotification(notification);
+      this.notificationService.saveNotification(notification);
+      return
+    }
 
     this.socketService.broadcastEventToEsp8266Clients({
       type: AppEventType.LightChange,

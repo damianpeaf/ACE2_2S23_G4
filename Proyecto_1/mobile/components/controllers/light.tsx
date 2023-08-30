@@ -13,13 +13,11 @@ export const Light = () => {
   const [changeSVG, setChangeSVG] = useState(
     state.global_state.is_light_on ? lightOn : lightOff
   );
-  const [isWaiting, setisWaiting] = useState(false)
 
 
   // onPressLearnMore
   const onPressOnOffLight = () => {
     // set changeSVG
-    setisWaiting(true)
 
     if (changeSVG === lightOff) {
       enableLight(true)
@@ -30,7 +28,6 @@ export const Light = () => {
   }
 
   useEffect(() => {
-    setisWaiting(false)
 
     if (state.global_state.is_light_on) {
       setChangeSVG(lightOn);
@@ -50,7 +47,6 @@ export const Light = () => {
         onPress={onPressOnOffLight}
         title="ON / OFF"
         color={changeSVG}
-        disabled={isWaiting}
       />
     </View>
   )
