@@ -71,6 +71,8 @@ export class AppSocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
   handleLivedata(client: Socket, payload: Omit<LiveDataEventPayload, 'timestamp'>): void {
     if (!this.socketService.isEsp8266Client(client)) return;
 
+    this.notificationService.setGlobalState({ presence: payload.presence });
+
     const event: LiveDataEvent = {
       type: AppEventType.LiveData,
       payload: {
