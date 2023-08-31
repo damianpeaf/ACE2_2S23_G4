@@ -32,15 +32,7 @@ Imagen de la fuente de poder del computador para alimentacion externa.
 
 ___
 
-~~~
-Universidad San Carlos de Guatemala 2023
 
-Daniel Estuardo Cuque Ruíz - 202112145
-Alvaro Norberto García Meza - 202109567
-Damián Ignacio Peña Afre - 202110568
-Aída Alejandra Mansilla Orantes - 202100239 
-Lesther Kevin Federico López Miculax - 202110897
-~~~
 
 
 
