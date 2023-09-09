@@ -11,9 +11,8 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "Proyecto_1/server",
-    "Proyecto_1/mobile",
-    "Proyecto_1/interfaces"
+    "Proyecto_2/server",
+    "Proyecto_2/mobile"
   ],
   "private": true
 }
