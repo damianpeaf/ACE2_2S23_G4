@@ -1,0 +1,16 @@
+version: '3'
+services:
+  grafana:
+    image: grafana/grafana:latest  # Utiliza la última versión de Grafana desde Docker Hub
+    container_name: grafana
+    ports:
+      - "3001:3001"  # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+    volumes:
+      - grafana-data:/var/lib/grafana  # Monta un volumen para almacenar datos persistentes
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin  # Nombre de usuario administrador de Grafana (cambia según tus preferencias)
+      - GF_SECURITY_ADMIN_PASSWORD=adminpassword  # Contraseña de usuario administrador de Grafana (cambia según tus preferencias)
+    restart: always  # Reiniciar el contenedor automáticamente en caso de fallo
+
+volumes:
+  grafana-data:  # Definición del volumen para almacenar datos de Grafana
