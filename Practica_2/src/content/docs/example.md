@@ -1,9 +1,8 @@
 ---
-title: Descripcion
+title: DESCRIPCION
 description: contenido de la descripcion. 
 ---
 
-# DESCRIPCIÓN 
 Una estación meteorológica de Internet de las cosas (IoT) representa un sistema avanzado de seguimiento que incorpora una variedad de sensores para adquirir información en tiempo real acerca de las condiciones climáticas. Es por eso que se creado un dispositivo diseñado específicamente para recolectar datos sobre las cuatro variables principales, que son la temperatura, la luminosidad y la concentración de dióxido de carbono (CO2) en el aire. Este dispositivo reúne la información proveniente de los sensores y la transmite a una plataforma en donde los datos se registran a través una base de datos y pueden ser visualizados por medio de una aplicación web y una aplicación móvil. Esto brinda la posibilidad a los usuarios de supervisar y tomar medidas con relación a los diversos elementos que son gestionados por la estación.
 
 
