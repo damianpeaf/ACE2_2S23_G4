@@ -18,7 +18,8 @@ export default defineConfig({
 						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
 						{ label: 'Prototipo', link: '/imagenes/' },
 						{ label: 'Mock-Ups', link: '/mockups/' },
-						{ label: 'Smart Connected design Framework', link: '/smart/' },
+						{ label: 'Smart Connected design Framework', link: '/SmartConnected/' },
+
 					],
 				},
 			],
