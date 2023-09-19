@@ -45,26 +45,26 @@ Al recopilar datos sobre la concentración de CO2 en el aire, este dispositivo c
 ___
 
 ## BOCETOS DEL PROTOTIPO
-![Boceto del prototipo por fuera](/src/content/docs/images/boceto1.png)
+![Boceto del prototipo por fuera](src/content/docs/images/boceto1.png)
 
 Boceto del Prototipo por fuera. 
 
-![Boceto del prototipo por dentro](/src/content/docs/images/boceto2.png)
+![Boceto del prototipo por dentro](src/content/docs/images/boceto2.png)
 
 Boceto del Prototipo por dentro. 
 ___
 
 ## PROTOTIPO PROPUESTO
 
-![imagen del prototipo por dentro](/src/content/docs/images/prototipo1.jpg)
+![imagen del prototipo por dentro](src/content/docs/images/prototipo1.jpg)
 
 Imagen del prototipo por fuera. 
 
-![imagen del prototipo por dentro](/src/content/docs/images/interior.jpg)
+![imagen del prototipo por dentro](src/content/docs/images/interior.jpg)
 
 Imagen del prototipo por dentro. 
 
-![imagen de la fuente de poder](/src/content/docs/images/fuente.jpg)
+![imagen de la fuente de poder](src/content/docs/images/fuente.jpg)
 
 Imagen de la fuente de poder del computador para alimentacion externa. 
 
@@ -74,21 +74,21 @@ ___
 
 La aplicacion movil cuenta con 3 pantallas, las cuales son parte esencial del dispositivo IoT y se puede acceder a ella por medio de una barra de navegacion que se encuentra en la parte inferior de la pantalla, de este modo, es importante profundizar en las diversas pantallas que ofrece en conjunto con sus funcionalidades, caracteristicas y diseño.
 
-![barra_inferior](/src/content/docs/images/barra_inferior.jpeg)
+![barra_inferior](src/content/docs/images/barra_inferior.jpeg)
 Barra de navegacion ubicado en parte inferior de aplicacion movil
 
 
 ## Monitor de sensores
 La primera pantalla de la aplicacion movil denominada monitor de sensores consta de tres graficos los cuales dan una representacion histórica de los valores que se obtienen de los sensores y se actualizan en tiempo real, por lo que la primera grafica de color naranja es el que muestra el comportamiento de los valores de la temperatura, de esta forma, en el eje Y se representa su valor en °C. Por consiguiente, la siguiente grafica de color azul es similar a la grafica anterior en cuanto a funcionalidad, sin embargo, la representacion de los valores es diferente, ya que evidencia la informacion del sensosr de luz y la representacion de estos valores se hacen tambien por medio del eje vertical en lx, el cual se usa para la cantidad de luz proyectada.
 
-![grafico1](/src/content/docs/images/monitor_sensores.jpeg)
+![grafico1](src/content/docs/images/monitor_sensores.jpeg)
 
 Grafico de valores de temperatura y luz
 
 
 Al ubicarse en la segunda parte de la pantalla de monitor de sensores se observara una tercera grafica, la cual en este caso es de color rojo y muestra la calidad de aire en base a ppm, es decir, se recibe los valores por medio del sensor y se muestran en el grafico de manera que al ser un valor alto la grafica tendra mayor altura a diferencia de obtener un dato pequeño que ocurre lo contrario. Finalmente, en esta primera pantalla se ve un simbolo de negacion, es decir, un circulo con una linea cruzada que indica que no se detecta presencia, por lo que al momento de detectar algo esta imagen se actualizara y cambiara para poder indicar que el sensor detecta una presencia en su alrededor.
 
-![grafico2](/src/content/docs/images/monitor_sensores2.jpeg)  
+![grafico2](src/content/docs/images/monitor_sensores2.jpeg)  
 
 Grafica de calidad de aire y representacion grafica de presencia
 
@@ -96,7 +96,7 @@ Grafica de calidad de aire y representacion grafica de presencia
 ## Controlador
 La pantalla de controlador tiene 4 opciones, por lo que cada uno tiene una funcionalidad distinta. La primera de ellas se hace al presionar la imagen del foco, el cual enciende la luz y lo demuestra cambiando de color la imagen a un tono mas claro, dicho de otro modo, al presionar el foco se mostrara de color amarillo en señal de que esta encendido. La segunda es un termometro que muestra cual es la temperatura actual en el texto que tiene debajo en °C. La tercera opcion es la que representa la calidad del aire haciendo uso de la unidad de medida ppm. Finalmente, la ultima imagen corresponde a la de un ventilador que al ser presionado se activa el sistema de ventilacion y aparecera en la parte inferior del ventilador el numero del nivel de ventilacion que esta activo, por lo que, su representacion es en tiempo real.
 
-![controlador](/src/content/docs/images/controlador.jpeg)  
+![controlador](src/content/docs/images/controlador.jpeg)  
 
 Controlador del dispositivo IoT
 
@@ -106,7 +106,7 @@ Controlador del dispositivo IoT
 La tercera pantalla, por la tanto la ultima es un centro de notificaciones, en donde al momento de acceder en el se muestra un listado de las diversas notificaciones recibidas, las cuales cada una de ellas muestran diferentes mensajes como lo son advertencias sobre la mala calidad del aire o el tiempo que la luz queda encendida sin alguna presencia humanda, de esta manera, al final de cada mensaje muestra los valores de la temperatura en C°, la calidad del aire en ppm, el valor de luz en lux y si existe presencia o no. En la parte inferior de cada mensaje del sector de notificaciones contiene la fecha en formato mm/dd/aa y hora de recibido en hh:mm:ss.
 
 
-![notificaciones](/src/content/docs/images/notificaciones.jpeg)
+![notificaciones](src/content/docs/images/notificaciones.jpeg)
 
 Seccion de notificaciones con diversos mensajes
 ___
@@ -119,13 +119,13 @@ La aplicación web cuenta con una interfaz en donde se pueden visualizar los gr�
 
 La estación meteorológica detecta las variaciones en el clima por medio de los sensores que tiene incorporados y con ayuda de la aplicación web, se visualiza en tiempo real tanto el valor aproximado de la temperatura, la intensidad de la luz, humedad y el CO2 así como también ilustraciones que varían según los cambios a los que se someten estos, con el objetivo de que el usuario pueda observar explícitamente dichas variaciones.  
 
-![aplicacion web, ilustraciones](/src/content/docs/images/aplicacion_web_ilus.jpg)
+![aplicacion web, ilustraciones](src/content/docs/images/aplicacion_web_ilus.jpg)
 
 Ilustración de los cambios en la Luz, Temperatura, Humedad y Calidad de Aire en la pagina web. 
 
 Cada variación que el dispositivo detecta en diferentes periodos de tiempo, se van administrando en la base de datos para que posteriormente se puedan analizar los cambios meteorológicos por medio de graficas que se presentan en la pagina web.  
 
-![aplicacion web, graficas](/src/content/docs/images/aplicacion_web.jpg)
+![aplicacion web, graficas](src/content/docs/images/aplicacion_web.jpg)
 
 Graficas de Luz, Temperatura, Humedad y Calidad de Aire en la pagina web. 
 
@@ -141,20 +141,20 @@ ___
 La primera capa corresponde a Device Hardware, la cual hace referencia a los diferentes componentes físicos que componen el dispositivo de control climático en alcobas, de esta forma, engloba principalmente los sensores, un puente H, el Arduino, el ventilador, el módulo wifi de comunicación utilizado y el servomotor. Los sensores del dispositivo IoT son una parte fundamental de esta capa, puesto que son los principales receptores de la información a procesar, por lo que se usó un sensor de tipo MQ-135 para medir la calidad del aire, un LDR para capturar la referencia de la cantidad de luz en el ambiente, un sensor ultrasónico HC SR04 que detecta la presencia, también contiene en su estructura un sensor de tipo DHT-11, el cual es un módulo que brinda la información adecuada para obtener la temperatura en el ambiente. Por otro lado, el Arduino también forma parte de esta capa, el cual es el encargado de procesar la información que recopila los sensores y los manipula por medio de código que se explica en la segunda capa, además se ocupa de la conectividad con el módulo wifi, el cual es de tipo Node MCU ESP8266 que es un componente electrónico que integra todas las funcionalidades requeridas para ejecutar la conectividad de manera inalámbrica. Por último, otros componentes fundamentales son el ventilador que funciona en conjunto con un puente H lm298n que por medio de modulación del ancho de pulso (PWM) controla sus velocidades y el servomotor que ocupa el rol de dispositivo actuador, por lo tanto el ventilador y el servomotor se accionan dependiendo del estado en el que se encuentra el sistema o indica que el usuario.
 
 
-![Dht11 (izq) y mq135 (derecha)](/src/content/docs/images/sensores.jpeg)
+![Dht11 (izq) y mq135 (derecha)](src/content/docs/images/sensores.jpeg)
 DHT11 (izq) y MQ135 (derecha)
 
-![Sensor ultrasonico hc sr04](/src/content/docs/images/ultrasonico.jpeg)
+![Sensor ultrasonico hc sr04](src/content/docs/images/ultrasonico.jpeg)
 Sensor ultrasonico HC SR04
 
-![Ventilador correspondiente al sistema de ventilacion](/src/content/docs/images/ventilador.jpeg)
+![Ventilador correspondiente al sistema de ventilacion](src/content/docs/images/ventilador.jpeg)
 Ventilador correspondiente al sistema de ventilacion
 
 
-![Puente H LM298N](/src/content/docs/images/Puenteh.jpeg)
+![Puente H LM298N](src/content/docs/images/Puenteh.jpeg)
 Puente H LM298N
 
-![arduino](/src/content/docs/images/arduino.jpeg)
+![arduino](src/content/docs/images/arduino.jpeg)
 Arduino correspondiente a la capa de Device Hardware
 
 ### Device Software
@@ -166,7 +166,7 @@ Device Software hace referencia a la segunda capa del Framework IOT y consta del
 ### Communication
 La capa de comunicación, es decir, la tercera capa del dispositivo IoT esta representado por todas las diferentes formas en la que el dispositivo intercambia información. Por lo que, existen diversas tecnologías para las comunicaciones IoT, siendo las más comunes Wi-Fi, Bluetooth y red cableada. Por lo tanto, en el contexto del dispositivo IoT presentado el intercambio de información se da por medio de la comunicación Wi-Fi, el cual funciona por medio del modulo Wi-Fi Node MCU ESP8266 mencionado anteriormente en la primera capa. Esta forma de comunicación funciona de manera que es capaz de enviar y recibir información de manera efectiva teniendo control por medio de otro protocolo denominado MQTT, el cual tiene ciertas reglas específicas sobre como deben transmitirse y formatear los datos que pasan por el proceso de comunicación, de esta forma, estas reglas se profundizan adecuadamente en otro punto de la documentación.
 
-![Node MCU ESP8266](/src/content/docs/images/esp8266.jpeg)
+![Node MCU ESP8266](src/content/docs/images/esp8266.jpeg)
 Tarjeta de desarrollo Node MCU ESP8266
 
 
@@ -176,7 +176,7 @@ En esta cuarta capa del dispositivo IoT el proceso que ocurre es el del almacena
 
 ### Cloud Applications
 La capa final corresponde principalmente a las aplicaciones que tiene acceso el usuario final, es decir, las partes del sistema que el cliente podrá percibir y con las que podrán interactuar de manera seguida. Esta capa esta formada por una aplicación móvil que se realizó con el propósito de que sea interactiva para el usuario y tenga una efectividad adecuada. Por consiguiente, la aplicación móvil está formada por distintas tecnologías, siendo las principales React Native y el framework de desarrollo de aplicaciones móviles Expo, el cual proporciona de manera eficaz distintas facilidades para el desarrollo móvil. Por otro lado, React Native es un framework que proporciona la base para la aplicación móvil y brinda la posibilidad al desarrollo de sus componentes como lo son los diversos botones, textos e imágenes, además proporciona librerías como la denominada react-native-chart-kit que desenvuelve un papel importante en la generacion de los gráficos, de esta forma, react native se combina con CSS, el cual proporciona el estilo de los componentes de la aplicación móvil. Finalmente, una segunda parte crucial de la última capa es la aplicación web que también cuenta con una interfaz con su respectivo diseño y estilo que brinda interacción con el usuario final de diferentes formas como lo es la manipulación de la iluminación, entre otras características que conlleva el dispositivo. 
-![Node MCU ESP8266](/src/content/docs/images/notificaciones.jpeg)
+![Node MCU ESP8266](src/content/docs/images/notificaciones.jpeg)
 
 Aplicación movil correspondiente al sector de Cloud Applications
 
@@ -184,7 +184,7 @@ Aplicación movil correspondiente al sector de Cloud Applications
 ## DIAGRAMA DE FLUJO DE INFORMACION
 ---
 
-![Ventilador correspondiente al sistema de ventilacion](/src/content/docs/images/diagrama.jpeg)
+![Ventilador correspondiente al sistema de ventilacion](src/content/docs/images/diagrama.jpeg)
 
 Diagrama correspondiente al flujo de la información del dispositivo IoT
 
@@ -195,7 +195,7 @@ Diagrama correspondiente al flujo de la información del dispositivo IoT
 
 El termino MQTT tiene origen en sus siglas Message Queing Telemetry Transport, el cual es un protocolo de mensajería basado en ciertas reglas que se utiliza regularmente para establecer comunicación de un equipo a otro y que se ha establecido como una de las partes fundamentales de IoT en los últimos años a causa de su accesibilidad, agilidad y popularidad. Existen diversos dispositivos de IoT como sensores o dispositivos portátiles que por lo general tienen la tarea de transmitir informacion y recibir datos por medio de una red que contiene ciertas limitaciones como lo son las limitaciones de potencia, consumo y ancho de banda. Por lo que, estos dispositivos hacen uso de MQTT para poder transmitir datos, puesto que es mas simple de implementar y comunica los datos IoT de manera efectiva. MQTT está basado en la pila TCP/IP como base para su comunicación, esta herramienta fue creado por el Dr.Andy Stanford-Clark de IBM y Arlen Nipper de Arcom en el año de 1999 con la idea inicial de un mecanismo para conectar dispositivos empleados en la industria petrolera, puesto que los ingenieros necesitaban un protocolo para un ancho de banda mínimo y una pérdida de batería mínima para supervisas los oleoductos vía satélite.
 
-![mqtt en iot](/src/content/docs/images/iotmqtt.jpg)
+![mqtt en iot](src/content/docs/images/iotmqtt.jpg)
 Protocolo MQTT en IoT
 
 Las ventajas que ofrece MQTT son amplias, una de ellas es que es escalable, puesto que su implementación necesita una cantidad mínima de código que consume poca energía en las operaciones haciendo que sea posible utilizar este protocolo para conectarse con millones de estos dispositivos. Además, facilita a los diferentes desarrolladores el cifrado de mensajes y la autenticación de dispositivos y usuarios brindando un sistema de seguridad fiable. Existen varios lenguajes con soporte para la implementación del protocolo MQTT de manera efectiva, como Python, JavaScript, Java, Go, C++, entre otros.
@@ -260,7 +260,7 @@ Otro destino fundamental de MQTT llamado publisher se encarga de publicar mensaj
 ## Subscriber
 El tercer pilar del proceso de MQTT es el de subscriber el cual hace referencia a cualquier dispositivo, es decir, desde un servidor hasta un microcontrolador que ejecuta una biblioteca MQTT. Por lo que, si el cliente envía mensajes actúa como un editor, y si recibe actúa como un receptor, de esta forma, cualquier dispositivo que se comunique por medio del protocolo MQTT se considera como subscriber. El subscriber en diversas ocasiones se suscribe a un tema puntual para poder recibir lo que le brinda el publisher y pasa por medio del broker. 
 
-![Node MCU ESP8266](/src/content/docs/images/mqttdiagrama.jpeg)
+![Node MCU ESP8266](src/content/docs/images/mqttdiagrama.jpeg)
 
 Diagrama de funcionamiento de subscriber, broker y publisher
 
