@@ -12,7 +12,8 @@
   "license": "ISC",
   "workspaces": [
     "Proyecto_2/server",
-    "Proyecto_2/mobile"
+    "Proyecto_2/server",
+    "Practica_2"
   ],
   "private": true
 }
