@@ -17,7 +17,6 @@ export default defineConfig({
 						{ label: 'Descripcion', link: '/descripcion/' },
 						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
 						{ label: 'Prototipo', link: '/imagenes/' },
-						{ label: 'Mock-Ups', link: '/mockups/' },
 					],
 				},
 			],
