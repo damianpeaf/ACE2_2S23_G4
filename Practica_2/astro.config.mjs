@@ -14,7 +14,10 @@ export default defineConfig({
 					label: 'Documentacion',
 					items: [
 						// Each item here is one entry in the navigation menu.
-						{ label: 'Descripcion', link: '/example/' },
+						{ label: 'Descripcion', link: '/descripcion/' },
+						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
+						{ label: 'Prototipo', link: '/imagenes/' },
+						{ label: 'Mock-Ups', link: '/mockUps/' },
 					],
 				},
 			],
