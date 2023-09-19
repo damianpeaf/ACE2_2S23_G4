@@ -11,13 +11,13 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Documentacion',
+					label: 'Documentación',
 					items: [
 						// Each item here is one entry in the navigation menu.
-						{ label: 'Descripcion', link: '/descripcion/' },
+						{ label: 'Descripción', link: '/descripcion/' },
 						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
 						{ label: 'Prototipo', link: '/imagenes/' },
-						
+						{ label: 'Mock-Ups', link: '/mockups/' },
 						{ label: 'Smart Connected design Framework', link: '/SmartConnected/' },
 						{ label: 'Diagramas', link: '/Diagrama/' },
 						{ label: 'Mqtt', link: '/mqtt/' },
