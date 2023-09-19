@@ -17,10 +17,10 @@ export default defineConfig({
 						{ label: 'Descripcion', link: '/descripcion/' },
 						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
 						{ label: 'Prototipo', link: '/imagenes/' },
-						
-						
+						{ label: 'Mock-Ups', link: '/mockups/' },
+						{ label: 'Smart Connected design Framework', link: '/SmartConnected/' },
 						{ label: 'Diagramas', link: '/Diagrama/' },
-						{ label: 'Mqtt', link: '/mqtt/' },
+						
 					],
 				},
 			],
