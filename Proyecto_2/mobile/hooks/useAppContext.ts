@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Context } from "../components/context";
-import { AppEventType, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, SyncEvent, VentChangeEvent, VentState } from "../interface";
+import { AppEventType, DoorChangeEvent, DoorState, InitEvent, LightChangeEvent, LiveDataEvent, NotificationEvent, SyncEvent, VentChangeEvent, VentState } from "../interface";
 import { Manager } from "socket.io-client";
 
 
@@ -102,7 +102,7 @@ export const useAppContext = () => {
     }
 
     const setVentState = (ventState: VentState) => {
-        if (!socket) return;
+        // if (!socket) return;
 
         const event: VentChangeEvent = {
             payload: {
@@ -111,7 +111,21 @@ export const useAppContext = () => {
             type: AppEventType.VentChange
         }
 
-        socket.emit(AppEventType.VentChange, event)
+        // socket.emit(AppEventType.VentChange, event)
+    }
+
+    const enableDoor = (isDoorOpen: boolean) => {
+        // TODO: Implement MQTT
+
+        const event: DoorChangeEvent = {
+            payload: {
+                door_state: isDoorOpen
+            },
+            type: AppEventType.DoorChange
+        }
+
+        // TODO: Implement MQTT to send event
+
     }
 
     useEffect(() => {
@@ -127,7 +141,8 @@ export const useAppContext = () => {
         addNotification,
         initStateEvent,
         enableLight,
-        setVentState
+        setVentState,
+        enableDoor
     }
 
 }

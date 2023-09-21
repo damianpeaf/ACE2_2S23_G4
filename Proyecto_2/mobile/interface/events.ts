@@ -2,6 +2,8 @@ import { NotificationI } from './app-context'
 
 export type VentState = 'off' | 'vel_1' | 'vel_2';
 
+export type DoorState = true | false ;
+
 export enum AppEventType {
     Init = 'init_client',
     Sync = 'global_state_sync',
@@ -10,6 +12,7 @@ export enum AppEventType {
     // output events
     LightChange = 'light_change',
     VentChange = 'vent_change',
+    DoorChange = 'door_change'
 }
 
 export type AppEvent = {
@@ -66,5 +69,13 @@ export type VentChangeEvent = {
     type: AppEventType.VentChange;
     payload: {
         vent_state: VentState;
+    };
+};
+
+
+export type DoorChangeEvent = {
+    type: AppEventType.DoorChange;
+    payload: {
+        door_state: DoorState;
     };
 };

@@ -13,13 +13,6 @@ const ItemComponents: {
   'vel_2': <MaterialCommunityIcons size={100} color="black" name="fan-speed-2" />,
 };
 
-const valueMap: {
-  [key: number]: VentState;
-} = {
-  0: 'off',
-  1: 'vel_1',
-  2: 'vel_2',
-}
 
 export const Air = () => {
   const { setVentState, state } = useAppContext();

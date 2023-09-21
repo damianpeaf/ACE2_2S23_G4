@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import {
     Air,
 } from "../../components/controllers/"
+import { Door } from '../../components/controllers/Dor'
 
 
 const components = [
@@ -10,6 +11,10 @@ const components = [
         name: 'Air',
         component: <Air />
     },
+    {
+        name: 'Door',
+        component: <Door />
+    }
 ]
 
 const Controller = () => {

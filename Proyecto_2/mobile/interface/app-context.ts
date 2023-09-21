@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client"
-import { VentState } from "."
+import {  VentState } from "."
 
 export type NotificationType = 'warning' | 'error' | 'info'
 
@@ -20,6 +20,7 @@ export interface AppState {
     global_state: {
         is_light_on: boolean,
         vent_state: VentState,
+        is_door_open: boolean,
     },
     notifications: NotificationI[],
     client_info: {
