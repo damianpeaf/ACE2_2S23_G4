@@ -1,35 +1,11 @@
 import { View, StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import {
-    Light,
-    Thermometer,
-    Co2,
     Air,
-    Empty
 } from "../../components/controllers/"
 
 
 const components = [
-    {
-        name: 'Light1',
-        component: <Empty />
-    },
-    {
-        name: 'Light2',
-        component: <Empty />
-    },
-    {
-        name: 'Light',
-        component: <Light />
-    },
-    {
-        name: 'Thermo',
-        component: <Thermometer />
-    },
-    {
-        name: 'Co2',
-        component: <Co2 />
-    },
     {
         name: 'Air',
         component: <Air />

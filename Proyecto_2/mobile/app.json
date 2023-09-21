@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner":"ace2-g4",
     "name": "mobile",
     "slug": "mobile",
     "version": "1.0.0",
