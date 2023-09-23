@@ -18,6 +18,8 @@ export default defineConfig({
 						{ label: 'Bocetos del Prototipo', link: '/bocetos/' },
 						{ label: 'Prototipo', link: '/imagenes/' },
 						{ label: 'Mock-Ups', link: '/mockups/' },
+						{ label: 'Uso de los sensores', link: '/uso-de-sensores/' },
+						{ label: 'Código de arduino', link: '/codigo-arduino/' },
 						{ label: 'Smart Connected', link: '/smart/' },
 						{ label: 'MQTT', link: '/mqtt/' },
 						{ label: 'Diagramas', link: '/diagramas/' },
