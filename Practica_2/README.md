@@ -449,6 +449,89 @@ void echo()
 }
 ```
 
+## Base de Datos
+
+
+### Redis
+
+Durante el proceso de desarrollo se utilizó una API REST por medio de Nest JS, el cual es un framework agil de backend para JS, de esta manera, se realizó la implementación de redis para poder tener el acceso de guardar en cache lo que son los diferentes datos a manipular como los datos que proporcionan los diversos sensores y las notificaciones. Existen diversos motivos del por que Redis, uno de ellos como se mencionó anteriormente la conservación en cache que acelera la entrega de los datos, ademas brinda un rendimiento altamente optimizado, lo cual es util para acelerar todo proceso. Redis tambien ofrece alta compatibilidad con diferentes lenguajes de programación lo que hace considerablemente sencilla su integración con diferentes tecnologias o frameworks, en este caso Nest JS. Por otro lado, la escalabilidad es otro aspecto conveniente, puesto que redis ofrece lo necesario para cubrir el proyecto presentado. La elección de Redis como base de datos es una parte importante del proyecto porque fue clave para lograr un alto rendimiento. ya que la combinación de Redis y Nest JS proporciona la rápida entrega de información en tiempo real, logrando que el usuario que haga uso del dispositivo IoT tenga la mejor experiencia.
+
+
+
+### Código de implementación
+
+
+
+En primera instancia, para la implementación de redis es necesario configurar los distintos modulos de redis a utilizar a nivel de la aplicación como configModule, RedisModule y socketModule que esta relacionado con la funcionalidad de sockets que permite la transmision en tiempo real del dispositivo IoT, por añadidura, es fundamental y necesario colocar las distintas variables de entorno, las cuales son el host, port y passwoord del redis cloud con el proposito de poder usar Redis como base de datos en la nube logrando que la aplicación pueda almacenar y recuperar datos. 
+
+```ts
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      load: [envConfiguration],
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        config: {
+          host: configService.get('redisHost'),
+          port: configService.get('redisPort'),
+          password: configService.get('redisPassword'),
+        },
+      }),
+    }),
+    SocketModule,
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule { }
+```
+
+
+Luego, es necesario crear un servicio donde se importa el servicio de redis que se creo anteriormente en el modulo principal de la API. Este nuevo servicio conlleva una función que se manda a llamar principalmente cada vez que se desea conservar alguna de las distintas notificaciones que conlleva la aplicación del dispositivo IoT, las cuales se especifican en la primera linea de codigo presentado a continuación y son las de Warning que alarma y brinda una advertencia al usuario, Info que provee información necesario al usuario y Error que proporciona retroalimentación sobre algún inconveniente que haya ocurrido durante el uso del dispositivo, de esta manera, se conservan tres tipos de notificaciones en redis en formato de cadena JSON. Por añadidura, se define una interfaz denominada bajo el nombre de NotificationI que tiene la estructura de la notificación con tres propiedades, las cuales son type que es el tipo de notificacion, message que es el mensaje que tiene la notificación y timestamp que posee la fecha y hora en la que se produce.
+
+```ts
+export type NotificationType = 'warning' | 'error' | 'info'
+
+export interface NotificationI {
+    type: NotificationType,
+    message: string,
+    timestamp: string,
+}
+
+
+saveNotification(notification: NotificationI) {
+    this.redisService.lpush('notifications', JSON.stringify(notification), (err, result) => {
+      if (err) {
+        this.logger.error(err)
+        return
+      }
+      this.logger.log('Notification saved')
+    })
+}
+```	
+
+Finalmente, para almacenar la información debe existir una función que reciba los topics que contienen la información de cada uno de los sensores que conlleva el dispositivo IoT, de este modo, el interface llamado topicl tiene la responsabilidad de guardar el nombre del topic, los cuales pueden ser temperatura, presencia, cantidad de luz, calidad de aire y humedad con su respectivo valor. Por consiguiente, con la función saveTopic es necesario hacer uso de la operación push que guarda en un array de redis el nuevo argumento recibido por la función en su respectiva llave que corresponde al topic. Otra clave es la añadidura de un gestionador de error por si ocurre algun error durante la operación push, el cual se observa en el codigo mostrado 
+
+```ts	
+
+export interface topicI {
+  topic: string
+  value: string
+}
+
+saveTopic(data: topicI) {
+      this.redisService.lpush(data.topic , JSON.stringify(data.value), (err, result) => {
+        if (err) {
+          this.logger.error(err)
+          return
+        }
+        this.logger.log('Data saved successfully')
+      })
+}
+```
 
 ## SMART CONNECTED DESIGN FRAMEWORK
 
@@ -492,6 +575,8 @@ En esta cuarta capa del dispositivo IoT el proceso que ocurre es el del almacena
 
 ### Cloud Applications
 La capa final corresponde principalmente a las aplicaciones que tiene acceso el usuario final, es decir, las partes del sistema que el cliente podrá percibir y con las que podrán interactuar de manera seguida. Esta capa esta formada por una aplicación móvil que se realizó con el propósito de que sea interactiva para el usuario y tenga una efectividad adecuada. Por consiguiente, la aplicación móvil está formada por distintas tecnologías, siendo las principales React Native y el framework de desarrollo de aplicaciones móviles Expo, el cual proporciona de manera eficaz distintas facilidades para el desarrollo móvil. Por otro lado, React Native es un framework que proporciona la base para la aplicación móvil y brinda la posibilidad al desarrollo de sus componentes como lo son los diversos botones, textos e imágenes, además proporciona librerías como la denominada react-native-chart-kit que desenvuelve un papel importante en la generacion de los gráficos, de esta forma, react native se combina con CSS, el cual proporciona el estilo de los componentes de la aplicación móvil. Finalmente, una segunda parte crucial de la última capa es la aplicación web que también cuenta con una interfaz con su respectivo diseño y estilo que brinda interacción con el usuario final de diferentes formas como lo es la manipulación de la iluminación, entre otras características que conlleva el dispositivo. 
+
+
 ![Node MCU ESP8266](src/content/docs/images/notificaciones.jpeg)
 
 Aplicación movil correspondiente al sector de Cloud Applications
@@ -564,21 +649,44 @@ El broker MQTT proporciona una diversa cantidad de tipos, los cuales cada uno ti
     * ActiveMQ: es uno de los broker de mensajería con alta popularidad que se encuentra desarrollado por Apache, por lo que admite el protocolo MQTT. Proporciona una implementación de alto rendimiento y es de codigo abierto, por lo que es gratuito y accesible para los interesados en esta tecnología.
 
     * HBMQTT: Es uno de los broket MQTT Open Source más famosos, el cual esta escrito en Python que funciona principalmente sobre asyncio.
+    * Mosquitto: considerado como el broker con mayor popularidad entre todos, el cual es fundado por la Fundación Eclipse y se distribuye bajo las licencias EPL y EDL. El broker Mosquitto esta implementado principalmente en el lenguaje C, por consiguiente, es altamente eficiente y adecuado para desenvolverse en diferentes plataformas. Entre sus principales características esta su ligereza, lo que lo vuelve un candidato principal para aplicaciones IoT, también cuenta con la ventaja de ser escalable y utilizable en aplicaciones de gran escala o industriales donde la comunicación MQTT es prioridad para la gestión de dispositivos conectados
 * De paga
     * AWS IoT Core: Uno de los brokers de paga es el que brinda AWS IoT Core, el cual tiene una escalabilidad amplia y tiene la capacidad de manejar altas cantidades de conexiones. Además, al ser proporcionado por aws la integración con otros servicios son mas fáciles de acoplar y contiene un soporte multiplataforma con diversos dispositivos y plataformas, por lo que su administración en dispositivos del internet de las cosas es mas sencillo.
     * EMQX: un broker que contiene una version gratuita de codigo abierto, sin embargo, tiene una version empresarial de paga que contiene una de los brokers con mayor escalabilidad, por lo que mueve y procesa millones de mensajes por segundo por medio del protocolo MQTT. La arquitectura del broker puede ser de tipo centralizo o distribuido, por consiguiente, al ser centralizado un unico broker gestiona la comunicación con los clientes, por otro lado, al ser distribuido son varios agentes los que trabajan en conjunto para proporcionar una infraestructura de mensajeria escalable y a prueba de varios errores o fallos.
     * Google Cloud IoT Core: La version pagada que ofrece Google sobre Cloud IoT para empresas con alta demanda proporciona un broker MQTT altamente seguro y confiable para facilitar la comunicación, proporcionando una comunicación en ambas direcciones, es decir de los dispositivos a los servidores en la nube y viceversa.
     
 ## Publisher
-Otro destino fundamental de MQTT llamado publisher se encarga de publicar mensajes a un tema en el broker del protocolo. Los subscribers y los brokers comienzan a comunicarse por medio del publisher. En su mayoría los clientes inician la conexión al brindar un mensaje **CONECTAR** al broker. Posteriormente, el broker confirma la conexión establecida al responder con un mensaje **CONNACK**. Los subscribers en ningun momento se conectan entre si, puesto que únicamente lo hacen con el agente o broker
+Otro destino fundamental de MQTT es el llamado publisher que se encarga de publicar mensajes a un tema en el broker del protocolo y los datos los hace en formato de bytes. Los subscribers y los brokers comienzan a comunicarse por medio del publisher. En su mayoría los clientes inician la conexión al brindar un mensaje **CONECTAR** al broker. Posteriormente, el broker confirma la conexión establecida al responder con un mensaje **CONNACK**. Los subscribers en ningun momento se conectan entre si, puesto que únicamente lo hacen con el agente o broker. En conclusión, los publicadores de MQTT son componentes que tienen alta importancia para el envio de datos y mensajes en tiempo real apoyandose del protocolo MQTT, de este modo, es popular en el ambito de las aplicaciones que necesitan comunicación en tiempo real debido a su optima capacidad de satisfacer esta necesidad
 
+![diagrama temperatura](src/content/docs/images/MQTTdiagrama.jpg)
 
 ## Subscriber
-El tercer pilar del proceso de MQTT es el de subscriber el cual hace referencia a cualquier dispositivo, es decir, desde un servidor hasta un microcontrolador que ejecuta una biblioteca MQTT. Por lo que, si el cliente envía mensajes actúa como un editor, y si recibe actúa como un receptor, de esta forma, cualquier dispositivo que se comunique por medio del protocolo MQTT se considera como subscriber. El subscriber en diversas ocasiones se suscribe a un tema puntual para poder recibir lo que le brinda el publisher y pasa por medio del broker. 
+El tercer pilar del proceso de MQTT es el de subscriber el cual hace referencia a cualquier dispositivo, es decir, desde un servidor hasta un microcontrolador que ejecuta una biblioteca MQTT. Por lo que, si el cliente envía mensajes actúa como un editor, y si recibe actúa como un receptor, de esta forma, cualquier dispositivo que se comunique por medio del protocolo MQTT se considera como subscriber. El subscriber en diversas ocasiones se suscribe a un tema puntual para poder recibir lo que le brinda el publisher y pasa por medio del broker. El subscriber dentro de sus características contiene que puede desconectarse del broker y luego volver a conectare, por lo que al reconectarse de manera apropiada automáticamente el broker comienza a reenviar los mensajes publicados en los temas a los que se encuentra suscrito el subscriber. Finalmente, el subscriber del protocolo MQTT es utilizable en diversos aspectos pero principalmente en el monitoreo de sensores en dispositivos IoT.
 
 ![Node MCU ESP8266](src/content/docs/images/mqttdiagrama.jpeg)
 
 Diagrama de funcionamiento de subscriber, broker y publisher
+## Topic
+El topic o también conocido por tema en el idioma español es un elemento fundamental que realiza un filtro de mensajes aplicado por los Brokers de MQTT para ejecutar una decisión sobre que clientes suscritos es enviado y a quienes no, de este modo, estos mensajes son recibidos desde los publicadores o publishers. Los temas se encuentran principalmente ordenados para evitar diversos problemas como confusiones, por consiguiente, se encuentran formados por uno o mas niveles separados entre si por una barra inclinada o diagonal, siendo esto similar a un directorio de archivo o carpeta. 
+
+El funcionamiento de estos topics son poco complejos, ya que el broker aceptar todos los topics, luego los clientes se pueden suscribir a uno o varios temas, de este modo, el cliente tiene la capacidad de establecer varias suscripciones. Por ultimo, el cliente publica mensajes indicando un único Topic logrando que el broker reciba el mensaje y se inicie la búsqueda de alguna suscripción que cumpla con el filtro empleado por el Topic, así se transmite el mensaje a los clientes que se encuentran suscritos.
+
+Algunos consejos para la implementación de Topics es diseñar sus sistema de una manera que sea ampliable y sustentable, puesto que es importante tener consideración en la escalabilidad para lograr evitar tener un sistema que sea insuficiente y no pueda satisfacer las necesidades del sistema IoT. Además, es recomendable tener los Topics lo mas pequeños y entendibles posible, de esta forma, los topics deben ser lo mas específicos posibles para una mejor gestión y evitar el envio de mensajes a varios dispositivos hacer la discriminación por el contenido del mensaje.
+
+
+![arbol topics](src/content/docs/images/mqttTopic.png)
+
+Arbol del flujo de topics
+
+## Link del repositorio de github.
+
+
+<div align="center">
+
+<a href="https://github.com/damianpeaf/ACE2_2S23_G4/tree/main" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg"  height="100" width="100" /></a>
+</div>
+
+
 
 ~~~
 Universidad San Carlos de Guatemala 2023
