@@ -20,6 +20,7 @@ export default defineConfig({
 						{ label: 'Mock-Ups', link: '/mockups/' },
 						{ label: 'Uso de los sensores', link: '/uso-de-sensores/' },
 						{ label: 'Código de arduino', link: '/codigo-arduino/' },
+						{ label: 'Base de datos', link: '/base-datos/' },
 						{ label: 'Smart Connected', link: '/smart/' },
 						{ label: 'MQTT', link: '/mqtt/' },
 						{ label: 'Diagramas', link: '/diagramas/' },
