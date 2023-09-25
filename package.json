@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:server": "yarn workspace server start:dev",
-    "dev:mobile": "yarn workspace mobile start"
+    "dev:server": "yarn workspace server2 start:dev",
+    "dev:mobile": "yarn workspace mobile2 start"
   },
   "author": "",
   "license": "ISC",
