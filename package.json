@@ -6,13 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:server": "yarn workspace server2 start:dev",
-    "dev:mobile": "yarn workspace mobile2 start"
+    "dev:mobile": "yarn workspace mobile2 start",
+    "dev:broker": "yarn workspace broker start"
   },
   "author": "",
   "license": "ISC",
   "workspaces": [
     "Proyecto_2/mobile",
-    "Proyecto_2/server"
+    "Proyecto_2/server",
+    "Proyecto_2/broker"
   ],
-  "private": true
+  "private": true,
+  "dependencies": {
+    "jsonschema": "^1.2.6",
+    "mosca": "^2.8.3",
+    "mqtt": "^5.0.5"
+  }
 }
