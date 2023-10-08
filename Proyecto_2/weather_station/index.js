@@ -7,7 +7,8 @@ const port = new SerialPort({
 })
 
 
-const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
+const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
+const client = mqtt.connect('wss://ace2-g4-broker.up.railway.app/mqtt')
 
 client.on('connect', () => {
     console.log('MQTT connected')
@@ -27,10 +28,10 @@ parser.on('error', (err) => {
 parser.on('data', (data) => {
 
     // temparature;humidity;airQuality;lumen;presence
-    const [temparature, humidity, airQuality, lumen, presence] = data.split(';')
+    const [temperature, humidity, airQuality, lumen, presence] = data.replace('\\n', '').split(';')
 
     const message = {
-        temparature,
+        temperature,
         humidity,
         airQuality,
         lumen,
@@ -38,7 +39,8 @@ parser.on('data', (data) => {
     }
     console.log(message)
 
-    client.publish('sensor-data', JSON.stringify(message))
+    // client.publish('sensor-data', JSON.stringify(message))
+    client.emit('sensor-data', 'sensor-data', JSON.stringify(message))
 })
 
 // recieve data

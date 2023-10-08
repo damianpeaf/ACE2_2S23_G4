@@ -1,6 +1,6 @@
 import mqtt from 'mqtt'
 
-const client = mqtt.connect('wss://mqtt-production-cb34.up.railway.app/mqtt')
+const client = mqtt.connect('wss://ace2-g4-broker.up.railway.app/mqtt')
 client.on('connect', () => {
     console.log('MQTT connected')
 

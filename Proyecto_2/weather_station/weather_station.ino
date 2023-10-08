@@ -62,7 +62,7 @@ void setup()
 
   // servo
   servo.attach(10);
-  servo.write(servoPosition);
+  servoClose();
 
   Serial.println("Ready!");
 }
@@ -113,12 +113,12 @@ void ledOn()
 
 void servoOpen()
 {
-  servo.write(0);
+  servo.write(1);
 }
 
 void servoClose()
 {
-  servo.write(90);
+  servo.write(89);
 }
 
 void sensorData()
@@ -150,7 +150,7 @@ void sensorData()
     presence = "true";
   }
 
-  String data = String(temperature, 2) + ";" + String(humidity, 2) + ";" + String(airQuality) + ";" + String(lumen, 2) + ";" + presence + "\n";
+  String data = String(temperature, 2) + ";" + String(humidity, 2) + ";" + String(airQuality) + ";" + String(lumen, 2) + ";" + presence;
   Serial.println(data);
 }
 
