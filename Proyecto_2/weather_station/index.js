@@ -8,7 +8,6 @@ const port = new SerialPort({
 
 
 const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
-const client = mqtt.connect('mqtt://localhost:9000')
 
 client.on('connect', () => {
     console.log('MQTT connected')
