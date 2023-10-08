@@ -1,5 +1,6 @@
 {
   "name": "ace2-2s23-g4",
+  "private": true,
   "version": "1.0.0",
   "description": "Arquitectura de computadores y ensambladores 2",
   "main": "index.js",
@@ -13,13 +14,6 @@
   "license": "ISC",
   "workspaces": [
     "Proyecto_2/mobile",
-    "Proyecto_2/server",
-    "Proyecto_2/broker"
-  ],
-  "private": true,
-  "dependencies": {
-    "jsonschema": "^1.2.6",
-    "mosca": "^2.8.3",
-    "mqtt": "^5.0.5"
-  }
+    "Proyecto_2/server"
+  ]
 }

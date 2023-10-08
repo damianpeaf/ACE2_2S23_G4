@@ -1,12 +1,10 @@
 #include <DHT.h>
 #include <DHT_U.h>
-
+#include <Servo.h>
 // ----------------- Serial -----------------
 
 // ----------------- DHT11 -----------------
 #define DHTPIN 4
-#include <SoftwareSerial.h>
-SoftwareSerial mySUART(2, 3); // SRX = Din-2, STX = Dpin-3
 
 #define DHTTYPE DHT11
 
@@ -22,10 +20,29 @@ DHT dht(DHTPIN, DHTTYPE);
 #define TRIGPIN 5
 #define ECHOPIN 6
 
+// State
+bool isLightOn = false;
+bool doorState = false;
+bool prevDoorState = false;
+int fanState = 0; // 0: off, 1: low, 2: high
+
+// Led pin on D7
+const int ledPin = 7;
+
+// fan pwm pin on d9
+const int fanPin = 9;
+
+// servo pin on d10
+const int servoPin = 10;
+Servo servo;
+int servoPosition = 0;
+
+//
+unsigned long previousMillis = 0;
+
 void setup()
 {
   Serial.begin(115200);
-  mySUART.begin(115200);
 
   dht.begin();
 
@@ -35,19 +52,82 @@ void setup()
   pinMode(TRIGPIN, OUTPUT);
   pinMode(ECHOPIN, INPUT);
 
+  // led
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+
+  // fan
+  pinMode(fanPin, OUTPUT);
+  analogWrite(fanPin, 0);
+
+  // servo
+  servo.attach(10);
+  servo.write(servoPosition);
+
   Serial.println("Ready!");
 }
 
 void loop()
 {
 
+  // 1. stream sensor data, every 3 seconds
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= 3000)
+  {
+    previousMillis = currentMillis;
+    sensorData();
+  }
+
+  // 2. check for commands
+  readCommands();
+
+  // 3. actuator control
+  actuatorControl();
+}
+
+void fanOff()
+{
+  analogWrite(fanPin, 0);
+}
+
+void fanLow()
+{
+  analogWrite(fanPin, 150);
+}
+
+void fanHigh()
+{
+  analogWrite(fanPin, 255);
+}
+
+void ledOff()
+{
+  digitalWrite(ledPin, LOW);
+}
+
+void ledOn()
+{
+  digitalWrite(ledPin, HIGH);
+}
+
+void servoOpen()
+{
+  servo.write(0);
+}
+
+void servoClose()
+{
+  servo.write(90);
+}
+
+void sensorData()
+{
   float temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
 
   int ldr = analogRead(LDRPIN);
-  float lumen = 0.6633 * ldr +0.0052;
-
-  // Serial.println("ANALOG LIGHT: " + String(lumen));
+  float lumen = 0.6633 * ldr + 0.0052;
 
   if (lumen < 0)
   {
@@ -70,14 +150,86 @@ void loop()
     presence = "true";
   }
 
-  // String output = String(temperature) + ";" + String(humidity) + ";" + String(airQuality) + ";" + String(lumen) + ";" + presence;
-  // format string with fixed length of bytes
   String data = String(temperature, 2) + ";" + String(humidity, 2) + ";" + String(airQuality) + ";" + String(lumen, 2) + ";" + presence + "\n";
+  Serial.println(data);
+}
 
-  for (int i = 0; i < data.length(); i++)
+void readCommands()
+{
+  if (Serial.available() > 0)
   {
-    mySUART.write(data[i]);
+    String command = Serial.readStringUntil('\n');
+    Serial.println(command);
+
+    if (command == "ledOn")
+    {
+      isLightOn = true;
+    }
+    else if (command == "ledOff")
+    {
+      isLightOn = false;
+    }
+    else if (command == "fanOff")
+    {
+      fanState = 0;
+    }
+    else if (command == "fanLow")
+    {
+      fanState = 1;
+    }
+    else if (command == "fanHigh")
+    {
+      fanState = 2;
+    }
+    else if (command == "servoOpen")
+    {
+      doorState = true;
+    }
+    else if (command == "servoClose")
+    {
+      doorState = false;
+    }
+  }
+}
+
+void actuatorControl()
+{
+
+  // light
+  if (isLightOn)
+  {
+    ledOn();
+  }
+  else
+  {
+    ledOff();
   }
 
-  delay(1500);
+  // fan
+  if (fanState == 0)
+  {
+    fanOff();
+  }
+  else if (fanState == 1)
+  {
+    fanLow();
+  }
+  else if (fanState == 2)
+  {
+    fanHigh();
+  }
+
+  // door
+  if (doorState != prevDoorState)
+  {
+    if (doorState)
+    {
+      servoOpen();
+    }
+    else
+    {
+      servoClose();
+    }
+    prevDoorState = doorState;
+  }
 }

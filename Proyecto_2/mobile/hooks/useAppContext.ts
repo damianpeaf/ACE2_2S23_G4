@@ -130,7 +130,11 @@ export const useAppContext = () => {
 
     useEffect(() => {
         if (!socket) {
-            initSocket();
+            try {
+                initSocket();
+            } catch (error) {
+                console.log(error)
+            }
         }
     }, [])
 

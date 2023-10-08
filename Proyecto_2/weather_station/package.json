@@ -1,12 +1,12 @@
 {
-  "name": "broker",
+  "name": "weather_station",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "jsonschema": "^1.2.6",
-    "mosca": "^0.6.0",
-    "mqtt": "^5.0.5"
+    "mqtt": "^5.0.5",
+    "serialport": "^12.0.0"
   }
 }
