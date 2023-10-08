@@ -1,5 +1,6 @@
 const mosca = require("mosca");
-const port = 9000;
+require("dotenv").config();
+const port = process.env.PORT || 9000;
 
 const broker = new mosca.Server({
   port: port,
