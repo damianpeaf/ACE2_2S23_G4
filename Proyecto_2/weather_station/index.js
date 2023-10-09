@@ -7,14 +7,25 @@ const port = new SerialPort({
 })
 
 
+const options = {
+    host: 'e97567f69db948879616b91506d2b620.s2.eu.hivemq.cloud',
+    port: 8883,
+    protocol: 'mqtts',
+    username: 'damianpeaf',
+    password: 'Grupo4arqui2'
+}
+
+const client = mqtt.connect(options);
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
-const client = mqtt.connect('wss://ace2-g4-broker.up.railway.app/mqtt')
 
-client.on('connect', () => {
-    console.log('MQTT connected')
+// setup the callbacks
+client.on('connect', function () {
+    console.log('Connected');
+});
 
-    client.subscribe('actuator-request')
-})
+client.on('error', function (error) {
+    console.log(error);
+});
 
 parser.on('open', () => {
     console.log('Arduino connected')
@@ -28,7 +39,7 @@ parser.on('error', (err) => {
 parser.on('data', (data) => {
 
     // temparature;humidity;airQuality;lumen;presence
-    const [temperature, humidity, airQuality, lumen, presence] = data.replace('\\n', '').split(';')
+    const [temperature, humidity, airQuality, lumen, presence] = data.split(';')
 
     const message = {
         temperature,
@@ -39,8 +50,7 @@ parser.on('data', (data) => {
     }
     console.log(message)
 
-    // client.publish('sensor-data', JSON.stringify(message))
-    client.emit('sensor-data', 'sensor-data', JSON.stringify(message))
+    client.publish('sensor-data', JSON.stringify(message))
 })
 
 // recieve data
@@ -51,3 +61,5 @@ client.on('message', (topic, message) => {
         port.write(`${msg}\n`)
     }
 })
+
+client.subscribe('actuator-request');

@@ -1,6 +1,13 @@
 import mqtt from 'mqtt'
+const options = {
+    host: 'e97567f69db948879616b91506d2b620.s2.eu.hivemq.cloud',
+    port: 8883,
+    protocol: 'mqtts',
+    username: 'damianpeaf',
+    password: 'Grupo4arqui2'
+}
 
-const client = mqtt.connect('wss://ace2-g4-broker.up.railway.app/mqtt')
+const client = mqtt.connect(options);
 client.on('connect', () => {
     console.log('MQTT connected')
 
@@ -8,9 +15,13 @@ client.on('connect', () => {
     console.log('Subscribed to sensor-data')
 })
 
-client.on('sensor-data', (topic, message) => {
+client.on('message', (topic, message) => {
+
+    // convert message to JSON
+    const data = JSON.parse(message.toString())
+
     console.log({
         topic,
-        message
+        data
     })
 })
