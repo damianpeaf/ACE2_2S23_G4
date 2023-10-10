@@ -1,13 +1,14 @@
+import { TimeSeriesDuplicatePolicies, TimeSeriesEncoding } from '@redis/time-series';
+
 export const createTimeSerie = async (redisClient, name) => {
     let temperatureSerie = false
 
     try {
-        const resp = await redisClient.ts.GET(name)
+        await redisClient.ts.GET(name)
         temperatureSerie = true
     } catch (error) {
         temperatureSerie = false
     }
-
 
     if (!temperatureSerie) {
         const created = await redisClient.ts.create(name, {

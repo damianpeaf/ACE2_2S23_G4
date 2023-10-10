@@ -1,5 +1,6 @@
 import mqtt from 'mqtt'
 import { createClient } from 'redis'
+import { createTimeSerie } from './utils.js'
 import express from 'express'
 import { Analyzer } from './analyzer.js'
 
@@ -19,10 +20,10 @@ const options = {
     password: 'Grupo4arqui2'
 }
 
-await createTimeSeries(redisClient, 'temperature')
-await createTimeSeries(redisClient, 'humidity')
-await createTimeSeries(redisClient, 'light')
-await createTimeSeries(redisClient, 'co2')
+await createTimeSerie(redisClient, 'temperature')
+await createTimeSerie(redisClient, 'humidity')
+await createTimeSerie(redisClient, 'light')
+await createTimeSerie(redisClient, 'co2')
 
 
 const client = mqtt.connect(options);
