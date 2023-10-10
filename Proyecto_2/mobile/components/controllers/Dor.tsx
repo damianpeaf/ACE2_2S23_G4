@@ -1,48 +1,37 @@
 import { useState, useEffect } from 'react'
 import { View, Button } from 'react-native'
 import { Foundation } from '@expo/vector-icons';
-import { useAppContext } from '../../hooks';
+
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
 const ItemComponents: {
   [key: string]: JSX.Element;
 } = {
-  'open': <FontAwesome5 name="door-open" size={24} color="black" />,
-  'close': <FontAwesome5 name="door-closed" size={24} color="black" />,
+  'open': <FontAwesome5 name="door-open" size={100} color="black" />,
+  'close': <FontAwesome5 name="door-closed" size={100} color="black" />,
 };
 
 
 
 export const Door = () => {
 
-  const { enableDoor, state } = useAppContext();
-  const [changeSVG, setChangeSVG] = useState(
-    state.global_state.is_door_open ? true : false
-  );
-
+  const [changeSVG, setChangeSVG] = useState(false);
 
   // onPressLearnMore
   const onPressOpenCloseDoor = () => {
     // set changeSVG
 
     if (!changeSVG) {
-      enableDoor(true)
+      setChangeSVG(true)
       return
     }
 
-    enableDoor(false)
+    setChangeSVG(false)
   
   }
 
-  useEffect(() => {
 
-    if (state.global_state.is_door_open) {
-      setChangeSVG(true);
-      return
-    }
-    setChangeSVG(false);
-  }, [state.global_state.is_door_open])
 
   return (
     <View style={{
@@ -52,6 +41,7 @@ export const Door = () => {
     }}>
       {changeSVG ? ItemComponents['open'] : ItemComponents['close']}
       <Button
+        color={changeSVG ? "#000000" : "#4F5353"}
         onPress={onPressOpenCloseDoor}
         title="OPEN / CLOSE"
       />

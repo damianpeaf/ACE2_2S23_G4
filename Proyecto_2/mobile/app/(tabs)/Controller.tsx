@@ -36,9 +36,9 @@ const Controller = () => {
 const styles = StyleSheet.create({
     gridContainer: {
         flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexDirection: 'column',
         width: '100%',
+        height: '100%',
         backgroundColor: '#F4F4F4',
         justifyContent: 'center',
     },
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     gridItem: {
         margin: 5,
         padding: 5,
-        height: 150,
-        width: 180,
+        height: 350,
+        width: '100%',
         textAlign: 'center',
         textAlignVertical: 'center',
     },

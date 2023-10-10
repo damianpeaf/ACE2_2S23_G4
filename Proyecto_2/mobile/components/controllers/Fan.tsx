@@ -2,27 +2,27 @@ import { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Slider } from '@react-native-assets/slider';
-import { useAppContext } from '../../hooks';
 import { VentState } from '../../interface';
+import {FanRequest} from '../api/api'
 
 const ItemComponents: {
   [key: string]: JSX.Element;
 } = {
-  'off': <MaterialCommunityIcons size={100} color="black" name="fan-off" />,
-  'vel_1': <MaterialCommunityIcons size={100} color="black" name="fan-speed-1" />,
-  'vel_2': <MaterialCommunityIcons size={100} color="black" name="fan-speed-2" />,
+  'off': <MaterialCommunityIcons size={120} color="black" name="fan-off" />,
+  'vel_1': <MaterialCommunityIcons size={120} color="black" name="fan-speed-1" />,
+  'vel_2': <MaterialCommunityIcons size={120} color="black" name="fan-speed-2" />,
 };
 
 
 export const Air = () => {
-  const { setVentState, state } = useAppContext();
 
-  const [sliderValue, setSliderValue] = useState(
-    state.global_state.vent_state === 'off' ? 0 : state.global_state.vent_state === 'vel_1' ? 1 : 2
-  );
+  const [statusFan, setStatusFan] = useState<VentState>("off");
+
+  const [sliderValue, setSliderValue] = useState(0);
 
   const handleSliderValueChange = (value: number) => {
     setSliderValue(Math.floor(value));
+
   };
 
   useEffect(() => {
@@ -30,25 +30,28 @@ export const Air = () => {
   }, [sliderValue]);
 
 
-  const handleEmit = () => {
+   const handleEmit = async () => {
 
     switch (sliderValue) {
-      case 0:
-        setVentState('off');
-        break;
-      case 1:
-        setVentState('vel_1');
-        break;
-      default:
-        setVentState('vel_2');
-        break;
+    case 0:
+      setStatusFan("off");
+      await FanRequest("off");
+      break;
+    case 1:
+      setStatusFan("vel_1");
+      await FanRequest("vel_1");
+      break;
+    default:
+      setStatusFan("vel_2");
+      await FanRequest("vel_2");
+      break;
     }
 
   }
 
   return (
     <View style={styles.viewStyles}>
-      {ItemComponents[state.global_state.vent_state]}
+      {ItemComponents[statusFan]}
       <Slider
         style={styles.sliderStyles}
         value={sliderValue}
@@ -67,11 +70,13 @@ export const Air = () => {
 
 const styles = StyleSheet.create({
   viewStyles: {
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     padding: 10,
   },
   sliderStyles: {
-    width: '80%',
+    width: '50%',
     height: 50,
   },
 });
