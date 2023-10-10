@@ -3,6 +3,7 @@ import { createClient } from 'redis'
 import express from 'express'
 import { Analyzer } from './analyzer.js'
 
+
 const app = express()
 
 const redisClient = createClient({
@@ -18,9 +19,16 @@ const options = {
     password: 'Grupo4arqui2'
 }
 
+await createTimeSeries(redisClient, 'temperature')
+await createTimeSeries(redisClient, 'humidity')
+await createTimeSeries(redisClient, 'light')
+await createTimeSeries(redisClient, 'co2')
+
+
 const client = mqtt.connect(options);
 
 const analyzer = new Analyzer(client, redisClient)
+
 
 client.on('connect', () => {
     console.log('MQTT connected')
@@ -38,6 +46,8 @@ client.on('message', async (topic, message) => {
     data.timestamp = timestamp
 
     // store data in Redis, array of json objects with a timestamp
+    await redisClient.ts.add('temperature', timestamp, data.temperature)
+
     redisClient.hSet('sensor-data', timestamp, JSON.stringify(data))
 
     // analyze data

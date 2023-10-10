@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@redis/time-series": "^1.0.5",
     "express": "^4.18.2",
     "mqtt": "^5.1.0",
     "redis": "^4.6.10"
