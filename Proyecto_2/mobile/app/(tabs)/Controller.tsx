@@ -4,9 +4,14 @@ import {
     Air,
 } from "../../components/controllers/"
 import { Door } from '../../components/controllers/Dor'
+import { Light } from '../../components/controllers/Light'
 
 
 const components = [
+    {
+        name: 'Light',
+        component: <Light />
+    },
     {
         name: 'Air',
         component: <Air />
@@ -46,7 +51,7 @@ const styles = StyleSheet.create({
     gridItem: {
         margin: 5,
         padding: 5,
-        height: 350,
+        height: 200,
         width: '100%',
         textAlign: 'center',
         textAlignVertical: 'center',

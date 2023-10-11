@@ -15,7 +15,6 @@ const ItemComponents: {
 
 
 export const Air = () => {
-
   const [statusFan, setStatusFan] = useState<VentState>("off");
 
   const [sliderValue, setSliderValue] = useState(0);
@@ -26,6 +25,8 @@ export const Air = () => {
   };
 
   useEffect(() => {
+    // setTimeout(() => {
+    // }, 1000);
     handleEmit();
   }, [sliderValue]);
 
@@ -53,6 +54,7 @@ export const Air = () => {
     <View style={styles.viewStyles}>
       {ItemComponents[statusFan]}
       <Slider
+        
         style={styles.sliderStyles}
         value={sliderValue}
         onValueChange={(newValue) => {
