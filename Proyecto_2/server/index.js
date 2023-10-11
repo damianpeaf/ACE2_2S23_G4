@@ -8,7 +8,10 @@ const init = async () => {
     const app = express()
 
     const redisClient = createClient({
-        url: 'redis://default:7A82y2At236JpCJoLb6nUNmeUJAp15On@redis-12048.c1.us-east1-2.gce.cloud.redislabs.com:12048'
+        url: 'redis://default:7A82y2At236JpCJoLb6nUNmeUJAp15On@redis-12048.c1.us-east1-2.gce.cloud.redislabs.com:12048',
+        socket: {
+            connectTimeout: 50000
+        }
     })
 
     await redisClient.connect()
