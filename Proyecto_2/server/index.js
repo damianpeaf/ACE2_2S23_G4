@@ -25,6 +25,8 @@ const init = async () => {
     }
 
     await createTimeSerie(redisClient, 'temperature')
+    await createTimeSerie(redisClient, 'lightOn')
+    await createTimeSerie(redisClient, 'presence')
     await createTimeSerie(redisClient, 'humidity')
     await createTimeSerie(redisClient, 'light')
     await createTimeSerie(redisClient, 'co2')
@@ -52,6 +54,10 @@ const init = async () => {
 
         // store data in Redis, array of json objects with a timestamp
         await redisClient.ts.add('temperature', timestamp, data.temperature)
+        await redisClient.ts.add('presence', timestamp, data.presence ? 1 : 0)
+        await redisClient.ts.add('humidity', timestamp, data.humidity)
+        await redisClient.ts.add('light', timestamp, data.lumen)
+        await redisClient.ts.add('co2', timestamp, data.airQuality)
 
         redisClient.hSet('sensor-data', timestamp, JSON.stringify(data))
 
@@ -70,6 +76,7 @@ const init = async () => {
         analyzer.setGlobalState({
             is_light_on: false
         })
+        await redisClient.ts.add('lightOn', new Date().toISOString(), 0)
     })
     app.get('/fanOff', async (req, res) => {
         client.publish('actuator-request', 'fanOff')
@@ -103,13 +110,7 @@ const init = async () => {
         analyzer.setGlobalState({
             is_light_on: true
         })
-    })
-
-    app.get('/ledOff', async (req, res) => {
-        client.publish('actuator-request', 'ledOff')
-        analyzer.setGlobalState({
-            is_light_on: false
-        })
+        await redisClient.ts.add('lightOn', new Date().toISOString(), 1)
     })
 
     app.get('/reset', async (req, res) => {

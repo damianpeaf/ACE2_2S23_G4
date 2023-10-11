@@ -137,6 +137,7 @@ class Analyzer {
                         this.notificationState.firstLightNotification = false;
 
                         this.mqttClient.publish('actuator-request', 'ledOff')
+                        await redisClient.ts.add('lightOn', new Date().toISOString(), 0)
 
                         console.log('2nd Light notification sent');
                     }
