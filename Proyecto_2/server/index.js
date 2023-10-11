@@ -47,7 +47,7 @@ const init = async () => {
     client.on('message', async (topic, message) => {
 
         // convert message to JSON
-        const timestamp = new Date().toISOString()
+        const timestamp = new Date().getTime()
         const data = JSON.parse(message.toString())
         data.presence = data.presence === 'true'
         data.timestamp = timestamp
@@ -76,7 +76,7 @@ const init = async () => {
         analyzer.setGlobalState({
             is_light_on: false
         })
-        await redisClient.ts.add('lightOn', new Date().toISOString(), 0)
+        await redisClient.ts.add('lightOn', new Date().getTime(), 0)
     })
     app.get('/fanOff', async (req, res) => {
         client.publish('actuator-request', 'fanOff')
@@ -110,7 +110,7 @@ const init = async () => {
         analyzer.setGlobalState({
             is_light_on: true
         })
-        await redisClient.ts.add('lightOn', new Date().toISOString(), 1)
+        await redisClient.ts.add('lightOn', new Date().getTime(), 1)
     })
 
     app.get('/reset', async (req, res) => {
