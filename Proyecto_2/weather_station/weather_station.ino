@@ -25,6 +25,7 @@ bool isLightOn = false;
 bool doorState = false;
 bool prevDoorState = false;
 int fanState = 0; // 0: off, 1: low, 2: high
+int prevFanState = 0;
 
 // Led pin on D7
 const int ledPin = 7;
@@ -159,7 +160,6 @@ void readCommands()
   if (Serial.available() > 0)
   {
     String command = Serial.readStringUntil('\n');
-    Serial.println(command);
 
     if (command == "ledOn")
     {
@@ -206,17 +206,21 @@ void actuatorControl()
   }
 
   // fan
-  if (fanState == 0)
+  if (fanState != prevFanState)
   {
-    fanOff();
-  }
-  else if (fanState == 1)
-  {
-    fanLow();
-  }
-  else if (fanState == 2)
-  {
-    fanHigh();
+    if (fanState == 0)
+    {
+      fanOff();
+    }
+    else if (fanState == 1)
+    {
+      fanLow();
+    }
+    else if (fanState == 2)
+    {
+      fanHigh();
+    }
+    prevFanState = fanState;
   }
 
   // door
