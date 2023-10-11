@@ -24,10 +24,10 @@ const init = async () => {
         password: 'Grupo4arqui2'
     }
 
-    // await createTimeSerie(redisClient, 'temperature')
-    // await createTimeSerie(redisClient, 'humidity')
-    // await createTimeSerie(redisClient, 'light')
-    // await createTimeSerie(redisClient, 'co2')
+    await createTimeSerie(redisClient, 'temperature')
+    await createTimeSerie(redisClient, 'humidity')
+    await createTimeSerie(redisClient, 'light')
+    await createTimeSerie(redisClient, 'co2')
 
 
     const client = mqtt.connect(options);
