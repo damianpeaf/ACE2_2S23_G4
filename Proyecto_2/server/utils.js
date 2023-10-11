@@ -1,6 +1,6 @@
-import { TimeSeriesDuplicatePolicies, TimeSeriesEncoding } from '@redis/time-series';
+const { TimeSeriesDuplicatePolicies, TimeSeriesEncoding } =  require('@redis/time-series');
 
-export const createTimeSerie = async (redisClient, name) => {
+const createTimeSerie = async (redisClient, name) => {
     let temperatureSerie = false
 
     try {
@@ -25,4 +25,8 @@ export const createTimeSerie = async (redisClient, name) => {
     } else {
         console.log(name, 'time series already exists')
     }
+}
+
+module.exports = {
+    createTimeSerie
 }

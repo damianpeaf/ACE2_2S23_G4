@@ -1,5 +1,4 @@
-
-export class Analyzer {
+class Analyzer {
 
     globalState = {
         is_light_on: false,
@@ -246,4 +245,8 @@ export class Analyzer {
             this.notificationState.firstAirNotification = false;
         }
     }
+}
+
+module.exports = {
+    Analyzer
 }

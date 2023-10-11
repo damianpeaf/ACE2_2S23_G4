@@ -1,15 +1,16 @@
-import mqtt from 'mqtt'
-import { createClient } from 'redis'
-import { createTimeSerie } from './utils.js'
-import express from 'express'
-import { Analyzer } from './analyzer.js'
+const mqtt = require('mqtt')
+const { createClient } = require('redis')
+const { createTimeSerie } = require('./utils')
+const express = require('express')
+const { Analyzer } = require('./analyzer')
 
-
-const app = express()
+const init = async () => {
+    const app = express()
 
 const redisClient = createClient({
     url: 'redis://default:7A82y2At236JpCJoLb6nUNmeUJAp15On@redis-12048.c1.us-east1-2.gce.cloud.redislabs.com:12048'
 })
+
 await redisClient.connect()
 
 const options = {
@@ -116,3 +117,6 @@ app.get('/reset', async (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Example app listening on http://localhost:${process.env.PORT || 3000} !`)
 })
+}
+
+init()
