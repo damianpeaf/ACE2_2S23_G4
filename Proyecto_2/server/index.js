@@ -3,6 +3,11 @@ const { createClient } = require('redis')
 const { createTimeSerie } = require('./utils')
 const express = require('express')
 const { Analyzer } = require('./analyzer')
+require('dotenv').config()
+
+const useMosca = process.env.MOSCA == 1 ? true : false
+console.log(`useMosca: ${useMosca}`)
+const moscaUrl = 'mqtt://localhost:9000'
 
 const init = async () => {
     const app = express()
@@ -32,7 +37,7 @@ const init = async () => {
     await createTimeSerie(redisClient, 'co2')
 
 
-    const client = mqtt.connect(options);
+    const client = mqtt.connect(useMosca ? moscaUrl : options)
 
     const analyzer = new Analyzer(client, redisClient)
 

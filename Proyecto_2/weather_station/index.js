@@ -1,11 +1,18 @@
 import { SerialPort, ReadlineParser } from 'serialport'
 import mqtt from 'mqtt'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const useMosca = process.env.MOSCA == 1 ? true : false
 
 const port = new SerialPort({
     path: 'COM3',
     baudRate: 9600
 })
 
+
+const moscaUrl = 'mqtt://localhost:9000'
 
 const options = {
     host: 'e97567f69db948879616b91506d2b620.s2.eu.hivemq.cloud',
@@ -15,7 +22,9 @@ const options = {
     password: 'Grupo4arqui2'
 }
 
-const client = mqtt.connect(options);
+
+console.log(`useMosca: ${useMosca}`)
+const client = mqtt.connect(useMosca ? moscaUrl : options);
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
 
 // setup the callbacks

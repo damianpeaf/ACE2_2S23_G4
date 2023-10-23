@@ -1,29 +1,29 @@
 
 interface Body {
-  path : string;
+  path: string;
 }
 
 
-async function sendRequest(body:Body) {
+async function sendRequest(body: Body) {
   try {
 
-    const response = await fetch(`https://ace2-g4-server-production.up.railway.app/${body.path}`, {
+    const response = await fetch(`http://192.168.1.2:3000/${body.path}`, {
       method: 'GET'
     });
 
     const data = await response.json();
     console.log(data);
 
-  } catch (error) { 
+  } catch (error) {
     console.log(error);
   }
 }
 
 
 // Fan function
-export async function FanRequest( status: string) {
+export async function FanRequest(status: string) {
 
-  if (status == "off" ){
+  if (status == "off") {
     await sendRequest({
       path: 'fanOff'
     })
@@ -41,9 +41,9 @@ export async function FanRequest( status: string) {
 
 
 // Light function
-export async function LightRequest( status: boolean) {
+export async function LightRequest(status: boolean) {
 
-  if (status){
+  if (status) {
     await sendRequest({
       path: 'ledOn'
     })
@@ -56,9 +56,9 @@ export async function LightRequest( status: boolean) {
 }
 
 // Door function
-export async function DoorRequest( status: boolean) {
+export async function DoorRequest(status: boolean) {
 
-  if (status){
+  if (status) {
     await sendRequest({
       path: 'servoOpen'
     })
