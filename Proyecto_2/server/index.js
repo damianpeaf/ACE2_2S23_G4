@@ -75,6 +75,11 @@ const init = async () => {
         })
     })
 
+    // setting cors
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*')
+        next()
+    })
 
     app.get('/ledOff', async (req, res) => {
         client.publish('actuator-request', 'ledOff')
@@ -82,32 +87,40 @@ const init = async () => {
             is_light_on: false
         })
         await redisClient.ts.add('lightOn', new Date().getTime(), 0)
+        return res.send('OK')
     })
     app.get('/fanOff', async (req, res) => {
         client.publish('actuator-request', 'fanOff')
         analyzer.setGlobalState({
             vent_state: 'off'
         })
+        return res.send('OK')
     })
     app.get('/fanLow', async (req, res) => {
         client.publish('actuator-request', 'fanLow')
         analyzer.setGlobalState({
             vent_state: 'low'
         })
+        return res.send('OK')
     })
     app.get('/fanHigh', async (req, res) => {
         client.publish('actuator-request', 'fanHigh')
         analyzer.setGlobalState({
             vent_state: 'high'
         })
+        return res.send('OK')
     })
     app.get('/servoOpen', async (req, res) => {
         client.publish('actuator-request', 'servoOpen')
         // TODO: set global state
+        return res.send('OK')
+
     })
     app.get('/servoClose', async (req, res) => {
         client.publish('actuator-request', 'servoClose')
         // TODO: set global state
+        return res.send('OK')
+
     })
 
     app.get('/ledOn', async (req, res) => {
@@ -116,11 +129,13 @@ const init = async () => {
             is_light_on: true
         })
         await redisClient.ts.add('lightOn', new Date().getTime(), 1)
+        return res.send('OK')
     })
 
     app.get('/reset', async (req, res) => {
         await analyzer.resetGlobalState()
         res.send('Reset')
+        return res.send('OK')
     })
 
     app.listen(process.env.PORT || 3000, () => {

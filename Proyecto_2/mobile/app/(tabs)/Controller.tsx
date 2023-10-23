@@ -6,7 +6,6 @@ import {
 import { Door } from '../../components/controllers/Dor'
 import { Light } from '../../components/controllers/Light'
 
-
 const components = [
     {
         name: 'Light',

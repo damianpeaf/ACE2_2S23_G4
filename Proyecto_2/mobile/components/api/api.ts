@@ -1,4 +1,6 @@
 
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+
 interface Body {
   path: string;
 }
@@ -11,11 +13,31 @@ async function sendRequest(body: Body) {
       method: 'GET'
     });
 
-    const data = await response.json();
-    console.log(data);
+    // const data = await response.json();
+    // console.log(data);
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'Exito',
+      text2: 'Se ha enviado la solicitud',
+      visibilityTime: 3000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
 
   } catch (error) {
     console.log(error);
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      text1: 'Error',
+      text2: 'No se ha podido enviar la solicitud\n' + error,
+      visibilityTime: 3000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
   }
 }
 

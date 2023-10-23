@@ -34,11 +34,8 @@ const int ledPin = 7;
 const int fanPin = 9;
 
 // servo pin on d10
-const int servoPin = 10;
 Servo servo;
-int servoPosition = 0;
 
-//
 unsigned long previousMillis = 0;
 
 void setup()
@@ -60,9 +57,9 @@ void setup()
   // fan
   pinMode(fanPin, OUTPUT);
   analogWrite(fanPin, 0);
-
+  
   // servo
-  servo.attach(10);
+  servo.attach(11);
   servoClose();
 
   Serial.println("Ready!");
