@@ -60,16 +60,16 @@ parser.on('data', (data) => {
     }
     console.log(message)
 
-    client.publish('sensor-data', JSON.stringify(message))
+    client.publish('ARQUI2_G4_sensor-data', JSON.stringify(message))
 })
 
 // recieve data
 client.on('message', (topic, message) => {
     const msg = message.toString()
     console.log(topic, msg)
-    if (topic === 'actuator-request') {
+    if (topic === 'ARQUI2_G4_actuator-request') {
         port.write(`${msg}\n`)
     }
 })
 
-client.subscribe('actuator-request');
+client.subscribe('ARQUI2_G4_actuator-request');

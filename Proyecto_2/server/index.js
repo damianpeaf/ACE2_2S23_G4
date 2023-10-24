@@ -46,8 +46,8 @@ const init = async () => {
     client.on('connect', () => {
         console.log('MQTT connected')
 
-        client.subscribe('sensor-data')
-        console.log('Subscribed to sensor-data')
+        client.subscribe('ARQUI2_G4_sensor-data')
+        console.log('Subscribed to ARQUI2_G4_sensor-data')
     })
 
     client.on('message', async (topic, message) => {
@@ -83,7 +83,7 @@ const init = async () => {
     })
 
     app.get('/ledOff', async (req, res) => {
-        client.publish('actuator-request', 'ledOff')
+        client.publish('ARQUI2_G4_actuator-request', 'ledOff')
         analyzer.setGlobalState({
             is_light_on: false
         })
@@ -91,41 +91,41 @@ const init = async () => {
         return res.send('OK')
     })
     app.get('/fanOff', async (req, res) => {
-        client.publish('actuator-request', 'fanOff')
+        client.publish('ARQUI2_G4_actuator-request', 'fanOff')
         analyzer.setGlobalState({
             vent_state: 'off'
         })
         return res.send('OK')
     })
     app.get('/fanLow', async (req, res) => {
-        client.publish('actuator-request', 'fanLow')
+        client.publish('ARQUI2_G4_actuator-request', 'fanLow')
         analyzer.setGlobalState({
             vent_state: 'low'
         })
         return res.send('OK')
     })
     app.get('/fanHigh', async (req, res) => {
-        client.publish('actuator-request', 'fanHigh')
+        client.publish('ARQUI2_G4_actuator-request', 'fanHigh')
         analyzer.setGlobalState({
             vent_state: 'high'
         })
         return res.send('OK')
     })
     app.get('/servoOpen', async (req, res) => {
-        client.publish('actuator-request', 'servoOpen')
+        client.publish('ARQUI2_G4_actuator-request', 'servoOpen')
         // TODO: set global state
         return res.send('OK')
 
     })
     app.get('/servoClose', async (req, res) => {
-        client.publish('actuator-request', 'servoClose')
+        client.publish('ARQUI2_G4_actuator-request', 'servoClose')
         // TODO: set global state
         return res.send('OK')
 
     })
 
     app.get('/ledOn', async (req, res) => {
-        client.publish('actuator-request', 'ledOn')
+        client.publish('ARQUI2_G4_actuator-request', 'ledOn')
         analyzer.setGlobalState({
             is_light_on: true
         })

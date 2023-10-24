@@ -63,7 +63,7 @@ class Analyzer {
     }
 
     emitNotification(notification) {
-        this.mqttClient.publish('notification', JSON.stringify(notification));
+        this.mqttClient.publish('ARQUI2_G4_notification', JSON.stringify(notification));
     }
 
     async saveNotification(notification) {
@@ -136,7 +136,7 @@ class Analyzer {
                         await this.redisClient.del('lightNotification');
                         this.notificationState.firstLightNotification = false;
 
-                        this.mqttClient.publish('actuator-request', 'ledOff')
+                        this.mqttClient.publish('ARQUI2_G4_actuator-request', 'ledOff')
                         await redisClient.ts.add('lightOn', new Date().getTime(), 0)
 
                         console.log('2nd Light notification sent');
@@ -167,7 +167,7 @@ class Analyzer {
             };
 
             //   Turn off the vent
-            this.mqttClient.publish('actuator-request', 'fanOff')
+            this.mqttClient.publish('ARQUI2_G4_actuator-request', 'fanOff')
 
             this.emitNotification(notification);
             await this.saveNotification(notification);
@@ -230,7 +230,7 @@ class Analyzer {
                         this.redisClient.del('airNotification');
                         this.notificationState.firstAirNotification = false;
 
-                        this.mqttClient.publish('actuator-request', 'fanHigh')
+                        this.mqttClient.publish('ARQUI2_G4_actuator-request', 'fanHigh')
                         console.log('2nd Air notification sent');
 
                         this.notificationState.secondAirNotification = true;
