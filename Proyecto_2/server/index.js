@@ -83,6 +83,10 @@ const init = async () => {
     })
 
     app.get('/ledOff', async (req, res) => {
+        if (!analyzer.globalState.presence) {
+            return res.status(400).send('No hay nadie en la habitacion, por lo que no se manipular la iluminacion')
+        }
+
         client.publish('ARQUI2_G4_actuator-request', 'ledOff')
         analyzer.setGlobalState({
             is_light_on: false
@@ -113,18 +117,19 @@ const init = async () => {
     })
     app.get('/servoOpen', async (req, res) => {
         client.publish('ARQUI2_G4_actuator-request', 'servoOpen')
-        // TODO: set global state
         return res.send('OK')
 
     })
     app.get('/servoClose', async (req, res) => {
         client.publish('ARQUI2_G4_actuator-request', 'servoClose')
-        // TODO: set global state
-        return res.send('OK')
 
     })
 
     app.get('/ledOn', async (req, res) => {
+        if (!analyzer.globalState.presence) {
+            return res.status(400).send('No hay nadie en la habitacion, por lo que no se manipular la iluminacion')
+        }
+
         client.publish('ARQUI2_G4_actuator-request', 'ledOn')
         analyzer.setGlobalState({
             is_light_on: true

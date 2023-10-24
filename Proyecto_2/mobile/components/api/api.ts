@@ -9,7 +9,7 @@ interface Body {
 async function sendRequest(body: Body) {
   try {
 
-    const response = await fetch(`http://192.168.1.2:3000/${body.path}`, {
+    const response = await fetch(`https://ace2-g4-server-production.up.railway.app/${body.path}`, {
       method: 'GET'
     });
 
@@ -32,7 +32,7 @@ async function sendRequest(body: Body) {
       type: 'error',
       position: 'bottom',
       text1: 'Error',
-      text2: 'No se ha podido enviar la solicitud\n' + error,
+      text2: 'Hubo un problema: \n' + error,
       visibilityTime: 3000,
       autoHide: true,
       topOffset: 30,

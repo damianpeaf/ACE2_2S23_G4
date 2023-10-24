@@ -53,6 +53,10 @@ class Analyzer {
 
     async analyzeData(data) {
         try {
+            this.setGlobalState({
+                presence: data.presence,
+            })
+
             // analyze light
             await this.analyzeLight(data);
             // analyze air quality
@@ -74,10 +78,15 @@ class Analyzer {
         console.log('Notification saved');
     }
 
-    async analyzeLight(data) {
+    async analyzeLight({
+        timestamp,
+        airQuality,
+        presence,
+        lumen,
+        temperature,
+    }) {
         // if presence is false -> evaluate if theye have passed 30 seconds
         const { is_light_on } = this.globalState;
-        const { presence } = data;
 
         // if there is no presence and the light is on -> evaluate if they have passed 30 seconds
         if (!presence && is_light_on) {
@@ -108,7 +117,7 @@ class Analyzer {
                         !this.notificationState.firstLightNotification
                     ) {
                         const notification = {
-                            message: `La luz se ha quedado encendida sin presencia humana por más de 25 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'
+                            message: `La luz se ha quedado encendida sin presencia humana por más de 25 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${airQuality} ppm, Luz: ${lumen} lux, Presencia: ${presence ? 'Si' : 'No'
                                 }`,
                             timestamp: new Date().toISOString(),
                             type: 'warning',
@@ -122,7 +131,7 @@ class Analyzer {
                         console.log('1st Light notification sent');
                     } else if (diff >= 50_000) {
                         const notification = {
-                            message: `La luz se ha quedado encendida sin presencia humana por más de 50 segundos, se apagará automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'
+                            message: `La luz se ha quedado encendida sin presencia humana por más de 50 segundos, se apagará automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${airQuality} ppm, Luz: ${lumen} lux, Presencia: ${presence ? 'Si' : 'No'
                                 }`,
                             timestamp: new Date().toISOString(),
                             type: 'error',
@@ -137,7 +146,10 @@ class Analyzer {
                         this.notificationState.firstLightNotification = false;
 
                         this.mqttClient.publish('ARQUI2_G4_actuator-request', 'ledOff')
-                        await redisClient.ts.add('lightOn', new Date().getTime(), 0)
+                        await this.redisClient.ts.add('lightOn', new Date().getTime(), 0)
+                        this.setGlobalState({
+                            is_light_on: false
+                        })
 
                         console.log('2nd Light notification sent');
                     }
@@ -153,14 +165,19 @@ class Analyzer {
         }
     }
 
-    async analyzeAirQuality(data) {
-        const { temperature, air_quality, light, presence } = data;
+    async analyzeAirQuality({
+        timestamp,
+        airQuality,
+        presence,
+        lumen,
+        temperature,
+    }) {
 
         if (this.notificationState.secondAirNotification) {
-            if (air_quality > this.badAirQualityThreshold) return;
+            if (airQuality > this.badAirQualityThreshold) return;
 
             const notification = {
-                message: `La calidad del aire se ha restablecido. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'
+                message: `La calidad del aire se ha restablecido. Temperatura: ${temperature}°C, Calidad del aire: ${airQuality} ppm, Luz: ${lumen} lux, Presencia: ${presence ? 'Si' : 'No'
                     }`,
                 timestamp: new Date().toISOString(),
                 type: 'info',
@@ -174,8 +191,8 @@ class Analyzer {
             this.notificationState.secondAirNotification = false;
         }
 
-        // if air_quality > Threshold -> evaluate if theye have passed 30 seconds
-        if (air_quality > this.badAirQualityThreshold) {
+        // if airQuality > Threshold -> evaluate if theye have passed 30 seconds
+        if (airQuality > this.badAirQualityThreshold) {
             if (!this.saveOnceAir) {
                 // save the data as airNotification: timestamp with 60 seconds of life
                 await this.redisClient.set(
@@ -203,7 +220,7 @@ class Analyzer {
                         !this.notificationState.firstAirNotification
                     ) {
                         const notification = {
-                            message: `La calidad del aire es mala de manera sostendida por más de 10 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'
+                            message: `La calidad del aire es mala de manera sostendida por más de 10 segundos. Temperatura: ${temperature}°C, Calidad del aire: ${airQuality} ppm, Luz: ${lumen} lux, Presencia: ${presence ? 'Si' : 'No'
                                 }`,
                             timestamp: new Date().toISOString(),
                             type: 'warning',
@@ -216,7 +233,7 @@ class Analyzer {
                         console.log('1st Air notification sent');
                     } else if (diff >= 20_000) {
                         const notification = {
-                            message: `La calidad del aire es mala, de manera sostendida por más de 20 segundos, se prenderá el ventilador automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${air_quality} ppm, Luz: ${light} lux, Presencia: ${presence ? 'Si' : 'No'
+                            message: `La calidad del aire es mala, de manera sostendida por más de 20 segundos, se prenderá el ventilador automáticamente. Temperatura: ${temperature}°C, Calidad del aire: ${airQuality} ppm, Luz: ${lumen} lux, Presencia: ${presence ? 'Si' : 'No'
                                 }`,
                             timestamp: new Date().toISOString(),
                             type: 'error',
