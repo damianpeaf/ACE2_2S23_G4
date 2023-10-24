@@ -7,7 +7,8 @@ require('dotenv').config()
 
 const useMosca = process.env.MOSCA == 1 ? true : false
 console.log(`useMosca: ${useMosca}`)
-const moscaUrl = 'mqtt://localhost:9000'
+const moscaUrl = process.env.MOSCA_URL || 'mqtt://localhost:9000'
+console.log(`MOSCA_URL: ${moscaUrl}`)
 
 const init = async () => {
     const app = express()

@@ -12,7 +12,6 @@ const port = new SerialPort({
 })
 
 
-const moscaUrl = 'mqtt://localhost:9000'
 
 const options = {
     host: 'e97567f69db948879616b91506d2b620.s2.eu.hivemq.cloud',
@@ -24,6 +23,8 @@ const options = {
 
 
 console.log(`useMosca: ${useMosca}`)
+const moscaUrl = process.env.MOSCA_URL || 'mqtt://localhost:9000'
+console.log(`MOSCA_URL: ${moscaUrl}`)
 const client = mqtt.connect(useMosca ? moscaUrl : options);
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
 

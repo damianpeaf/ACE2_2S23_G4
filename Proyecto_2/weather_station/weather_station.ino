@@ -31,7 +31,7 @@ int prevFanState = 0;
 const int ledPin = 7;
 
 // fan pwm pin on d9
-const int fanPin = 9;
+const int fanPin = 13;
 
 // servo pin on d10
 Servo servo;
@@ -91,7 +91,7 @@ void fanOff()
 
 void fanLow()
 {
-  analogWrite(fanPin, 150);
+  analogWrite(fanPin, 200);
 }
 
 void fanHigh()
@@ -212,6 +212,7 @@ void actuatorControl()
     else if (fanState == 1)
     {
       fanLow();
+      delay(5000);
     }
     else if (fanState == 2)
     {
