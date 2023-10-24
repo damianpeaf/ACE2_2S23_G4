@@ -13,6 +13,11 @@ async function sendRequest(body: Body) {
       method: 'GET'
     });
 
+    if (response.status == 400) {
+      const errorMsg = await response.text();
+      throw new Error(errorMsg);
+    }
+
     // const data = await response.json();
     // console.log(data);
     Toast.show({
